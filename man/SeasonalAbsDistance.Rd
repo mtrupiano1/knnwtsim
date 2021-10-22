@@ -22,4 +22,5 @@ two points, given the number of periods in one full seasonal cycle
 }
 \examples{
 SeasonalAbsDistance(1,4,4)
+ 1
 }

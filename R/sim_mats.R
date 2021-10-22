@@ -12,6 +12,7 @@
 #'
 #' @examples
 #' SeasonalAbsDistance(1,4,4)
+#'  1
 SeasonalAbsDistance <- function(p1,p2,nPeriods){
   minPeriod <- 1
 
@@ -24,6 +25,25 @@ SeasonalAbsDistance <- function(p1,p2,nPeriods){
 }
 
 
+#' Calculate Seasonal Similarity Matrix
+#'
+#' Generates and returns an nxn matrix by calculating the Seasonal Dissimilarity
+#' (see \code{SeasonalAbsDistance()}) for each possible pair of points in a vector
+#' of seasonal periods, then converts Dissimilarity matrix to a Similarity matrix using 1/(D_p +1)
+#'
+#' @param v numeric vector
+#' @param nPeriods numeric
+#'
+#' @return matrix
+#' @export
+#'
+#' @examples
+#' SpMatrixCalc(c(1,2,3),3)
+#'      [,1] [,2] [,3]
+#' [1,]  1.0  0.5  0.5
+#' [2,]  0.5  1.0  0.5
+#' [3,]  0.5  0.5  1.0
+#'
 SpMatrixCalc <- function(v,nPeriods){
   n <- length(v)
   dpmat <- matrix(NA,nrow=n,ncol=n)
@@ -41,11 +61,44 @@ SpMatrixCalc <- function(v,nPeriods){
 
 
 
+#' Temporal Absolute Dissimilarity
+#'
+#' Simply takes the absolute difference between two points, meaning points close
+#' in time will have smaller dissimilarity. This is equivalent to Euclidean Distance
+#'
+#' @param p1 numeric
+#' @param p2 numeric
+#'
+#' @return numeric
+#' @export
+#'
+#' @examples
+#' TempAbsDistance(1,3)
+#' 2
 TempAbsDistance <- function(p1,p2){
   Dt <- abs(p1-p2)
   return(Dt)
 }
 
+
+#' Calculate Temporal Similarity Matrix
+#'
+#' Generates and returns an nxn matrix by calculating the absolute difference
+#' (see \code{TempAbsDistance()}) for each possible pair of points in a vector
+#' of the time order of each point in a series,
+#' then converts Dissimilarity matrix to a Similarity matrix using 1/(D_t +1)
+#'
+#' @param v numeric vector
+#'
+#' @return matrix
+#' @export
+#'
+#' @examples
+#' StMatrixCalc(c(1,2,3))
+#' 1.0000000  0.5 0.3333333
+#' 0.5000000  1.0 0.5000000
+#' 0.3333333  0.5 1.0000000
+#'
 StMatrixCalc <- function(v){
   n <- length(v)
   dtmat <- matrix(NA,nrow=n,ncol=n)
