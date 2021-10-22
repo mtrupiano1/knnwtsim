@@ -20,8 +20,5 @@ then converts Dissimilarity matrix to a Similarity matrix using 1/(D_t +1)
 }
 \examples{
 StMatrixCalc(c(1,2,3))
-1.0000000  0.5 0.3333333
-0.5000000  1.0 0.5000000
-0.3333333  0.5 1.0000000
 
 }

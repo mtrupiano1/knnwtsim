@@ -20,5 +20,4 @@ in time will have smaller dissimilarity. This is equivalent to Euclidean Distanc
 }
 \examples{
 TempAbsDistance(1,3)
-2
 }

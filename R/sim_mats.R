@@ -12,7 +12,6 @@
 #'
 #' @examples
 #' SeasonalAbsDistance(1,4,4)
-#'  1
 SeasonalAbsDistance <- function(p1,p2,nPeriods){
   minPeriod <- 1
 
@@ -39,10 +38,6 @@ SeasonalAbsDistance <- function(p1,p2,nPeriods){
 #'
 #' @examples
 #' SpMatrixCalc(c(1,2,3),3)
-#'      [,1] [,2] [,3]
-#' [1,]  1.0  0.5  0.5
-#' [2,]  0.5  1.0  0.5
-#' [3,]  0.5  0.5  1.0
 #'
 SpMatrixCalc <- function(v,nPeriods){
   n <- length(v)
@@ -74,7 +69,6 @@ SpMatrixCalc <- function(v,nPeriods){
 #'
 #' @examples
 #' TempAbsDistance(1,3)
-#' 2
 TempAbsDistance <- function(p1,p2){
   Dt <- abs(p1-p2)
   return(Dt)
@@ -95,9 +89,6 @@ TempAbsDistance <- function(p1,p2){
 #'
 #' @examples
 #' StMatrixCalc(c(1,2,3))
-#' 1.0000000  0.5 0.3333333
-#' 0.5000000  1.0 0.5000000
-#' 0.3333333  0.5 1.0000000
 #'
 StMatrixCalc <- function(v){
   n <- length(v)

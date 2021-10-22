@@ -21,9 +21,5 @@ of seasonal periods, then converts Dissimilarity matrix to a Similarity matrix u
 }
 \examples{
 SpMatrixCalc(c(1,2,3),3)
-     [,1] [,2] [,3]
-[1,]  1.0  0.5  0.5
-[2,]  0.5  1.0  0.5
-[3,]  0.5  0.5  1.0
 
 }
