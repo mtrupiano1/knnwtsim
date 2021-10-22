@@ -40,7 +40,7 @@ StMatrixCalc <- function(v){
     p1 <- v[i]
     for (j in c(1:n)){
       p2 <- v[j]
-      dtmat[i,j] <- TempAbsDistance(p1,p2,nPeriods)
+      dtmat[i,j] <- TempAbsDistance(p1,p2)
     }
   }
   stmat <- 1/(1+dtmat)
