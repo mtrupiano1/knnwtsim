@@ -1,12 +1,11 @@
 Package: knnwtsim
 Type: Package
 Title: Implementation of KNN forecasting using a weighted similarity metric for time series decomposition
-Version: 0.1.0
+Version: 0.1.0.9000
 Author: Matt Trupiano
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Maintainer: Matt Trupiano <yourself@somewhere.net>
+Description: This package contains functions to assist in the implmentation of K Nearest Neighbor (KNN) forecasting using a weighted similarity metric, \{S_w}. It is intended in particular for univariate time series problems where recent observations, seasonal patterns, and exogenous predictors are all relevent in predicting future observations of the series in question
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Suggests: 
