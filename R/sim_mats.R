@@ -1,3 +1,17 @@
+#' Seasonal Absolute Dissimilarity
+#'
+#'Calculate Seasonal Dissimilarity measure between the respective seasonal period
+#'two points, given the number of periods in one full seasonal cycle
+#'
+#' @param p1 numeric
+#' @param p2 numeric
+#' @param nPeriods numeric
+#'
+#' @return numeric
+#' @export
+#'
+#' @examples
+#' SeasonalAbsDistance(1,4,4)
 SeasonalAbsDistance <- function(p1,p2,nPeriods){
   minPeriod <- 1
 
