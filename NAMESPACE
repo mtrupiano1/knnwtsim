@@ -3,4 +3,6 @@
 export(SeasonalAbsDistance)
 export(SpMatrixCalc)
 export(StMatrixCalc)
+export(SwMatrixCalc)
+export(SxMatrixCalc)
 export(TempAbsDistance)
