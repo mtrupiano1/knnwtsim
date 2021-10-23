@@ -22,7 +22,7 @@ SwMatrixCalc(
 
 \item{X.in}{numeric vector or matrix of exogenous predictors, where the rows correspond to points in the response series}
 
-\item{XdistMetric.in}{Distance calculation method to be used by \code{stats::dist()}}
+\item{XdistMetric.in}{character describing the method \code{stats::dist()} should use. This must be one of "euclidean", "maximum", "manhattan", "canberra", "binary" or "minkowski".}
 
 \item{weights}{numeric vector where first value represents weight for \code{S_t}, second value the weight for \code{S_p}, and the third value the weight for \code{S_x}}
 }

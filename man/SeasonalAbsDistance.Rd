@@ -7,14 +7,14 @@
 SeasonalAbsDistance(p1, p2, nPeriods)
 }
 \arguments{
-\item{p1}{numeric}
+\item{p1}{numeric value representing a seasonal period}
 
-\item{p2}{numeric}
+\item{p2}{numeric value representing a seasonal period}
 
-\item{nPeriods}{numeric}
+\item{nPeriods}{numeric value representing the maximum value \code{p1} or \code{p2} can take on}
 }
 \value{
-numeric
+numeric value of the Seasonality Dissimilarity between \code{p1} and \code{p2}
 }
 \description{
 Calculate Seasonal Dissimilarity measure between the respective seasonal period

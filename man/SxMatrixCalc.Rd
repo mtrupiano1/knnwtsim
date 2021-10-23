@@ -7,12 +7,12 @@
 SxMatrixCalc(A, XdistMetric = "euclidean")
 }
 \arguments{
-\item{A}{matrix}
+\item{A}{numeric matrix or numeric vector where the columns represents exogenous predictor variables and the rows correspond to the points in the respond series}
 
-\item{XdistMetric}{character}
+\item{XdistMetric}{character describing the method \code{stats::dist()} should use. This must be one of "euclidean", "maximum", "manhattan", "canberra", "binary" or "minkowski".}
 }
 \value{
-matrix
+numeric matrix of distances for \code{A}
 }
 \description{
 Largely a wrapper function for base R's \code{stats::dist()} function. First calculates

@@ -7,12 +7,12 @@
 SpMatrixCalc(v, nPeriods)
 }
 \arguments{
-\item{v}{numeric vector}
+\item{v}{numeric vector with the seasonal periods corresponding to each point in the response series}
 
-\item{nPeriods}{numeric}
+\item{nPeriods}{numeric value representing the maximum value \code{v} can take on}
 }
 \value{
-matrix
+numeric matrix of Seasonal Similarities for the vector \code{v}
 }
 \description{
 Generates and returns an nxn matrix by calculating the Seasonal Dissimilarity

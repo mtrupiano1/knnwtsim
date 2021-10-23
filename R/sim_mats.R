@@ -3,11 +3,11 @@
 #'Calculate Seasonal Dissimilarity measure between the respective seasonal period
 #'two points, given the number of periods in one full seasonal cycle
 #'
-#' @param p1 numeric
-#' @param p2 numeric
-#' @param nPeriods numeric
+#' @param p1 numeric value representing a seasonal period
+#' @param p2 numeric value representing a seasonal period
+#' @param nPeriods numeric value representing the maximum value \code{p1} or \code{p2} can take on
 #'
-#' @return numeric
+#' @return numeric value of the Seasonality Dissimilarity between \code{p1} and \code{p2}
 #' @export
 #'
 #' @examples
@@ -30,10 +30,10 @@ SeasonalAbsDistance <- function(p1,p2,nPeriods){
 #' (see \code{SeasonalAbsDistance()}) for each possible pair of points in a vector
 #' of seasonal periods, then converts Dissimilarity matrix to a Similarity matrix using 1/(D_p +1)
 #'
-#' @param v numeric vector
-#' @param nPeriods numeric
+#' @param v numeric vector with the seasonal periods corresponding to each point in the response series
+#' @param nPeriods numeric value representing the maximum value \code{v} can take on
 #'
-#' @return matrix
+#' @return numeric matrix of Seasonal Similarities for the vector \code{v}
 #' @export
 #'
 #' @examples
@@ -61,10 +61,10 @@ SpMatrixCalc <- function(v,nPeriods){
 #' Simply takes the absolute difference between two points, meaning points close
 #' in time will have smaller dissimilarity. This is equivalent to Euclidean Distance
 #'
-#' @param p1 numeric
-#' @param p2 numeric
+#' @param p1 numeric value representing the time order of the point in the response series
+#' @param p2 numeric value representing the time order of the point in the response series
 #'
-#' @return numeric
+#' @return numeric value of the absolute difference between \code{p1} and \code{p2}
 #' @export
 #'
 #' @examples
@@ -82,9 +82,9 @@ TempAbsDistance <- function(p1,p2){
 #' of the time order of each point in a series,
 #' then converts Dissimilarity matrix to a Similarity matrix using 1/(D_t +1)
 #'
-#' @param v numeric vector
+#' @param v numeric vector with the time order corresponding to each point in the response series
 #'
-#' @return matrix
+#' @return numeric matrix of Temporal Similarities for the vector \code{v}
 #' @export
 #'
 #' @examples
@@ -113,10 +113,10 @@ StMatrixCalc <- function(v){
 #' nxn distance matrix using specified method for an input matrix or vector using
 #'  \code{stats::dist()}. Then converts the distance matrix to Similarity matrix using 1/(D_x +1)
 #'
-#' @param A matrix
-#' @param XdistMetric character
+#' @param A numeric matrix or numeric vector where the columns represents exogenous predictor variables and the rows correspond to the points in the respond series
+#' @param XdistMetric character describing the method \code{stats::dist()} should use. This must be one of "euclidean", "maximum", "manhattan", "canberra", "binary" or "minkowski".
 #'
-#' @return matrix
+#' @return numeric matrix of distances for \code{A}
 #' @export
 #'
 #' @examples
@@ -136,7 +136,7 @@ SxMatrixCalc <- function(A,XdistMetric='euclidean'){
 #' @param p.in numeric vector of period within a seasonal cycle (ex. 1 for January points in monthly data)
 #' @param nPeriods.in numeric scalar indicating the maximum value \code{p.in} could take on (ex. 12 for monthly data)
 #' @param X.in numeric vector or matrix of exogenous predictors, where the rows correspond to points in the response series
-#' @param XdistMetric.in Distance calculation method to be used by \code{stats::dist()}
+#' @param XdistMetric.in character describing the method \code{stats::dist()} should use. This must be one of "euclidean", "maximum", "manhattan", "canberra", "binary" or "minkowski".
 #' @param weights numeric vector where first value represents weight for \code{S_t}, second value the weight for \code{S_p}, and the third value the weight for \code{S_x}
 #'
 #' @return numeric matrix which is the weighted similarity matrix \code{S_w}

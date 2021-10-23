@@ -7,12 +7,12 @@
 TempAbsDistance(p1, p2)
 }
 \arguments{
-\item{p1}{numeric}
+\item{p1}{numeric value representing the time order of the point in the response series}
 
-\item{p2}{numeric}
+\item{p2}{numeric value representing the time order of the point in the response series}
 }
 \value{
-numeric
+numeric value of the absolute difference between \code{p1} and \code{p2}
 }
 \description{
 Simply takes the absolute difference between two points, meaning points close

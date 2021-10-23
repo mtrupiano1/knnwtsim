@@ -7,10 +7,10 @@
 StMatrixCalc(v)
 }
 \arguments{
-\item{v}{numeric vector}
+\item{v}{numeric vector with the time order corresponding to each point in the response series}
 }
 \value{
-matrix
+numeric matrix of Temporal Similarities for the vector \code{v}
 }
 \description{
 Generates and returns an nxn matrix by calculating the absolute difference
