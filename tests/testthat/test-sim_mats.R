@@ -25,7 +25,7 @@ test_that("SpMatrixCalc matches hand calculation", {
   #2-5 dist is 2, sim is 1/(2+1)= 1/3
   sp.check <- matrix(c(1,.5,.5,.5,1,1/3,.5,1/3,1),nrow=3,ncol=3,byrow=TRUE)
 
-  #Test of around dist
+
   expect_equal(SpMatrixCalc(vp,np), sp.check)
 
 })
