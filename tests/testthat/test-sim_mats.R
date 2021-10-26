@@ -1,3 +1,6 @@
+context("Tests on the various functions for generating similarities in sim_mats.R")
+library(stats)
+
 test_that("SeasonalAbsDistance works when around and direct dist are needed", {
   px <- 1
   py <- 6
@@ -9,4 +12,90 @@ test_that("SeasonalAbsDistance works when around and direct dist are needed", {
 
   #Test of direct dist
   expect_equal(SeasonalAbsDistance(px,pz,np), 2)
+})
+
+
+test_that("SpMatrixCalc matches hand calculation", {
+  vp <- c(1,2,5)
+  np <- 5
+
+  #diag should be 1
+  #1-2 dist is 1, sim is 1/(1+1)=1/2
+  #1-5 dist is 1, sim is 1/(1+1)= 1/2
+  #2-5 dist is 2, sim is 1/(2+1)= 1/3
+  sp.check <- matrix(c(1,.5,.5,.5,1,1/3,.5,1/3,1),nrow=3,ncol=3,byrow=TRUE)
+
+  #Test of around dist
+  expect_equal(SpMatrixCalc(vp,np), sp.check)
+
+})
+
+
+test_that("TempAbsDistance correctly takes absolute difference", {
+  px <- 3
+  py <- 6
+  pz <- 1
+
+  #Test of neg diff
+  expect_equal(TempAbsDistance(px,py), 3)
+
+  #Test of pos diff
+  expect_equal(TempAbsDistance(px,pz), 2)
+
+})
+
+
+
+test_that("StMatrixCalc matches hand calculation", {
+  vt <- c(1,2,3)
+
+  #diag should be 1
+  #1-2 dist is 1, sim is 1/(1+1)=1/2
+  #1-3 dist is 2, sim is 1/(2+1)= 1/3
+  #2-3 dist is 1, sim is 1/(1+1)= 1/2
+  st.check <- matrix(c(1,.5,1/3,.5,1,.5,1/3,.5,1),nrow=3,ncol=3,byrow=TRUE)
+
+  expect_equal(StMatrixCalc(vt),st.check)
+
+})
+
+
+test_that("SxMatrixCalc wrapper matches direct call to dist() for vector", {
+
+  x.v <- c(1.2,8.3,4.7)
+
+  #Canberra distance to try a different method
+  dxmat.can <- as.matrix(stats::dist(x.v,method='canberra' ,upper=TRUE,diag=TRUE))
+  sxmat.can <- 1/(1+dxmat.can)
+
+  #Default which should be Euclidean
+  dxmat.euc <- as.matrix(stats::dist(x.v ,upper=TRUE,diag=TRUE))
+  sxmat.euc <- 1/(1+dxmat.euc)
+
+  #Test that non default method works
+  expect_equal(SxMatrixCalc(x.v,XdistMetric = 'canberra') ,sxmat.can)
+
+  #Test that default method works
+  expect_equal(SxMatrixCalc(x.v) ,sxmat.euc)
+
+})
+
+test_that("SxMatrixCalc wrapper matches direct call to dist() for matrix", {
+
+  x.mat <- matrix(c(1.2,8.3,4.7,12,1.6,6.7,7.8,3,7),nrow=3,ncol=3)
+
+  #Canberra distance to try a different method
+  dxmat.can <- as.matrix(stats::dist(x.mat,method='canberra' ,upper=TRUE,diag=TRUE))
+  sxmat.can <- 1/(1+dxmat.can)
+
+  #Default which should be Euclidean
+  dxmat.euc <- as.matrix(stats::dist(x.mat ,upper=TRUE,diag=TRUE))
+  sxmat.euc <- 1/(1+dxmat.euc)
+
+  #Test that non default method works
+  expect_equal(SxMatrixCalc(x.mat,XdistMetric = 'canberra') ,sxmat.can)
+
+  #Test that default method works
+  expect_equal(SxMatrixCalc(x.mat) ,sxmat.euc)
+
 })

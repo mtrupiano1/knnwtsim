@@ -37,7 +37,7 @@ SeasonalAbsDistance <- function(p1,p2,nPeriods){
 #' @export
 #'
 #' @examples
-#' SpMatrixCalc(c(1,2,3),3)
+#' SpMatrixCalc(c(1,2,4),4)
 #'
 SpMatrixCalc <- function(v,nPeriods){
   n <- length(v)

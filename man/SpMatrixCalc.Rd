@@ -20,6 +20,6 @@ Generates and returns an nxn matrix by calculating the Seasonal Dissimilarity
 of seasonal periods, then converts Dissimilarity matrix to a Similarity matrix using 1/(D_p +1)
 }
 \examples{
-SpMatrixCalc(c(1,2,3),3)
+SpMatrixCalc(c(1,2,4),4)
 
 }
