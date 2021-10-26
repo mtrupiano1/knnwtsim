@@ -84,6 +84,7 @@ test_that("SxMatrixCalc wrapper matches direct call to dist() for matrix", {
 
   x.mat <- matrix(c(1.2,8.3,4.7,12,1.6,6.7,7.8,3,7),nrow=3,ncol=3)
 
+
   #Canberra distance to try a different method
   dxmat.can <- as.matrix(stats::dist(x.mat,method='canberra' ,upper=TRUE,diag=TRUE))
   sxmat.can <- 1/(1+dxmat.can)
@@ -99,3 +100,30 @@ test_that("SxMatrixCalc wrapper matches direct call to dist() for matrix", {
   expect_equal(SxMatrixCalc(x.mat) ,sxmat.euc)
 
 })
+
+
+
+test_that("SwMatrixCalc wrapper matches individual calls", {
+  vt <- c(1,2,3)
+  vp <- c(1,2,5)
+  np <- 5
+  x.v <- c(1.2,8.3,4.7)
+
+  a<-.4
+  b<-.25
+  c<-.35
+
+  w.v <- c(a,b,c)
+
+  st.check <- StMatrixCalc(vt)
+  sp.check <- SpMatrixCalc(vp,np)
+  sx.check <- SxMatrixCalc(x.v,XdistMetric = 'canberra')
+  sw.check <- a*st.check + b*sp.check + c*sx.check
+
+
+  #Test that non default method works
+  expect_equal(SwMatrixCalc(t.in=vt,p.in=vp,nPeriods.in=np,X.in=x.v
+                            ,XdistMetric.in='canberra',weights=w.v) ,sw.check)
+
+})
+
