@@ -6,7 +6,7 @@
 #' forecasted should be included. The \code{f.index.in} argument indicates which observations
 #' to identify neighbors for, and removes them from consideration as eligible neighbors.
 #' Once the matrix is subset down to only the columns in \code{f.index.in} and the rows excluding \code{f.index.in}, the
-#' \code{getNN()} function is applied over the columns, returning for each column the mean of those points in \code{y.in} identified as neighbors
+#' \code{NNreg()} function is applied over the columns, returning for each column the mean of those points in \code{y.in} identified as neighbors
 #' based on the row index of the \code{k.in} most similar observations in the column. It is important that the index of the similarity matrix
 #' and \code{y.in} accurately reflect the time order of the observations.
 #'
