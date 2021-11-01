@@ -49,6 +49,6 @@ A dataset which contains the weekly count of 911 dispatches in the city of
 Boston, MA, USA, for three City of Boston public safety agencies: Boston Police Department, Boston Fire Department,
 and Boston Emergency Medical Services. In addition a number of holiday indicators, and dummy variables for months.
 Data is present for weeks between 2010-10-31 and 2014-04-20. Derived by Matthew Trupiano
-from a .csv file (911 Daily Dispatch Count By Agency (CSV)) hosted on https://data.boston.gov/
+from a .csv file (911 Daily Dispatch Count By Agency (CSV)) hosted on \url{https://data.boston.gov/}
 }
 \keyword{datasets}

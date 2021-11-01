@@ -1,8 +1,5 @@
 ## code to prepare `simulation_master_list` dataset goes here
 
-#Your path here
-data.dir <- ''
-
 library(stats)
 library(MASS)
 library(clusterGeneration)
@@ -225,7 +222,7 @@ for (i in (1:nrow(seed.len.grid))) {
               ,seasonal.periods=s,sin.coef=beta.sin,cos.coef=beta.cos
               ,X.cols = x.vars,X.mu= mu.vec,X.Sigma = Sigma.mat,X =X.sim,x.coef = b.x
               ,x.chng.mu=mu.x,x.chng.sd = sd.x ,x.chng.coef1 = coef1.x
-              , x.chng.coef1 = coef1.x, x.chng.break.point =break.point.x ,x.chng.break.point.sqrt =sqrt.break.point.x
+              , x.chng.coef2 = coef2.x, x.chng.break.point =break.point.x ,x.chng.break.point.sqrt =sqrt.break.point.x
               ,x.chng = x.chng.sim,type.noise = error.choice,poisson.rate = pois.rate, normal.sd = norm.sd
               ,noise = e.sim , constant = constant, series.mvnormx=y.sim.mv.normx
               ,series.lin.to.sqrt.x = y.sim.lin.to.sqrt.x, series.lin.coef.chng.x = y.sim.lin.coef.chng.x
@@ -235,9 +232,5 @@ for (i in (1:nrow(seed.len.grid))) {
 
 }
 
-
-
-save(simulation_master_list,file=paste0(data.dir,'simulation_master_list.RData'))
-
-#usethis::use_data(simulation_master_list, overwrite = TRUE)
+usethis::use_data(simulation_master_list, overwrite = TRUE)
 

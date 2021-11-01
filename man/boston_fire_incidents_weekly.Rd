@@ -36,6 +36,6 @@ A dataset which contains the weekly count of fire incidents in the city of
 Boston, MA, USA, as well as a number of holiday indicators and one indicator
 for the period where a COVID-19 state of emergency was declared in Massachusetts.
 Data is present for weeks between 2017-01-01 and 2021-07-25. Derived by Matthew Trupiano
-from a series of .csv files hosted on https://data.boston.gov/
+from a series of .csv files hosted on \url{https://data.boston.gov/}
 }
 \keyword{datasets}
