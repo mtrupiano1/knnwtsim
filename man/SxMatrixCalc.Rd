@@ -15,7 +15,7 @@ SxMatrixCalc(A, XdistMetric = "euclidean")
 numeric matrix of distances for \code{A}
 }
 \description{
-Largely a wrapper function for base R's \code{stats::dist()} function. First calculates
+Largely a wrapper function for the \code{stats::dist()} function. First calculates
 nxn distance matrix using specified method for an input matrix or vector using
  \code{stats::dist()}. Then converts the distance matrix to Similarity matrix using 1/(D_x +1)
 }
