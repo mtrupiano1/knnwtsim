@@ -1,0 +1,115 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# knnwtsim
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+The goal of knnwtsim is to provide a package to share and implement a project I have been working on 
+around the use of KNN forecasting in situations where the response series of interest can be predicted by
+a combination of its' own recent realizations, its own periodic patterns, and by the values of
+one or multiple exogenous predictors. 
+
+The package and project are focused primarily into two components. The first being calculation of a 
+similarity measure which takes into account all three factors listed above ($S_w$). And the second being the 
+usage of this measure to identify neighbors and perform KNN regression using the similarity measure. 
+
+
+
+## Installation
+
+You can install the development version of knnwtsim from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("mtrupiano1/knnwtsim")
+```
+
+## Example
+
+This is a basic example which shows a full forecasting workflow:
+
+```{r generate Sw example}
+library(knnwtsim)
+## basic example code
+data("simulation_master_list")
+series.index <- 15
+ex.series <- simulation_master_list[[series.index]]$series.lin.coef.chng.x
+
+#Weights pre tuned by random search. In alpha, beta, gamma order   
+pre.tuned.wts <- c(0.2788147,0.7209188,0.0002665336)
+pre.tuned.k <- 11 
+
+df <- data.frame(ex.series)
+#Generate vector of time orders
+df$t <- c(1:nrow(df))
+
+#Generate vector of periods
+nperiods <- simulation_master_list[[series.index]]$seasonal.periods
+df$p <- rep(1:nperiods,length.out=nrow(df))
+
+#Pull corresponding exogenous predictor(s)
+X <- as.matrix(simulation_master_list[[series.index]]$x.chng)
+XdistMetric <- 'euclidean'
+
+#Number of points to set aside for validation
+val.len <- ifelse(nperiods==12,nperiods,nperiods*2)
+
+#Calculate the weighted similarity matrix Sw 
+Sw.ex <- SwMatrixCalc(#For the recency similarity St
+                      t.in = df$t
+                      #For the periodic similarity Sp
+                      ,p.in=df$p, nPeriods.in = nperiods
+                      #For the exogenous similarity Sx
+                      ,X.in=X, XdistMetric.in = XdistMetric
+                      #Weights to be applied to each similarity
+                      ,weights=pre.tuned.wts)
+
+#View the top corner of the weighted similarity matrix Sw 
+print(Sw.ex[1:5,1:5])
+
+```
+
+```{r knn forecast example}
+
+#Index we want to forecast 
+val.index <- c((length(ex.series) - val.len + 1):length(ex.series))
+
+#Generate the forecast 
+knn.frcst <- knn.forecast(Sim.Mat.in = Sw.ex
+                          ,f.index.in = val.index
+                          ,k.in=pre.tuned.k
+                          ,y.in=ex.series)
+
+ts.plot(ex.series,ylab="Simulated Time Series Value")
+lines(x=val.index,y=knn.frcst,col='red',lty=2)
+legend('bottomleft',legend=c('actuals','KNN Forecast'),col=c('black','red'),lty=c(1,2))
+
+
+```
+
+
+
+
+You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date. `devtools::build_readme()` is handy for this. You could also use GitHub Actions to re-render `README.Rmd` every time you push. An example workflow can be found here: <https://github.com/r-lib/actions/tree/v1/examples>.
+
+You can also embed plots, for example:
+
+```{r pressure, echo = FALSE}
+plot(pressure)
+```
+
+In that case, don't forget to commit and push the resulting figure files, so they display on GitHub and CRAN.
