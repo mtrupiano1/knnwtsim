@@ -14,9 +14,60 @@ and by the values of one or multiple exogenous predictors.
 
 The package and project are focused primarily into two components. The
 first being calculation of a similarity measure which takes into account
-all three factors listed above (*S*<sub>*w*</sub>). And the second being
-the usage of this measure to identify neighbors and perform KNN
-regression using the similarity measure.
+all three factors listed above (*S*<sub>*w*</sub>), and can weight the
+degree to which each component contributed to the overall similarity.
+The second being the usage of this measure to identify neighbors and
+perform KNN regression.
+
+##Formulation
+
+### Weighted Similarity Measure *S*<sub>*w*</sub>
+
+The Similarity measure I have formulated for incorporating the three
+factors listed above is:
+
+*S*<sub>*w*</sub> = *α**S*<sub>*t*</sub> + *β**S*<sub>*p*</sub> + *γ**S*<sub>*x*</sub>
+Where *S*<sub>*t*</sub> is matrix calculated by `StMatrixCalc()` to
+measure similarity in terms of pure recency between all observations.
+*α* is the weight between 0-1 assigned to this matrix in the calculation
+of *S*<sub>*w*</sub>.
+
+*S*<sub>*p*</sub> is the matrix calculated by `SpMatrixCalc()` to
+measure similarity in terms of where each observation falls along a
+periodic cycle relative to all others. *β* is the weight between 0-1
+assigned to this matrix in the calculation of *S*<sub>*w*</sub>.
+
+*S*<sub>*x*</sub> is the matrix calculated by `SxMatrixCalc()` to
+measure similarity between all observations in terms of the values of
+one or more exogenous predictors associated with a given observation.
+*γ* is the weight between 0-1 assigned to this matrix in the calculation
+of *S*<sub>*w*</sub>.
+
+The function `SwMatrixCalc()` calls each of these previous functions to
+generate the final matrix to use in `knn.forecast()`
+
+### KNN Forecasting
+
+K Nearest Neighbors forecasting is implemented in this package through
+the function `knn.forecast()`. Using a provided similarity matrix, note
+that this function does not actually require *S*<sub>*w*</sub>
+specifically is used, the function will perform K Nearest Neighbors
+regression on each point in a specified index `f.index.in`, returning
+the mean of the identified, `k.in`, neighbors in the response series
+`y.in`.
+
+Mathematically the estimate for a given point *y*<sub>*t*</sub> is
+formulated
+
+$$ \\hat{y}\_t = \\frac{1}{k} \\sum\_{i \\in K(y_t)} y_i$$
+Where *k* is the number of nearest neighbors considered
+*K*(*y*<sub>*t*</sub>) is the ‘neighborhood’ onsisting of the *k*
+observations of *y*<sub>*i*</sub> with the highest similarity to
+*y*<sub>*t*</sub> of all eligible members of the time series, meaning
+*i* \< *t*. Currently in `knn.forecast()` this eligibility constraint is
+enforced by only considering the points in `y.in` which are not present
+in `f.index.in` when performing KNN regression on each point in
+`f.index.in`.
 
 ## Installation
 
