@@ -28,7 +28,7 @@ factors listed above is:
 
 `S_w = alpha*S_t + beta*S_p + gamma*S_x`
 
-Where `S_t` is matrix calculated by `StMatrixCalc()` to measure
+Where `S_t` is the matrix calculated by `StMatrixCalc()` to measure
 similarity in terms of pure recency between all observations. `alpha` is
 the weight between 0-1 assigned to this matrix in the calculation of
 `S_w`.
@@ -46,19 +46,18 @@ between 0-1 assigned to this matrix in the calculation of `S_w`.
 The function `SwMatrixCalc()` calls each of these previous functions to
 generate the final matrix to use in `knn.forecast()`
 
-The weights `alpha`, `beta`, and `gamma` are recommended sum to 1. In
-this case each element of `S_w` should also be between 0-1, with the
-diagonal elements being equal to 1.
+The weights `alpha`, `beta`, and `gamma` are recommended to be set so
+that they sum to 1. In this case each element of `S_w` should also be
+between 0-1, with the diagonal elements being equal to 1.
 
 ### KNN Forecasting
 
 K Nearest Neighbors forecasting is implemented in this package through
 the function `knn.forecast()`. Using a provided similarity matrix, note
-that this function does not actually require *S*<sub>*w*</sub>
-specifically is used, the function will perform K Nearest Neighbors
-regression on each point in a specified index `f.index.in`, returning
-the mean of the identified, `k.in`, neighbors in the response series
-`y.in`.
+that this function does not actually require `S_w` specifically is used,
+the function will perform K Nearest Neighbors regression on each point
+in a specified index `f.index.in`, returning the mean of the identified,
+`k.in`, neighbors in the response series `y.in`.
 
 Mathematically the estimate for a given point `y_t` is formulated as the
 mean of the previous points in the series `y_i` identified to be in the
@@ -67,9 +66,14 @@ neighborhood of `y_t`, `K(y_t)`.
 In the neighborhood `K(y_t)` will be the `k` observations of `y_i` with
 the highest similarity to `y_t` of all eligible members of the time
 series, meaning `i < t`. Currently in `knn.forecast()` this eligibility
-constraint is enforced by only considering the points in `y.in` which
-are not present in `f.index.in` when performing KNN regression on each
-point in `f.index.in`.
+constraint is enforced by only considering the rows of the similarity
+matrix at indices which are not present in `f.index.in` when selecting
+neighbors while performing KNN regression on each point in `f.index.in`,
+thus preventing the corresponding points in `y.in` at those indices from
+being selected as neighbors. Meaning there should not be rows of higher
+index in your similarity matrix provided to `knn.forecast()` than the
+max value in `f.index.in`, or the values of `y.in` at those indices will
+be considered eligible neighbors.
 
 ## Installation
 
@@ -122,6 +126,11 @@ Sw.ex <- SwMatrixCalc(#For the recency similarity St
                       ,weights=pre.tuned.wts)
 
 #View the top corner of the weighted similarity matrix Sw 
+cat('\n Dimensions and Slice of S_w \n')
+#> 
+#>  Dimensions and Slice of S_w
+print(dim(Sw.ex))
+#> [1] 100 100
 print(Sw.ex[1:5,1:5])
 #>           1         2         3         4         5
 #> 1 1.0000000 0.5000444 0.3333827 0.2500869 0.2362313
