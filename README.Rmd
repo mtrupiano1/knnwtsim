@@ -28,13 +28,14 @@ similarity measure which takes into account all three factors listed above ($S_w
 the degree to which each component contributed to the overall similarity. The second being the 
 usage of this measure to identify neighbors and perform KNN regression. 
 
-##Formulation 
+## Formulation 
 
 ### Weighted Similarity Measure $S_w$
 
 The Similarity measure I have formulated for incorporating the three factors listed above is: 
 
-$$S_w = \alpha S_t + \beta S_p + \gamma S_x$$
+$S_w = \alpha S_t + \beta S_p + \gamma S_x$
+
 Where $S_t$ is matrix calculated by `StMatrixCalc()` to measure similarity in terms of pure recency between all observations. $\alpha$ is the weight between 0-1 assigned to this matrix in the calculation of $S_w$.
 
 $S_p$ is the matrix calculated by `SpMatrixCalc()` to measure similarity in terms of where each observation falls 
@@ -50,7 +51,8 @@ K Nearest Neighbors forecasting is implemented in this package through the funct
 
 Mathematically the estimate for a given point $y_{t}$ is formulated
 
-$$ \hat{y}_t = \frac{1}{k} \sum_{i \in K(y_t)} y_i$$
+$\hat{y}_t = \frac{1}{k} \sum_{i \in K(y_t)} y_i$
+
 Where $k$ is the number of nearest neighbors considered $K(y_t)$ is the 'neighborhood' onsisting of the $k$ observations of $y_i$ with the highest similarity to $y_t$ of all eligible members of the time series, meaning $i < t$. Currently in `knn.forecast()` this eligibility constraint is enforced by only considering the points in `y.in` which are not present in `f.index.in` when performing KNN regression on each point in `f.index.in`. 
 
 ## Installation

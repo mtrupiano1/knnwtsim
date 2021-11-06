@@ -19,7 +19,7 @@ degree to which each component contributed to the overall similarity.
 The second being the usage of this measure to identify neighbors and
 perform KNN regression.
 
-##Formulation
+## Formulation
 
 ### Weighted Similarity Measure *S*<sub>*w*</sub>
 
@@ -27,6 +27,7 @@ The Similarity measure I have formulated for incorporating the three
 factors listed above is:
 
 *S*<sub>*w*</sub> = *α**S*<sub>*t*</sub> + *β**S*<sub>*p*</sub> + *γ**S*<sub>*x*</sub>
+
 Where *S*<sub>*t*</sub> is matrix calculated by `StMatrixCalc()` to
 measure similarity in terms of pure recency between all observations.
 *α* is the weight between 0-1 assigned to this matrix in the calculation
@@ -59,7 +60,8 @@ the mean of the identified, `k.in`, neighbors in the response series
 Mathematically the estimate for a given point *y*<sub>*t*</sub> is
 formulated
 
-$$ \\hat{y}\_t = \\frac{1}{k} \\sum\_{i \\in K(y_t)} y_i$$
+$\\hat{y}\_t = \\frac{1}{k} \\sum\_{i \\in K(y_t)} y_i$
+
 Where *k* is the number of nearest neighbors considered
 *K*(*y*<sub>*t*</sub>) is the ‘neighborhood’ onsisting of the *k*
 observations of *y*<sub>*i*</sub> with the highest similarity to
