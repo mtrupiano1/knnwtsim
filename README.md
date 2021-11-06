@@ -26,23 +26,21 @@ perform KNN regression.
 The Similarity measure I have formulated for incorporating the three
 factors listed above is:
 
-*S*<sub>*w*</sub> = *α**S*<sub>*t*</sub> + *β**S*<sub>*p*</sub> + *γ**S*<sub>*x*</sub>
+`S_w = alpha*S_t + beta*S_p + gamma*S_x`
 
-Where *S*<sub>*t*</sub> is matrix calculated by `StMatrixCalc()` to
-measure similarity in terms of pure recency between all observations.
-*α* is the weight between 0-1 assigned to this matrix in the calculation
-of *S*<sub>*w*</sub>.
+Where `S_t` is matrix calculated by `StMatrixCalc()` to measure
+similarity in terms of pure recency between all observations. *α* is the
+weight between 0-1 assigned to this matrix in the calculation of `S_w`.
 
-*S*<sub>*p*</sub> is the matrix calculated by `SpMatrixCalc()` to
-measure similarity in terms of where each observation falls along a
-periodic cycle relative to all others. *β* is the weight between 0-1
-assigned to this matrix in the calculation of *S*<sub>*w*</sub>.
+`S_p` is the matrix calculated by `SpMatrixCalc()` to measure similarity
+in terms of where each observation falls along a periodic cycle relative
+to all others. *β* is the weight between 0-1 assigned to this matrix in
+the calculation of `S_w`.
 
-*S*<sub>*x*</sub> is the matrix calculated by `SxMatrixCalc()` to
-measure similarity between all observations in terms of the values of
-one or more exogenous predictors associated with a given observation.
-*γ* is the weight between 0-1 assigned to this matrix in the calculation
-of *S*<sub>*w*</sub>.
+`S_x` is the matrix calculated by `SxMatrixCalc()` to measure similarity
+between all observations in terms of the values of one or more exogenous
+predictors associated with a given observation. *γ* is the weight
+between 0-1 assigned to this matrix in the calculation of `S_w`.
 
 The function `SwMatrixCalc()` calls each of these previous functions to
 generate the final matrix to use in `knn.forecast()`
@@ -57,19 +55,16 @@ regression on each point in a specified index `f.index.in`, returning
 the mean of the identified, `k.in`, neighbors in the response series
 `y.in`.
 
-Mathematically the estimate for a given point *y*<sub>*t*</sub> is
-formulated
+Mathematically the estimate for a given point `y_t` is formulated is the
+mean of the previous points in the series `y_i` identified to be in the
+neighborhood of `y_t`, `K(y_t)`.
 
-$\\hat{y}\_t = \\frac{1}{k} \\sum\_{i \\in K(y_t)} y_i$
-
-Where *k* is the number of nearest neighbors considered
-*K*(*y*<sub>*t*</sub>) is the ‘neighborhood’ onsisting of the *k*
-observations of *y*<sub>*i*</sub> with the highest similarity to
-*y*<sub>*t*</sub> of all eligible members of the time series, meaning
-*i* \< *t*. Currently in `knn.forecast()` this eligibility constraint is
-enforced by only considering the points in `y.in` which are not present
-in `f.index.in` when performing KNN regression on each point in
-`f.index.in`.
+In the neighborhood `K(y_t)` will be the `k` observations of `y_i` with
+the highest similarity to `y_t` of all eligible members of the time
+series, meaning `i < t`. Currently in `knn.forecast()` this eligibility
+constraint is enforced by only considering the points in `y.in` which
+are not present in `f.index.in` when performing KNN regression on each
+point in `f.index.in`.
 
 ## Installation
 
