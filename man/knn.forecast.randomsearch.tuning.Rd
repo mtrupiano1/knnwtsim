@@ -2,7 +2,7 @@
 % Please edit documentation in R/tuning.R
 \name{knn.forecast.randomsearch.tuning}
 \alias{knn.forecast.randomsearch.tuning}
-\title{Tune knn.forecast Hyperparameters with Random Search}
+\title{Tune \code{knn.forecast()} Hyperparameters with Random Search}
 \usage{
 knn.forecast.randomsearch.tuning(
   grid.len = 100,
@@ -47,7 +47,7 @@ A simplistic automated hyperparameter tuning function which randomly
 generates a grid of hyperparameter sets used to build corresponding \code{S_w} similarity matrices
 which are used in \code{knn.forecast()} test against the last \code{test.h} points of \code{y.in} after
 any \code{val.holdout.len} points are removed from the end of \code{y.in}. The best performing set of
-parameters based on MAPE over over the forecast horizon of \code{test.h} points are returned as part of list
+parameters based on MAPE over over the forecast horizon of \code{test.h} points are returned as part of a list
 alongside the 'optimum' weighted similarity matrix \code{Sw.opt}, the \code{Grid} of tested sets, and the MAPE
 results. MAPE formula used is: \code{abs((test.actuals - test.forecast.i)/test.actuals)*100}. Where \code{test.forecast.i}
 and \code{test.actuals} are both numeric vectors.

@@ -1,15 +1,14 @@
 
-#' Tune knn.forecast Hyperparameters with Random Search
+#' Tune \code{knn.forecast()} Hyperparameters with Random Search
 #'
 #' A simplistic automated hyperparameter tuning function which randomly
 #' generates a grid of hyperparameter sets used to build corresponding \code{S_w} similarity matrices
 #' which are used in \code{knn.forecast()} test against the last \code{test.h} points of \code{y.in} after
 #' any \code{val.holdout.len} points are removed from the end of \code{y.in}. The best performing set of
-#' parameters based on MAPE over over the forecast horizon of \code{test.h} points are returned as part of list
+#' parameters based on MAPE over over the forecast horizon of \code{test.h} points are returned as part of a list
 #' alongside the 'optimum' weighted similarity matrix \code{Sw.opt}, the \code{Grid} of tested sets, and the MAPE
 #' results. MAPE formula used is: \code{abs((test.actuals - test.forecast.i)/test.actuals)*100}. Where \code{test.forecast.i}
 #' and \code{test.actuals} are both numeric vectors.
-#'
 #'
 #'
 #' @param grid.len numeric value representing the number of hyperparameter sets to generate and test
@@ -71,11 +70,18 @@ knn.forecast.randomsearch.tuning <- function(grid.len = 100
 
   n<- length(y.in)
 
+  #Ensure integer inputs are in fact integers
+  grid.len <- floor(grid.len)
+  max.k <- floor(max.k)
+  test.h <- floor(test.h)
+  val.holdout.len <- floor(val.holdout.len)
+
+
   #Set a maximum for k
   if (is.na(max.k)){
     k.cap <- min(floor((length(y.in))*.4),50)
   } else {
-    k.cap <- floor(max.k)
+    k.cap <- max.k
   }
 
   #Randomly propose sets of hyperparameters
@@ -94,7 +100,7 @@ knn.forecast.randomsearch.tuning <- function(grid.len = 100
 
   #Remove any holdout points from y
   if (val.holdout.len > 0){
-    val.remove <- as.vector(c((n-floor(val.holdout.len)+1):(n)))
+    val.remove <- as.vector(c((n-val.holdout.len+1):(n)))
     y.in <- y.in[-(val.remove)]
   }
 
@@ -118,7 +124,6 @@ knn.forecast.randomsearch.tuning <- function(grid.len = 100
 
     #Remove holdout points from Sw
     if (val.holdout.len > 0){
-      #val.remove <- as.vector(c((n-floor(val.holdout.len)+1):(n)))
       Sw.theta.i <- Sw.theta.i[-(val.remove),-(val.remove)]
     }
 
@@ -143,6 +148,8 @@ knn.forecast.randomsearch.tuning <- function(grid.len = 100
 
   Sw.opt <- alpha.opt*St.in + beta.opt*Sp.in + gamma.opt*Sx.in
 
+
+  #Compile results for final list
   return.list <- list(weight.opt=weight.opt
                       ,k.opt=k.opt
                       ,Sw.opt=Sw.opt
