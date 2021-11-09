@@ -85,9 +85,11 @@ You can install the development version of knnwtsim from
 devtools::install_github("mtrupiano1/knnwtsim")
 ```
 
-## Example
+## Example with Known Similarity Matrix Weights and `k`
 
-This is a basic example which shows a full forecasting workflow:
+This is a basic example which shows a full forecasting workflow if the
+weights to use in the generation of `S_w`, and the hyperparameter `k`
+are known:
 
 ``` r
 library(knnwtsim)
@@ -97,8 +99,8 @@ series.index <- 15
 ex.series <- simulation_master_list[[series.index]]$series.lin.coef.chng.x
 
 #Weights pre tuned by random search. In alpha, beta, gamma order   
-pre.tuned.wts <- c(0.2788147,0.7209188,0.0002665336)
-pre.tuned.k <- 11 
+pre.tuned.wts <- c(0.2148058, 0.2899638, 0.4952303)
+pre.tuned.k <- 5
 
 df <- data.frame(ex.series)
 #Generate vector of time orders
@@ -133,11 +135,11 @@ print(dim(Sw.ex))
 #> [1] 100 100
 print(Sw.ex[1:5,1:5])
 #>           1         2         3         4         5
-#> 1 1.0000000 0.5000444 0.3333827 0.2500869 0.2362313
-#> 2 0.5000444 1.0000000 0.5000533 0.3334602 0.2501260
-#> 3 0.3333827 0.5000533 1.0000000 0.5000901 0.3333916
-#> 4 0.2500869 0.3334602 0.5000901 1.0000000 0.5000314
-#> 5 0.2362313 0.2501260 0.3333916 0.5000314 1.0000000
+#> 1 0.9999999 0.5825337 0.4249690 0.4115130 0.5589633
+#> 2 0.5825337 0.9999999 0.5989170 0.5690332 0.4841708
+#> 3 0.4249690 0.5989170 0.9999999 0.6673498 0.4414853
+#> 4 0.4115130 0.5690332 0.6673498 0.9999999 0.5582553
+#> 5 0.5589633 0.4841708 0.4414853 0.5582553 0.9999999
 ```
 
 ``` r
@@ -156,3 +158,87 @@ legend('bottomleft',legend=c('actuals','KNN Forecast'),col=c('black','red'),lty=
 ```
 
 <img src="man/figures/README-knn-forecast-example-1.png" width="100%" />
+
+## Example with Tuning of Similarity Matrix Weights
+
+In most cases you will likely want to tune the hyperparameters used in
+the construction of `S_w`, and the number of nearest neighbors, `k`, to
+consider for any given point. There are many approaches that can be
+taken to accomplish this tuning, and many users choose to implement
+their preferred approach. However, for those who want something
+pre-built I have included a simple tuning function with the package
+called `knn.forecast.randomsearch.tuning()`. This function creates a
+randomly generated `Grid` of potential sets of hyperparameters
+`k`,`alpha`,`beta`,`gamma` and generates a forecast of length `test.h`
+on the last `test.h` points in the series. The best set of parameters
+are selected based on which row of the `Grid` led to the forecast with
+the lowest MAPE (Mean Absolute Percent Error) over the points in the
+forecast, and returned as the `weight.opt` and `k.opt` items of the list
+object returned by the function. Additionally, the ‘optimal’ similarity
+matrix to pass to `knn.forecast()` is also returned as `Sw.opt`, as are
+the testing grid (`Grid`), best test MAPE (`Test.MAPE.opt`), and the
+full vector of test MAPE values (`MAPE.all`) corresponding to each row
+in `Grid`.
+
+If you do not want to tune the hyperparameters on the entire series and
+want to leave some points for validation of the tuned result the
+`val.holdout.len` will remove that many points from the end of the
+series, and will perform the test forecasts and the `test.h` at the end
+of the series after the validation observations are removed. This is
+recommended.
+
+Using the example series from the previous section, we can reproduce the
+‘pre-tuned’ weights from the previous section and generate a forecast
+using the included tuning function.
+
+``` r
+#Calcualte component similarity matrices
+St.ex <- StMatrixCalc(df$t)
+Sp.ex <- SpMatrixCalc(df$p,nPeriods=nperiods)
+Sx.ex <- SxMatrixCalc(X)
+
+#Set seed for reproducibility 
+set.seed(10)
+#Run tuning function 
+tuning.ex <- knn.forecast.randomsearch.tuning(grid.len=10**4
+                                               ,y.in = ex.series
+                                               ,St.in = St.ex 
+                                               ,Sp.in = Sp.ex
+                                               ,Sx.in = Sx.ex
+                                               ,test.h = val.len
+                                               ,max.k = NA
+                                               ,val.holdout.len=val.len)
+
+
+cat('\n Tuned Hyperparameters \n')
+#> 
+#>  Tuned Hyperparameters
+cat('\n S_w Weights \n')
+#> 
+#>  S_w Weights
+print(tuning.ex$weight.opt)
+#> [1] 0.2148058 0.2899638 0.4952303
+cat('\n k \n')
+#> 
+#>  k
+print(tuning.ex$k.opt)
+#> [1] 5
+
+#Pull out tuned S_w and k
+k.opt.ex <- tuning.ex$k.opt
+Sw.opt.ex <- tuning.ex$Sw.opt
+```
+
+``` r
+#Generate the forecast 
+knn.frcst.tuned <- knn.forecast(Sim.Mat.in = Sw.opt.ex
+                              ,f.index.in = val.index
+                              ,k.in=k.opt.ex 
+                              ,y.in=ex.series)
+
+ts.plot(ex.series,ylab="Simulated Time Series Value")
+lines(x=val.index,y=knn.frcst.tuned,col='purple',lty=3)
+legend('bottomleft',legend=c('actuals','KNN Forecast Tuned'),col=c('black','purple'),lty=c(1,3))
+```
+
+<img src="man/figures/README-tuned-knn-forecast-example-1.png" width="100%" />

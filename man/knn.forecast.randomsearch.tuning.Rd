@@ -49,7 +49,7 @@ which are used in \code{knn.forecast()} test against the last \code{test.h} poin
 any \code{val.holdout.len} points are removed from the end of \code{y.in}. The best performing set of
 parameters based on MAPE over over the forecast horizon of \code{test.h} points are returned as part of a list
 alongside the 'optimum' weighted similarity matrix \code{Sw.opt}, the \code{Grid} of tested sets, and the MAPE
-results. MAPE formula used is: \code{abs((test.actuals - test.forecast.i)/test.actuals)*100}. Where \code{test.forecast.i}
+results. MAPE is the average of absolute percent errors for each point calculated as: \code{abs((test.actuals - test.forecast.i)/test.actuals)*100}. Where \code{test.forecast.i}
 and \code{test.actuals} are both numeric vectors.
 }
 \examples{
