@@ -181,11 +181,10 @@ full vector of test MAPE values (`MAPE.all`) corresponding to each row
 in `Grid`.
 
 If you do not want to tune the hyperparameters on the entire series and
-want to leave some points for validation of the tuned result the
+prefer to leave some points for validation of the tuned result the
 `val.holdout.len` will remove that many points from the end of the
-series, and will perform the test forecasts and the `test.h` at the end
-of the series after the validation observations are removed. This is
-recommended.
+series, and will perform the test forecasts on the `test.h` points at
+the end of the series after the validation observations are removed.
 
 Using the example series from the previous section, we can reproduce the
 ‘pre-tuned’ weights from the previous section and generate a forecast

@@ -142,8 +142,8 @@ I have included a simple tuning function with the package called `knn.forecast.r
 This function creates a randomly generated `Grid` of potential sets of hyperparameters `k`,`alpha`,`beta`,`gamma` and generates a forecast of length `test.h` on the last `test.h` points in the series. The best set of parameters 
 are selected based on which row of the `Grid` led to the forecast with the lowest MAPE (Mean Absolute Percent Error) over the points in the forecast, and returned as the `weight.opt` and `k.opt` items of the list object returned by the function. Additionally, the 'optimal' similarity matrix to pass to `knn.forecast()` is also returned as `Sw.opt`, as are the testing grid (`Grid`), best test MAPE (`Test.MAPE.opt`), and the full vector of test MAPE values (`MAPE.all`) corresponding to each row in `Grid`.
 
-If you do not want to tune the hyperparameters on the entire series and want to leave some points for validation of the tuned result the `val.holdout.len` will remove that many points from the end of the series, and will perform the test forecasts and the `test.h` at the end of 
-the series after the validation observations are removed. This is recommended. 
+If you do not want to tune the hyperparameters on the entire series and prefer to leave some points for validation of the tuned result the `val.holdout.len` will remove that many points from the end of the series, and will perform the test forecasts on the `test.h` points at the end of 
+the series after the validation observations are removed. 
 
 Using the example series from the previous section, we can reproduce the 'pre-tuned' weights from the 
 previous section and generate a forecast using the included tuning function.
