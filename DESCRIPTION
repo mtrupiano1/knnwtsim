@@ -1,6 +1,6 @@
 Package: knnwtsim
 Type: Package
-Title: Implementation of KNN forecasting using a weighted similarity metric for time series decomposition
+Title: Implementation of KNN forecasting using a weighted similarity metric for univariate forecasting in the presence of exogenous predictors
 Version: 0.1.0.9000
 Author: Matthew Trupiano
 Maintainer: Matthew Trupiano <matthew.trupiano.professional@gmail.com>
