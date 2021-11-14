@@ -4,6 +4,8 @@
 # knnwtsim
 
 <!-- badges: start -->
+
+[![R-CMD-check](https://github.com/mtrupiano1/knnwtsim/workflows/R-CMD-check/badge.svg)](https://github.com/mtrupiano1/knnwtsim/actions)
 <!-- badges: end -->
 
 The goal of knnwtsim is to provide a package to share and implement a
