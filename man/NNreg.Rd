@@ -20,7 +20,7 @@ numeric value of the mean of the \code{k.in2} nearest neighbors in \code{y.in2}
 Finds the index of the nearest neighbors for a single point given that point's
 vector of similarities to all observations eligible to be considered as neighbors. The \code{k.in2}
 neighbors are identified by their index in the similarity vector, and this index is used to
-identify the neigbor points in \code{y.in2}. The function then returns the mean of the values
+identify the neighbor points in \code{y.in2}. The function then returns the mean of the values
 in \code{y.in2} identified as neighbors. It is suggested to call this function through \code{knn.forecast()}
 for all points to be forecasted simultaneously.
 }

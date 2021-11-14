@@ -18,7 +18,7 @@
 #' @param y.in numeric vector of the series to be forecast
 #' @param test.h numeric value representing the number of points in the test forecast horizon
 #' @param max.k numeric value representing the maximum value of k, \code{knn.forecast()} should use, will be set to \code{min(floor((length(y.in))*.4),50)} if \code{NA} is passed
-#' @param val.holdout.len numeric value representing the number of observations at the end of the series to be removed in testing foreacst if desired to leave a validation set after tuning
+#' @param val.holdout.len numeric value representing the number of observations at the end of the series to be removed in testing forecast if desired to leave a validation set after tuning
 #'
 #' @return a list of the following components
 #' \describe{
