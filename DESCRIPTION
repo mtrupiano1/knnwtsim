@@ -8,6 +8,8 @@ Description: This package contains functions to assist in the implementation of 
 License: GPL (>= 3) 
 Encoding: UTF-8
 LazyData: true
+URL: https://github.com/mtrupiano1/knnwtsim
+BugReports: https://github.com/mtrupiano1/knnwtsim/issues
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
