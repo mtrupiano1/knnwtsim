@@ -138,7 +138,7 @@ legend('bottomleft',legend=c('actuals','KNN Forecast'),col=c('black','red'),lty=
 In most cases you will likely want to tune the hyperparameters used in the construction
 of `S_w`, and the number of nearest neighbors, `k`, to consider for any given point. There 
 are many approaches that can be taken to accomplish this tuning, and many users
-choose to implement their preferred approach. However, for those who want something pre-built
+may choose to implement their preferred approach. However, for those who want something pre-built
 I have included a simple tuning function with the package called `knn.forecast.randomsearch.tuning()`.
 This function creates a randomly generated `Grid` of potential sets of hyperparameters `k`,`alpha`,`beta`,`gamma` and generates a forecast of length `test.h` on the last `test.h` points in the series. The best set of parameters 
 are selected based on which row of the `Grid` led to the forecast with the lowest MAPE (Mean Absolute Percent Error) over the points in the forecast, and returned as the `weight.opt` and `k.opt` items of the list object returned by the function. Additionally, the 'optimal' similarity matrix to pass to `knn.forecast()` is also returned as `Sw.opt`, as are the testing grid (`Grid`), best test MAPE (`Test.MAPE.opt`), and the full vector of test MAPE values (`MAPE.all`) corresponding to each row in `Grid`.
@@ -152,7 +152,7 @@ previous section and generate a forecast using the included tuning function.
 
 ```{r tuning-example}
 
-#Calcualte component similarity matrices
+#Calculate component similarity matrices
 St.ex <- StMatrixCalc(df$t)
 Sp.ex <- SpMatrixCalc(df$p,nPeriods=nperiods)
 Sx.ex <- SxMatrixCalc(X)

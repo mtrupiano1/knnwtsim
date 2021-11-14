@@ -166,7 +166,7 @@ legend('bottomleft',legend=c('actuals','KNN Forecast'),col=c('black','red'),lty=
 In most cases you will likely want to tune the hyperparameters used in
 the construction of `S_w`, and the number of nearest neighbors, `k`, to
 consider for any given point. There are many approaches that can be
-taken to accomplish this tuning, and many users choose to implement
+taken to accomplish this tuning, and many users may choose to implement
 their preferred approach. However, for those who want something
 pre-built I have included a simple tuning function with the package
 called `knn.forecast.randomsearch.tuning()`. This function creates a
@@ -193,7 +193,7 @@ Using the example series from the previous section, we can reproduce the
 using the included tuning function.
 
 ``` r
-#Calcualte component similarity matrices
+#Calculate component similarity matrices
 St.ex <- StMatrixCalc(df$t)
 Sp.ex <- SpMatrixCalc(df$p,nPeriods=nperiods)
 Sx.ex <- SxMatrixCalc(X)
