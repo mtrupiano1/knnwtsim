@@ -1,16 +1,16 @@
 context("Tests on the various functions for generating similarities in sim_mats.R")
 library(stats)
 
-test_that("SeasonalAbsDissimilarity works when around and direct dis are needed", {
+test_that("SeasonalAbsDissimilarity works when around and direct diss are needed", {
   px <- 1
   py <- 6
   pz <- 3
   np <- 7
 
-  #Test of around dist
+  #Test of around diss
   expect_equal(SeasonalAbsDissimilarity(px,py,np), 2)
 
-  #Test of direct dist
+  #Test of direct diss
   expect_equal(SeasonalAbsDissimilarity(px,pz,np), 2)
 })
 
