@@ -16,7 +16,7 @@ numeric value of the absolute difference between \code{p1} and \code{p2}
 }
 \description{
 Simply takes the absolute difference between two points, meaning points close
-in time will have smaller dissimilarity. This is equivalent to Euclidean Distance
+in time will have smaller dissimilarity. This is equivalent to Euclidean Distance.
 }
 \examples{
 TempAbsDissimilarity(1,3)

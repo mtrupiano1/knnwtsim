@@ -30,7 +30,10 @@ SwMatrixCalc(
 numeric matrix which is the weighted similarity matrix \code{S_w}
 }
 \description{
-Calculate Weighted Similarity Matrix
+A wrapper function which calls each of \code{StMatrixCalc(v=t.in)}, \code{SpMatrixCalc(v=p.in,nPeriods=nPeriods.in)},
+and \code{SxMatrixCalc(A=X.in,XdistMetric=XdistMetric.in)} to generate the three component matrices of \code{S_w}. Then
+generates the final weighted similarity matrix as the sum of each component matrix multiplied by its corresponding \code{weights}.
+The first value in \code{weights} will be multiplied by \code{S_t}, the second \code{S_p}, and the third \code{S_x}.
 }
 \examples{
 t <- c(1,2,3)

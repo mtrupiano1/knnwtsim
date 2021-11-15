@@ -18,7 +18,7 @@ numeric value of the Seasonality Dissimilarity between \code{p1} and \code{p2}
 }
 \description{
 Calculate Seasonal Dissimilarity measure between the respective seasonal period
-two points, given the number of periods in one full seasonal cycle
+two points, given the number of periods in one full seasonal cycle.
 }
 \examples{
 SeasonalAbsDissimilarity(1,4,4)
