@@ -11,8 +11,8 @@
 #' @export
 #'
 #' @examples
-#' SeasonalAbsDistance(1,4,4)
-SeasonalAbsDistance <- function(p1,p2,nPeriods){
+#' SeasonalAbsDissimilarity(1,4,4)
+SeasonalAbsDissimilarity <- function(p1,p2,nPeriods){
   minPeriod <- 1
 
   DirectDis <- abs(p1-p2)
@@ -27,7 +27,7 @@ SeasonalAbsDistance <- function(p1,p2,nPeriods){
 #' Calculate Seasonal Similarity Matrix
 #'
 #' Generates and returns an nxn matrix by calculating the Seasonal Dissimilarity
-#' (see \code{SeasonalAbsDistance()}) for each possible pair of points in a vector
+#' (see \code{SeasonalAbsDissimilarity()}) for each possible pair of points in a vector
 #' of seasonal periods, then converts Dissimilarity matrix to a Similarity matrix using 1/(D_p +1)
 #'
 #' @param v numeric vector with the seasonal periods corresponding to each point in the response series
@@ -47,7 +47,7 @@ SpMatrixCalc <- function(v,nPeriods){
     p1 <- v[i]
     for (j in c(1:n)){
       p2 <- v[j]
-      dpmat[i,j] <- SeasonalAbsDistance(p1,p2,nPeriods)
+      dpmat[i,j] <- SeasonalAbsDissimilarity(p1,p2,nPeriods)
     }
   }
   spmat <- 1/(1+dpmat)
@@ -68,8 +68,8 @@ SpMatrixCalc <- function(v,nPeriods){
 #' @export
 #'
 #' @examples
-#' TempAbsDistance(1,3)
-TempAbsDistance <- function(p1,p2){
+#' TempAbsDissimilarity(1,3)
+TempAbsDissimilarity <- function(p1,p2){
   Dt <- abs(p1-p2)
   return(Dt)
 }
@@ -78,7 +78,7 @@ TempAbsDistance <- function(p1,p2){
 #' Calculate Temporal Similarity Matrix
 #'
 #' Generates and returns an nxn matrix by calculating the absolute difference
-#' (see \code{TempAbsDistance()}) for each possible pair of points in a vector
+#' (see \code{TempAbsDissimilarity()}) for each possible pair of points in a vector
 #' of the time order of each point in a series,
 #' then converts Dissimilarity matrix to a Similarity matrix using 1/(D_t +1)
 #'
@@ -98,7 +98,7 @@ StMatrixCalc <- function(v){
     p1 <- v[i]
     for (j in c(1:n)){
       p2 <- v[j]
-      dtmat[i,j] <- TempAbsDistance(p1,p2)
+      dtmat[i,j] <- TempAbsDissimilarity(p1,p2)
     }
   }
   stmat <- 1/(1+dtmat)

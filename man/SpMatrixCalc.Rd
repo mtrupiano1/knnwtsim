@@ -16,7 +16,7 @@ numeric matrix of Seasonal Similarities for the vector \code{v}
 }
 \description{
 Generates and returns an nxn matrix by calculating the Seasonal Dissimilarity
-(see \code{SeasonalAbsDistance()}) for each possible pair of points in a vector
+(see \code{SeasonalAbsDissimilarity()}) for each possible pair of points in a vector
 of seasonal periods, then converts Dissimilarity matrix to a Similarity matrix using 1/(D_p +1)
 }
 \examples{

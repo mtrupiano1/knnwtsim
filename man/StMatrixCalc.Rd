@@ -14,7 +14,7 @@ numeric matrix of Temporal Similarities for the vector \code{v}
 }
 \description{
 Generates and returns an nxn matrix by calculating the absolute difference
-(see \code{TempAbsDistance()}) for each possible pair of points in a vector
+(see \code{TempAbsDissimilarity()}) for each possible pair of points in a vector
 of the time order of each point in a series,
 then converts Dissimilarity matrix to a Similarity matrix using 1/(D_t +1)
 }

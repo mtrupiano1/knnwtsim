@@ -1,17 +1,17 @@
 context("Tests on the various functions for generating similarities in sim_mats.R")
 library(stats)
 
-test_that("SeasonalAbsDistance works when around and direct dist are needed", {
+test_that("SeasonalAbsDissimilarity works when around and direct dis are needed", {
   px <- 1
   py <- 6
   pz <- 3
   np <- 7
 
   #Test of around dist
-  expect_equal(SeasonalAbsDistance(px,py,np), 2)
+  expect_equal(SeasonalAbsDissimilarity(px,py,np), 2)
 
   #Test of direct dist
-  expect_equal(SeasonalAbsDistance(px,pz,np), 2)
+  expect_equal(SeasonalAbsDissimilarity(px,pz,np), 2)
 })
 
 
@@ -31,16 +31,16 @@ test_that("SpMatrixCalc matches hand calculation", {
 })
 
 
-test_that("TempAbsDistance correctly takes absolute difference", {
+test_that("TempAbsDissimilarity correctly takes absolute difference", {
   px <- 3
   py <- 6
   pz <- 1
 
   #Test of neg diff
-  expect_equal(TempAbsDistance(px,py), 3)
+  expect_equal(TempAbsDissimilarity(px,py), 3)
 
   #Test of pos diff
-  expect_equal(TempAbsDistance(px,pz), 2)
+  expect_equal(TempAbsDissimilarity(px,pz), 2)
 
 })
 
