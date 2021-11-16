@@ -78,7 +78,7 @@ Where we have two points `y_i` and `y_j` with `p_i` and `p_j`
 representing the corresponding period of those points, and a total of
 `p_max` periods in a full periodic cycle. The value returned by
 `SeasonalAbsDissimilarity(p_i,p_j,p_max)` will be
-`min(DirectDis,AroundDis)` where `DirectDis <- abs(p_i,p_j)` and
+`min(DirectDis,AroundDis)` where `DirectDis <- abs(p_i - p_j)` and
 `AroundDis <- abs(min(p_i,p_j) - 1) + abs(p_max - max(p_i,p_j)) + 1`.
 
 This formulation is based on the idea that generally the periods at the
@@ -101,11 +101,11 @@ in `stats::dist()`.
 ### KNN Forecasting
 
 K Nearest Neighbors forecasting is implemented in this package through
-the function `knn.forecast()`. Using a provided similarity matrix, note
-that this function does not actually require `S_w` specifically is used,
-the function will perform K Nearest Neighbors regression on each point
-in a specified index `f.index.in`, returning the mean of the identified,
-`k.in`, neighbors in the response series `y.in`.
+the function `knn.forecast()`. Using a provided similarity matrix, which
+is not required to be `S_w` specifically, the function will perform K
+Nearest Neighbors regression on each point in a specified index
+`f.index.in`, returning the mean of the identified, `k.in`, neighbors in
+the response series `y.in`.
 
 Mathematically the estimate for a given point `y_t` is formulated as the
 mean of the previous points in the series `y_i` identified to be in the
