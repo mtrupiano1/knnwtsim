@@ -45,11 +45,22 @@ between all observations in terms of the values of one or more exogenous
 predictors associated with a given observation. `gamma` is the weight
 between 0-1 assigned to this matrix in the calculation of `S_w`.
 
+The function `SwMatrixCalc()` calls each of the previous similarity
+matrix functions to generate the final matrix to use in
+`knn.forecast()`.
+
+The weights `alpha`, `beta`, and `gamma` are recommended to be set so
+that they sum to 1. In this case each element of `S_w` should also be
+between 0-1, with the diagonal elements being equal to 1.
+
+#### Component Similarity Details
+
 Initially `S_t`, `S_p`, and `S_x` are calculated as dissimilarity
-matrices, `D_t`,`D_p`, and `D_x`. They are transformed to a similarity
-matrices by the formula `1/(D+1)`, which also ensures each element of
-the similarity matrices fall in the range `(0,1]`. With 1 representing
-the greatest similarity, and the values approaching 0 the least.
+matrices, `D_t`,`D_p`, and `D_x`. They are then transformed to
+similarity matrices by the formula `1/(D+1)`, where `D` is any
+dissimilarity matrix. This also ensures each element of the similarity
+matrices fall in the range `(0,1]`, with 1 representing the greatest
+similarity, and the values approaching 0 the least.
 
 When `StMatrixCalc()` generates the intermediate dissimilarity matrix,
 `D_t`, it calls the function `TempAbsDissimilarity()` for each pairwise
@@ -69,14 +80,15 @@ representing the corresponding period of those points, and a total of
 `SeasonalAbsDissimilarity(p_i,p_j,p_max)` will be
 `min(DirectDis,AroundDis)` where `DirectDis <- abs(p_i,p_j)` and
 `AroundDis <- abs(min(p_i,p_j) - 1) + abs(p_max - max(p_i,p_j)) + 1`.
-This is based on the idea that generally the periods at the very end and
-very beginning of a cycle should be fairly similar. For example in a
-monthly cycle where 1 represents January and 12 represents December,
-these two months are generally more similar to eachother then say period
-July at period 7. Continuing with the monthly example, if we have three
-points which occur in January, March, and November: `p_i = 1`,
-`p_j = 3`, `p_k = 11` with `p_max = 12`. Then
-`SeasonalAbsDissimilarity(p_i,p_j,p_max) = 2`,
+
+This formulation is based on the idea that generally the periods at the
+very end and very beginning of a cycle should be fairly similar. To
+clarify through an example, in a monthly cycle where 1 represents
+January and 12 represents December, these two months are generally more
+similar to each-other than either are to July at period 7. Continuing
+with this monthly example, if we have three points which occur in
+January, March, and November: `p_i = 1`, `p_j = 3`, `p_k = 11` with
+`p_max = 12`. Then `SeasonalAbsDissimilarity(p_i,p_j,p_max) = 2`,
 `SeasonalAbsDissimilarity(p_i,p_k,p_max) = 2`, and
 `SeasonalAbsDissimilarity(p_j,p_k,p_max) = 4`.
 
@@ -85,14 +97,6 @@ the intermediate dissimilarity matrix, `D_x`, for an input matrix or
 vector using the method indicated by the `XdistMetric` argument of
 `SxMatrixCalc()`. Naturally, this limits `D_x` to the methods available
 in `stats::dist()`.
-
-The function `SwMatrixCalc()` calls each of the previous similarity
-matrix functions to generate the final matrix to use in
-`knn.forecast()`.
-
-The weights `alpha`, `beta`, and `gamma` are recommended to be set so
-that they sum to 1. In this case each element of `S_w` should also be
-between 0-1, with the diagonal elements being equal to 1.
 
 ### KNN Forecasting
 
