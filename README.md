@@ -127,6 +127,12 @@ be considered eligible neighbors.
 
 ## Installation
 
+You can install the most recent stable version from CRAN with
+
+``` r
+install.packages("knnwtsim")
+```
+
 You can install the development version of knnwtsim from
 [GitHub](https://github.com/) with:
 

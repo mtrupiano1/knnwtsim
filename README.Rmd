@@ -72,11 +72,18 @@ In the neighborhood `K(y_t)` will be the `k` observations of `y_i` with the high
 
 ## Installation
 
+You can install the most recent stable version from CRAN with 
+
+``` r
+install.packages("knnwtsim")
+```
+
 You can install the development version of knnwtsim from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
 devtools::install_github("mtrupiano1/knnwtsim")
+
 ```
 
 ## Example with Known Similarity Matrix Weights and `k`
