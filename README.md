@@ -6,6 +6,8 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/mtrupiano1/knnwtsim/workflows/R-CMD-check/badge.svg)](https://github.com/mtrupiano1/knnwtsim/actions)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/knnwtsim)](https://CRAN.R-project.org/package=knnwtsim)
 <!-- badges: end -->
 
 The goal of knnwtsim is to provide a package to share and implement a
