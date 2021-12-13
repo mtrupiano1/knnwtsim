@@ -7,14 +7,14 @@
 NNreg(v, k.in2, y.in2)
 }
 \arguments{
-\item{v}{numeric vector of similarities used to identify nearest neighbors}
+\item{v}{numeric vector of similarities used to identify nearest neighbors.}
 
-\item{k.in2}{integer value indicating the the number of nearest neighbors to be considered}
+\item{k.in2}{integer value indicating the the number of nearest neighbors to be considered.}
 
-\item{y.in2}{numeric vector of the series to be forecast}
+\item{y.in2}{numeric vector of the response series to be forecast.}
 }
 \value{
-numeric value of the mean of the \code{k.in2} nearest neighbors in \code{y.in2}
+numeric value of the mean of the \code{k.in2} nearest neighbors in \code{y.in2}.
 }
 \description{
 Finds the index of the nearest neighbors for a single point given that point's
@@ -25,9 +25,10 @@ in \code{y.in2} identified as neighbors. It is suggested to call this function t
 for all points to be forecasted simultaneously.
 }
 \examples{
-Sim.Mat <- matrix(c(1,.5,.2,.5,1,.7,.2,.7,1),nrow=3,ncol=3,byrow=TRUE)
+Sim.Mat <- matrix(c(1, .5, .2, .5, 1, .7, .2, .7, 1),
+  nrow = 3, ncol = 3, byrow = TRUE)
 Sim.Mat.col <- Sim.Mat[-(3),3]
-y <- c(2,1,5)
+y <- c(2, 1, 5)
 k <- 2
-NNreg(v=Sim.Mat.col,k.in2=2,y.in2=y)
+NNreg(v = Sim.Mat.col, k.in2 = 2, y.in2 = y)
 }

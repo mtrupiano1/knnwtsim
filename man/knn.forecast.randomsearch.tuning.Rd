@@ -16,30 +16,31 @@ knn.forecast.randomsearch.tuning(
 )
 }
 \arguments{
-\item{grid.len}{numeric value representing the number of hyperparameter sets to generate and test}
+\item{grid.len}{integer value representing the number of hyperparameter sets to generate and test.}
 
-\item{St.in}{numeric matrix of Similarities, recommend generating with \code{StMatrixCalc()}}
+\item{St.in}{numeric matrix of similarities, can be generated with \code{StMatrixCalc()}.}
 
-\item{Sp.in}{numeric matrix of Similarities, recommend generating with \code{SpMatrixCalc()}}
+\item{Sp.in}{numeric matrix of similarities, can be generated with \code{SpMatrixCalc()}.}
 
-\item{Sx.in}{numeric matrix of Similarities, recommend generating with \code{SxMatrixCalc()}}
+\item{Sx.in}{numeric matrix of similarities, can be generated with \code{SxMatrixCalc()}.}
 
-\item{y.in}{numeric vector of the series to be forecast}
+\item{y.in}{numeric vector of the response series to be forecast.}
 
-\item{test.h}{numeric value representing the number of points in the test forecast horizon}
+\item{test.h}{integer value representing the number of points in the test forecast horizon.}
 
-\item{max.k}{numeric value representing the maximum value of k, \code{knn.forecast()} should use, will be set to \code{min(floor((length(y.in))*.4),50)} if \code{NA} is passed}
+\item{max.k}{integer value representing the maximum value of k, \code{knn.forecast()} should use, will be set to \code{min(floor((length(y.in))*.4),50)} if \code{NA} is passed.}
 
-\item{val.holdout.len}{numeric value representing the number of observations at the end of the series to be removed in testing forecast if desired to leave a validation set after tuning}
+\item{val.holdout.len}{integer value representing the number of observations at the end of the series to be removed in testing forecast if desired to leave a validation set after tuning.}
 }
 \value{
-a list of the following components
+list of the following components:
 \describe{
-          \item{weight.opt}{numeric vector of the 3 weights to generate \code{Sw.opt} in alpha, beta, gamma order which achieved the best performance in terms of MAPE}
-          \item{k.opt}{numeric value of neighbors used in \code{knn.forecast()} which achieved the best performance in terms of MAPE}
-          \item{Test.MAPE}{numeric value of the MAPE result for the optimum hyperparamter set achieved on the test points}
-          \item{MAPE.all}{numeric vector of MAPE results, each observation corresponds to the row in \code{Grid} of the same index}
-          \item{Grid}{dataframe of all hyperparameter sets tested in the tuning}
+          \item{weight.opt}{numeric vector of the 3 weights to generate \code{Sw.opt} in alpha, beta, gamma order which achieved the best performance in terms of MAPE.}
+          \item{k.opt}{integer value of neighbors used in \code{knn.forecast()} which achieved the best performance in terms of MAPE.}
+          \item{Sw.opt}{numeric matrix of similarities calculated using \code{S_w}, with the best performing set of hyperparameters.}
+          \item{Test.MAPE}{numeric value of the MAPE result for the optimum hyperparamter set achieved on the test points.}
+          \item{MAPE.all}{numeric vector of MAPE results, each observation corresponds to the row in \code{Grid} of the same index.}
+          \item{Grid}{dataframe of all hyperparameter sets tested in the tuning.}
 }
 }
 \description{
@@ -49,7 +50,7 @@ which are used in \code{knn.forecast()} test against the last \code{test.h} poin
 any \code{val.holdout.len} points are removed from the end of \code{y.in}. The best performing set of
 parameters based on MAPE over over the forecast horizon of \code{test.h} points are returned as part of a list
 alongside the 'optimum' weighted similarity matrix \code{Sw.opt}, the \code{Grid} of tested sets, and the MAPE
-results. MAPE is the average of absolute percent errors for each point calculated as: \code{abs((test.actuals - test.forecast.i)/test.actuals)*100}. Where \code{test.forecast.i}
+results. MAPE is the average of absolute percent errors for each point calculated as: \code{abs((test.actuals - test.forecast.i) / test.actuals) * 100}. Where \code{test.forecast.i}
 and \code{test.actuals} are both numeric vectors.
 }
 \examples{
@@ -62,20 +63,20 @@ df <- data.frame(ex.series)
 df$t <- c(1:nrow(df))
 #Generate vector of periods
 nperiods <- simulation_master_list[[series.index]]$seasonal.periods
-df$p <- rep(1:nperiods,length.out=nrow(df))
+df$p <- rep(1:nperiods, length.out = nrow(df))
 #Pull corresponding exogenous predictor(s)
 X <- as.matrix(simulation_master_list[[series.index]]$x.chng)
 
 St.ex <- StMatrixCalc(df$t)
-Sp.ex <- SpMatrixCalc(df$p,nPeriods=nperiods)
+Sp.ex <- SpMatrixCalc(df$p, nPeriods = nperiods)
 Sx.ex <- SxMatrixCalc(X)
 
-tuning.test <- knn.forecast.randomsearch.tuning(grid.len=10
-,y.in = ex.series
-,St.in = St.ex
-,Sp.in = Sp.ex
-,Sx.in = Sx.ex
-,test.h = 3
-,max.k = 10
-,val.holdout.len=3)
+tuning.test <- knn.forecast.randomsearch.tuning(grid.len = 10,
+  y.in = ex.series,
+  St.in = St.ex,
+  Sp.in = Sp.ex,
+  Sx.in = Sx.ex,
+  test.h = 3,
+  max.k = 10,
+  val.holdout.len=3)
 }

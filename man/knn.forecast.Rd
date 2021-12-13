@@ -7,16 +7,16 @@
 knn.forecast(Sim.Mat.in, f.index.in, k.in, y.in)
 }
 \arguments{
-\item{Sim.Mat.in}{numeric matrix of similarities (recommend use of \code{S_w}, see \code{SwMatrixCalc()})}
+\item{Sim.Mat.in}{numeric matrix of similarities (recommend use of \code{S_w}, see \code{SwMatrixCalc()}).}
 
-\item{f.index.in}{numeric vector indicated the indices of \code{Sim.Mat.in} and \code{y.in} which correspond to the points to be forecast}
+\item{f.index.in}{numeric vector indicating the indices of \code{Sim.Mat.in} and \code{y.in} which correspond to the time order of the points to be forecast.}
 
-\item{k.in}{integer value indicating the the number of nearest neighbors to be considered in forecasting}
+\item{k.in}{integer value indicating the the number of nearest neighbors to be considered in forecasting.}
 
-\item{y.in}{numeric vector of the series to be forecast}
+\item{y.in}{numeric vector of the response series to be forecast.}
 }
 \value{
-numeric vector of the same length as \code{f.index.in}, of forecasted observations
+numeric vector of the same length as \code{f.index.in}, of forecasted observations.
 }
 \description{
 Provide an nxn similarity matrix as input, all points both observed and those to be
@@ -28,9 +28,10 @@ based on the row index of the \code{k.in} most similar observations in the colum
 and \code{y.in} accurately reflect the time order of the observations.
 }
 \examples{
-Sim.Mat <- matrix(c(1,.5,.2,.5,1,.7,.2,.7,1),nrow=3,ncol=3,byrow=TRUE)
-y <- c(2,1,5)
+Sim.Mat <- matrix(c(1, .5, .2, .5, 1, .7, .2, .7, 1),
+  nrow = 3, ncol = 3, byrow = TRUE)
+y <- c(2, 1, 5)
 f.index <- c(3)
 k <- 2
-knn.forecast(Sim.Mat.in = Sim.Mat,f.index.in = f.index,y.in = y,k.in = k)
+knn.forecast(Sim.Mat.in = Sim.Mat, f.index.in = f.index, y.in = y, k.in = k)
 }
