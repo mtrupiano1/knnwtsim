@@ -14,31 +14,32 @@ SwMatrixCalc(
 )
 }
 \arguments{
-\item{t.in}{numeric vector of time orders for points in the response series}
+\item{t.in}{numeric vector of time orders for points in the response series.}
 
-\item{p.in}{numeric vector of period within a seasonal cycle (ex. 1 for January points in monthly data)}
+\item{p.in}{numeric vector of period within a seasonal cycle (ex. 1 for January points in monthly data).}
 
-\item{nPeriods.in}{numeric scalar indicating the maximum value \code{p.in} could take on (ex. 12 for monthly data)}
+\item{nPeriods.in}{numeric scalar indicating the maximum value \code{p.in} could take on (ex. 12 for monthly data).}
 
-\item{X.in}{numeric vector or matrix of exogenous predictors, where the rows correspond to points in the response series}
+\item{X.in}{numeric vector or matrix of exogenous predictors, where the rows correspond to points in the response series.}
 
-\item{XdistMetric.in}{character describing the method \code{stats::dist()} should use. This must be one of "euclidean", "maximum", "manhattan", "canberra", "binary" or "minkowski".}
+\item{XdistMetric.in}{character describing the method \code{stats::dist()} should use. This must be one of \code{"euclidean"},
+\code{"maximum"}, \code{"manhattan"}, \code{"canberra"}, \code{"binary"}, or \code{"minkowski"}.}
 
-\item{weights}{numeric vector where first value represents weight for \code{S_t}, second value the weight for \code{S_p}, and the third value the weight for \code{S_x}}
+\item{weights}{numeric vector where first value represents weight for \code{S_t}, second value the weight for \code{S_p}, and the third value the weight for \code{S_x}.}
 }
 \value{
-numeric matrix which is the weighted similarity matrix \code{S_w}
+numeric matrix of similarities which is calculated using \code{S_w}.
 }
 \description{
 A wrapper function which calls each of \code{StMatrixCalc(v=t.in)}, \code{SpMatrixCalc(v=p.in,nPeriods=nPeriods.in)},
-and \code{SxMatrixCalc(A=X.in,XdistMetric=XdistMetric.in)} to generate the three component matrices of \code{S_w}. Then
+and \code{SxMatrixCalc(A=X.in,XdistMetric=XdistMetric.in)} to generate the three matrices of using the component measures of \code{S_w}. Then
 generates the final weighted similarity matrix as the sum of each component matrix multiplied by its corresponding \code{weights}.
 The first value in \code{weights} will be multiplied by \code{S_t}, the second \code{S_p}, and the third \code{S_x}.
 }
 \examples{
-t <- c(1,2,3)
-p <- c(1,2,1)
-X <- matrix(c(1,1,1,2,2,2,3,3,3),nrow=3,ncol=3,byrow=TRUE)
-SwMatrixCalc(t.in=t,p.in=p,nPeriods.in = 2,X.in=X
-             ,XdistMetric.in = "euclidean",weights=c(1/4,1/4,1/2))
+t <- c(1, 2, 3)
+p <- c(1, 2, 1)
+X <- matrix(c(1, 1, 1, 2, 2, 2, 3, 3, 3), nrow = 3, ncol = 3, byrow = TRUE)
+SwMatrixCalc(t.in = t, p.in = p, nPeriods.in = 2, X.in = X,
+  weights = c(1/4,1/4,1/2))
 }

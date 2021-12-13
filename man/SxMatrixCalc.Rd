@@ -7,19 +7,20 @@
 SxMatrixCalc(A, XdistMetric = "euclidean")
 }
 \arguments{
-\item{A}{numeric matrix or numeric vector where the columns represents exogenous predictor variables and the rows correspond to the points in the respond series}
+\item{A}{numeric matrix or numeric vector where the columns represents exogenous predictor variables and the rows correspond to the points in the response series.}
 
-\item{XdistMetric}{character describing the method \code{stats::dist()} should use. This must be one of "euclidean", "maximum", "manhattan", "canberra", "binary" or "minkowski".}
+\item{XdistMetric}{character describing the method \code{stats::dist()} should use.
+This must be one of \code{"euclidean"}, \code{"maximum"}, \code{"manhattan"}, \code{"canberra"}, \code{"binary"}, or \code{"minkowski"}.}
 }
 \value{
-numeric matrix of distances for \code{A}
+numeric matrix of distances for \code{A}.
 }
 \description{
 Largely a wrapper function for the \code{stats::dist()} function. First calculates
 nxn distance matrix using specified method for an input matrix or vector using
- \code{stats::dist()}. Then converts the distance matrix to Similarity matrix using 1/(D_x +1).
+ \code{stats::dist()}. Then converts the distance matrix to similarity matrix using 1/(D_x + 1).
 }
 \examples{
-X <- matrix(c(1,1,1,2,2,2,3,3,3),nrow=3,ncol=3,byrow=TRUE)
-SxMatrixCalc(X,'euclidean')
+X <- matrix(c(1, 1, 1, 2, 2, 2, 3, 3, 3), nrow = 3, ncol = 3, byrow = TRUE)
+SxMatrixCalc(X)
 }

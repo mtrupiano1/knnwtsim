@@ -7,17 +7,17 @@
 TempAbsDissimilarity(p1, p2)
 }
 \arguments{
-\item{p1}{numeric value representing the time order of the point in the response series}
+\item{p1}{numeric value representing the time order of the point in the response series.}
 
-\item{p2}{numeric value representing the time order of the point in the response series}
+\item{p2}{numeric value representing the time order of the point in the response series.}
 }
 \value{
-numeric value of the absolute difference between \code{p1} and \code{p2}
+numeric value of the absolute difference between \code{p1} and \code{p2}.
 }
 \description{
 Simply takes the absolute difference between two points, meaning points close
 in time will have smaller dissimilarity. This is equivalent to Euclidean Distance.
 }
 \examples{
-TempAbsDissimilarity(1,3)
+TempAbsDissimilarity(1, 3)
 }

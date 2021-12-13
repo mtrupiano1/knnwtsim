@@ -7,19 +7,19 @@
 SeasonalAbsDissimilarity(p1, p2, nPeriods)
 }
 \arguments{
-\item{p1}{numeric value representing a seasonal period}
+\item{p1}{numeric value representing a seasonal period.}
 
-\item{p2}{numeric value representing a seasonal period}
+\item{p2}{numeric value representing a seasonal period.}
 
-\item{nPeriods}{numeric value representing the maximum value \code{p1} or \code{p2} can take on}
+\item{nPeriods}{numeric value representing the maximum value \code{p1} or \code{p2} can take on.}
 }
 \value{
-numeric value of the Seasonality Dissimilarity between \code{p1} and \code{p2}
+numeric value of the seasonal dissimilarity between \code{p1} and \code{p2}.
 }
 \description{
-Calculate Seasonal Dissimilarity measure between the respective seasonal period
+Calculate seasonal dissimilarity measure between the respective seasonal period
 two points, given the number of periods in one full seasonal cycle.
 }
 \examples{
-SeasonalAbsDissimilarity(1,4,4)
+SeasonalAbsDissimilarity(1, 4, 4)
 }
