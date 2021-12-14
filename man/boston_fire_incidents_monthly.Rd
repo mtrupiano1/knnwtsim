@@ -7,9 +7,9 @@
 \format{
 A dataframe with 55 rows and 3 variables:
 \describe{
-          \item{week}{first day of a given month, date}
-          \item{incidents}{summarized count of fire incidents in the month which starts the date of the corresponding month variable}
-          \item{covid.soe.ind}{1 if the month contains days between '2020-03-10' and '2021-06-15' when a state of emergency for COVID-19 was declared in MA else 0}
+          \item{week}{first day of a given month, date.}
+          \item{incidents}{summarized count of fire incidents in the month which starts the date of the corresponding month variable.}
+          \item{covid.soe.ind}{1 if the month contains days between '2020-03-10' and '2021-06-15' when a state of emergency for COVID-19 was declared in Massachusetts else 0.}
 }
 }
 \source{
@@ -23,6 +23,6 @@ A dataset which contains the monthly count of fire incidents in the city of
 Boston, MA, USA, as well as one indicator for the period where a
 COVID-19 state of emergency was declared in Massachusetts.
 Data is present for starting from 2017-01-01 to 2021-07-01. Derived by Matthew Trupiano
-from a series of .csv files hosted on \url{https://data.boston.gov/}
+from a series of .csv files hosted on \url{https://data.boston.gov/}.
 }
 \keyword{datasets}

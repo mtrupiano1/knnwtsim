@@ -86,7 +86,7 @@ knn.forecast.randomsearch.tuning <- function(grid.len = 100
   }
 
   #Randomly propose sets of hyperparameters
-  ks <- base::sample(1:k.cap,size=grid.len,replace=T)
+  ks <- base::sample(1:k.cap,size=grid.len,replace=TRUE)
   alpha.0 <- stats::runif(grid.len,min=.001,max=10000)
   beta.0<- stats::runif(grid.len,min=.001,max=10000)
   gamma.0<- stats::runif(grid.len,min=.001,max=10000)
