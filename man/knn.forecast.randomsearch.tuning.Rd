@@ -12,7 +12,8 @@ knn.forecast.randomsearch.tuning(
   y.in,
   test.h = 1,
   max.k = NA,
-  val.holdout.len = 0
+  val.holdout.len = 0,
+  min.k = 1
 )
 }
 \arguments{
@@ -31,6 +32,8 @@ knn.forecast.randomsearch.tuning(
 \item{max.k}{integer value representing the maximum value of k, \code{knn.forecast()} should use, will be set to \code{min(floor((length(y.in))*.4),50)} if \code{NA} is passed.}
 
 \item{val.holdout.len}{integer value representing the number of observations at the end of the series to be removed in testing forecast if desired to leave a validation set after tuning.}
+
+\item{min.k}{integer value representing the minimum value of k, \code{knn.forecast()} should use.}
 }
 \value{
 list of the following components:

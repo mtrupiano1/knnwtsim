@@ -19,6 +19,7 @@
 #' @param test.h integer value representing the number of points in the test forecast horizon.
 #' @param max.k integer value representing the maximum value of k, \code{knn.forecast()} should use, will be set to \code{min(floor((length(y.in))*.4),50)} if \code{NA} is passed.
 #' @param val.holdout.len integer value representing the number of observations at the end of the series to be removed in testing forecast if desired to leave a validation set after tuning.
+#' @param min.k integer value representing the minimum value of k, \code{knn.forecast()} should use.
 #'
 #' @return list of the following components:
 #' \describe{
@@ -67,7 +68,8 @@ knn.forecast.randomsearch.tuning <- function(grid.len = 100
                                              ,y.in
                                              ,test.h=1
                                              ,max.k =NA
-                                             ,val.holdout.len=0  ) {
+                                             ,val.holdout.len=0
+                                             ,min.k = 1) {
 
   n<- length(y.in)
 
@@ -86,7 +88,7 @@ knn.forecast.randomsearch.tuning <- function(grid.len = 100
   }
 
   #Randomly propose sets of hyperparameters
-  ks <- base::sample(1:k.cap,size=grid.len,replace=TRUE)
+  ks <- base::sample(min.k:k.cap,size=grid.len,replace=TRUE)
   alpha.0 <- stats::runif(grid.len,min=.001,max=10000)
   beta.0<- stats::runif(grid.len,min=.001,max=10000)
   gamma.0<- stats::runif(grid.len,min=.001,max=10000)
