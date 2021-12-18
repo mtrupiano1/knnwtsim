@@ -40,6 +40,15 @@ SeasonalAbsDissimilarity <- function(p1,p2,nPeriods){
 #' SpMatrixCalc(c(1, 2, 4), 4)
 #'
 SpMatrixCalc <- function(v,nPeriods){
+
+  if(!(is.vector(v, mode = 'numeric'))){
+    stop('v should be a numeric vector')
+  }
+
+  if((!(is.vector(nPeriods, mode = 'numeric'))) | (length(nPeriods) != 1L)){
+    stop('nPeriods should be numeric with length 1L')
+  }
+
   n <- length(v)
   dpmat <- matrix(NA,nrow=n,ncol=n)
 
@@ -92,7 +101,7 @@ TempAbsDissimilarity <- function(p1,p2){
 #'
 StMatrixCalc <- function(v){
 
-  if((!(is.numeric(v))) | (!(is.vector(v)))){
+  if(!(is.vector(v, mode = 'numeric'))){
     stop('v should be a numeric vector')
   }
 

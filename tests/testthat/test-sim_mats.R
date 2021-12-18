@@ -30,6 +30,31 @@ test_that("SpMatrixCalc matches hand calculation", {
 
 })
 
+test_that("SpMatrixCalc throws errors for bad arguments", {
+  ch.v <- c('a', 'b')
+  X.v <- matrix(c(1, 1, 1, 2, 2, 2, 3, 3, 3), nrow = 3, ncol = 3, byrow = TRUE)
+  good.v <- c(1, 2, 5)
+
+  long.np <- c(5, 5)
+  ch.np <- 'p'
+  good.np <- 5
+
+
+  #test for non-numeric v error
+  expect_error(SpMatrixCalc(ch.v, good.np))
+
+  #test for non-vector v error
+  expect_error(SpMatrixCalc(X.v, good.np))
+
+  #test for non-numeric nPeriods error
+  expect_error(SpMatrixCalc(good.v, long.np))
+
+  #test for non-vector v error
+  expect_error(SpMatrixCalc(good.v, ch.np))
+
+})
+
+
 
 test_that("TempAbsDissimilarity correctly takes absolute difference", {
   px <- 3
