@@ -57,7 +57,21 @@ test_that("StMatrixCalc matches hand calculation", {
 
   expect_equal(StMatrixCalc(vt),st.check)
 
+
 })
+
+test_that("StMatrixCalc throws errors for bad arguments", {
+  ch.v <- c('a', 'b')
+  X.v <- matrix(c(1, 1, 1, 2, 2, 2, 3, 3, 3), nrow = 3, ncol = 3, byrow = TRUE)
+
+  #test for non-numeric error
+  expect_error(StMatrixCalc(ch.v))
+
+  #test for non-vector error
+  expect_error(StMatrixCalc(X.v))
+
+})
+
 
 
 test_that("SxMatrixCalc wrapper matches direct call to dist() for vector", {

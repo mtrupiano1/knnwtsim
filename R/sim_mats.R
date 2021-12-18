@@ -91,6 +91,11 @@ TempAbsDissimilarity <- function(p1,p2){
 #' StMatrixCalc(c(1, 2, 3))
 #'
 StMatrixCalc <- function(v){
+
+  if((!(is.numeric(v))) | (!(is.vector(v)))){
+    stop('v should be a numeric vector')
+  }
+
   n <- length(v)
   dtmat <- matrix(NA,nrow=n,ncol=n)
 
