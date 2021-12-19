@@ -45,7 +45,7 @@ SpMatrixCalc <- function(v,nPeriods){
     stop('v should be a numeric vector')
   }
 
-  if((!(is.vector(nPeriods, mode = 'numeric'))) | (length(nPeriods) != 1L)){
+  if((!(is.vector(nPeriods, mode = 'numeric'))) | (!(identical(length(nPeriods),1L)))){
     stop('nPeriods should be numeric with length 1L')
   }
 
@@ -137,9 +137,14 @@ StMatrixCalc <- function(v){
 #' @examples
 #' X <- matrix(c(1, 1, 1, 2, 2, 2, 3, 3, 3), nrow = 3, ncol = 3, byrow = TRUE)
 #' SxMatrixCalc(X)
-SxMatrixCalc <- function(A,XdistMetric='euclidean'){
-  dxmat <- as.matrix(stats::dist(A,method=XdistMetric ,upper=TRUE,diag=TRUE))
-  sxmat <- 1/(1+dxmat)
+SxMatrixCalc <- function(A, XdistMetric = 'euclidean'){
+
+  if(!((is.vector(A, mode = 'numeric')) |  (is.matrix(A) & is.numeric(A)))){
+    stop('A should be a numeric vector or a numeric matrix')
+  }
+
+  dxmat <- as.matrix(stats::dist(A, method = XdistMetric, upper=TRUE, diag = TRUE))
+  sxmat <- 1 / (1 + dxmat)
   return(sxmat)
 }
 
@@ -171,17 +176,38 @@ SxMatrixCalc <- function(A,XdistMetric='euclidean'){
 #' SwMatrixCalc(t.in = t, p.in = p, nPeriods.in = 2, X.in = X,
 #'   weights = c(1/4,1/4,1/2))
 SwMatrixCalc<- function(t.in,p.in,nPeriods.in,X.in,XdistMetric.in='euclidean',weights=c(1/3,1/3,1/3)){
+
+  if(!(is.vector(weights, mode = 'numeric'))){
+    stop('weights should be a numeric vector')
+  } else if (length(weights) > 3){
+    warning('weights vector length > 3, only first three elements will be used')
+  } else if (length(weights) < 3){
+    stop('weights vector length < 3, if it is desired to exclude a component set weight to 0')
+  }
+
+  #The component function calls will handle errors relating to their respective arguments, just handling dimension problems here
+  if( (is.vector(t.in)) & (is.vector(p.in)) & (is.vector(X.in))){
+      if((!(identical(length(t.in), length(p.in)))) | (!(identical(length(t.in), length(X.in))))){
+        stop('t.in, p.in, and X.in are all vectors but lengths differ')
+      }
+  } else if ((is.vector(t.in)) & (is.vector(p.in)) & (is.matrix(X.in))) {
+    if((!(identical(length(t.in), length(p.in)))) | (!(identical(length(t.in), dim(X.in)[1])))){
+        stop('t.in, p.in, are vectors, and X.in is matrix, but vector lengths and matrix row dimension are not all equal')
+    }
+  }
+
+
   alpha <- weights[1]
   beta <- weights[2]
   gamma <- weights[3]
 
-  St <- StMatrixCalc(v=t.in)
+  St <- StMatrixCalc(v = t.in)
 
-  Sp <- SpMatrixCalc(v=p.in,nPeriods=nPeriods.in)
+  Sp <- SpMatrixCalc(v = p.in, nPeriods = nPeriods.in)
 
-  Sx <- SxMatrixCalc(A=X.in,XdistMetric=XdistMetric.in)
+  Sx <- SxMatrixCalc(A = X.in, XdistMetric = XdistMetric.in)
 
-  Sw <- alpha*St + beta*Sp + gamma*Sx
+  Sw <- alpha * St + beta * Sp + gamma * Sx
 
   return(Sw)
 

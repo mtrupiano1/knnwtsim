@@ -140,6 +140,26 @@ test_that("SxMatrixCalc wrapper matches direct call to dist() for matrix", {
 
 })
 
+test_that("SxMatrixCalc throws errors for bad arguments", {
+
+  x.mat <- matrix(c(1.2,8.3,4.7,12,1.6,6.7,7.8,3,7),nrow=3,ncol=3)
+  x.df <- data.frame(x.mat)
+  ch.mat <- matrix(c("1", "1", "1", "2", "2", "2", "3", "3", "3"), nrow = 3, ncol = 3, byrow = TRUE)
+
+  ch.v <- c('a', 'b')
+
+  #test for non-numeric vector error
+  expect_error(SxMatrixCalc(ch.v))
+
+  #test for non-numeric matrix error
+  expect_error(SxMatrixCalc(ch.mat))
+
+  #test for non matrix or vector error
+  expect_error(SxMatrixCalc(x.df))
+
+})
+
+
 
 
 test_that("SwMatrixCalc wrapper matches individual calls", {
@@ -166,3 +186,40 @@ test_that("SwMatrixCalc wrapper matches individual calls", {
 
 })
 
+
+test_that("SwMatrixCalc throws errors or warnings for bad arguments", {
+  vt <- c(1,2,3)
+  vp <- c(1,2,5)
+  np <- 5
+  x.v <- c(1.2,8.3,4.7)
+  X.lop.dim <-  matrix(c(1, 1, 2, 2, 3, 3), nrow = 2, ncol = 3, byrow = TRUE)
+
+  a<-.4
+  b<-.25
+  c<-.35
+
+  w.v <- c(a,b,c)
+  w.v.short <- w.v[1:2]
+  w.v.long <- c(w.v,1)
+  w.v.ch <- c('a','b','c')
+
+  #Test for too long weight vector warning
+  expect_warning(SwMatrixCalc(t.in = vt, p.in = vp, nPeriods.in = np, X.in = x.v
+    , weights = w.v.long))
+
+  #Test for too short weight vector error
+  expect_error(SwMatrixCalc(t.in = vt, p.in = vp, nPeriods.in = np, X.in = x.v
+    , weights = w.v.short))
+
+  #Test for non-numeric weight vector error
+  expect_error(SwMatrixCalc(t.in = vt, p.in = vp, nPeriods.in = np, X.in = x.v
+    , weights = w.v.ch))
+
+  #Test for vector dimension error
+  expect_error(SwMatrixCalc(t.in = vt, p.in = vp[1:2], nPeriods.in = np, X.in = x.v
+    , weights = w.v))
+
+  #Test for matrix dimension error
+  expect_error(SwMatrixCalc(t.in = vt, p.in = vp, nPeriods.in = np, X.in = X.lop.dim
+    , weights = w.v))
+})
