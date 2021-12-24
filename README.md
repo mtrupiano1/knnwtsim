@@ -10,18 +10,20 @@
 status](https://www.r-pkg.org/badges/version/knnwtsim)](https://CRAN.R-project.org/package=knnwtsim)
 <!-- badges: end -->
 
-The goal of knnwtsim is to provide a package to share and implement a
-project I have been working on around the use of KNN forecasting in
+The goal of `knnwtsim` is to provide a package to share and implement a
+forecasting methodology using k nearest neighbors (KNN) primarily for
 situations where the response series of interest can be predicted by a
 combination of its’ own recent realizations, its own periodic patterns,
 and by the values of one or multiple exogenous predictors.
 
-The package and project are focused primarily into two components. The
-first being calculation of a similarity measure which takes into account
-all three factors listed above (`S_w`), and can weight the degree to
-which each component contributed to the overall similarity. The second
-being the usage of this measure to identify neighbors and perform KNN
-regression.
+The functions of this package are focused primarily into two components.
+The first being calculation of a similarity measure which takes into
+account all three factors listed above (`S_w`), and can weight the
+degree to which each component contributed to the overall similarity.
+The second being the usage of this measure to identify neighbors and
+perform KNN regression. For a more formal discussion of the methodology
+used and the key user facing functions in `knnwtsim` please see Trupiano
+(2021) \<arXiv:2112.06266v1>.
 
 ## Formulation
 
