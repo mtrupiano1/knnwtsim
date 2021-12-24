@@ -26,6 +26,23 @@
 #' k <- 2
 #' knn.forecast(Sim.Mat.in = Sim.Mat, f.index.in = f.index, y.in = y, k.in = k)
 knn.forecast <- function(Sim.Mat.in,f.index.in,k.in,y.in) {
+
+  if(!(is.vector(y.in, mode = 'numeric'))){
+    stop('y.in should be a numeric vector')
+  }
+
+  if(!((is.matrix(Sim.Mat.in) & is.numeric(Sim.Mat.in)))){
+    stop('Sim.Mat.in should be a numeric matrix')
+  }
+
+  if((!(is.vector(k.in, mode = 'numeric'))) | (!(identical(length(k.in),1L)))){
+    stop('k.in should be an integer with length 1L')
+  } else if(!(identical((k.in %% 1),0))){
+    warning('k.in should be an integer, argument will be floored to nearest whole number')
+    k.in <- floor(k.in)
+  }
+
+
   Sim.Mat.Eligible <- as.matrix(Sim.Mat.in[-(f.index.in),f.index.in])
   Y.hat <- apply(Sim.Mat.Eligible,MARGIN=2,FUN=NNreg,k.in2=k.in,y.in2=y.in)
   return(Y.hat)
