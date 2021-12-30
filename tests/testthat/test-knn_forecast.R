@@ -15,11 +15,11 @@ test_that("NNreg returns average of correct k nearest neighbors", {
 
 test_that("knn.forecast returns expected estimates", {
 
-  Sim.Mat.test <- matrix(c(1,.2,.3,.4,.5,
-                      .5,1,.4,.3,.2,
-                      .4,.3,1,.2,.5,
-                      .3,.2,.5,1,.4,
-                      .2,.5,.4,.3,1),nrow=5,ncol=5,byrow=TRUE)
+  Sim.Mat.test <- matrix(c(1, .2, .3, .4, .5,
+                      .2, 1, .4, .3, .2,
+                      .3, .4, 1, .2, .5,
+                      .4, .3, .2, 1, .4,
+                      .5, .2, .5, .4, 1), nrow = 5, ncol = 5, byrow = TRUE)
   k.test <- 2
   y.test <- c(1,5,-4,30,40,50)
   f.index.test <- c(4,5)

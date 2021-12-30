@@ -27,12 +27,14 @@
 #' knn.forecast(Sim.Mat.in = Sim.Mat, f.index.in = f.index, y.in = y, k.in = k)
 knn.forecast <- function(Sim.Mat.in,f.index.in,k.in,y.in) {
 
-  if(!(is.vector(y.in, mode = 'numeric'))){
-    stop('y.in should be a numeric vector')
+  if(!((is.vector(y.in, mode = 'numeric')) & (is.vector(f.index.in, mode = 'numeric'))) ){
+    stop('y.in and f.index.in should be a numeric vectors')
   }
 
   if(!((is.matrix(Sim.Mat.in) & is.numeric(Sim.Mat.in)))){
     stop('Sim.Mat.in should be a numeric matrix')
+  } else if (!(isSymmetric.matrix(Sim.Mat.in))){
+    stop('Sim.Mat.in should be a symmetric matrix')
   }
 
   if((!(is.vector(k.in, mode = 'numeric'))) | (!(identical(length(k.in),1L)))){
@@ -42,6 +44,16 @@ knn.forecast <- function(Sim.Mat.in,f.index.in,k.in,y.in) {
     k.in <- floor(k.in)
   }
 
+  if(max(f.index.in) < nrow(Sim.Mat.in)){
+    warning('Sim.Mat.in row count is greater than the maximum value of f.index.in, rows and columns
+            at indices greater than maximum value of f.index.in will be removed')
+    remove.indices <- c((max(f.index.in) + 1) : nrow(Sim.Mat.in))
+    Sim.Mat.in <- Sim.Mat.in[-(remove.indices),-(remove.indices)]
+  }
+
+  if(k.in > nrow(Sim.Mat.in[-(f.index.in),])){
+    stop('k.in is larger than the number of eligible neighbors')
+  }
 
   Sim.Mat.Eligible <- as.matrix(Sim.Mat.in[-(f.index.in),f.index.in])
   Y.hat <- apply(Sim.Mat.Eligible,MARGIN=2,FUN=NNreg,k.in2=k.in,y.in2=y.in)
