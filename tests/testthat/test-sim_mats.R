@@ -46,10 +46,10 @@ test_that("SpMatrixCalc throws errors for bad arguments", {
   #test for non-vector v error
   expect_error(SpMatrixCalc(X.v, good.np))
 
-  #test for non-numeric nPeriods error
+  #test for too long nPeriods error
   expect_error(SpMatrixCalc(good.v, long.np))
 
-  #test for non-vector v error
+  #test for non-numeric nPeriods error
   expect_error(SpMatrixCalc(good.v, ch.np))
 
 })

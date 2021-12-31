@@ -124,10 +124,9 @@ constraint is enforced by only considering the rows of the similarity
 matrix at indices which are not present in `f.index.in` when selecting
 neighbors while performing KNN regression on each point in `f.index.in`,
 thus preventing the corresponding points in `y.in` at those indices from
-being selected as neighbors. Meaning there should not be rows of higher
-index in your similarity matrix provided to `knn.forecast()` than the
-max value in `f.index.in`, or the values of `y.in` at those indices will
-be considered eligible neighbors.
+being selected as neighbors. Furthermore, rows and columns of
+`Sim.Mat.in` at indices greater than the maximum value of `f.index.in`
+will be removed.
 
 ## Installation
 
