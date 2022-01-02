@@ -30,7 +30,7 @@ test_that("knn.forecast returns expected estimates", {
   expected.forecast <- c(3,-1.5)
 
   expect_equal(knn.forecast(Sim.Mat.in = Sim.Mat.test,f.index.in = f.index.test
-                            ,k.in = k.test,y.in = y.test), expected.forecast)
+                            , k.in = k.test, y.in = y.test), expected.forecast)
 })
 
 
@@ -107,7 +107,7 @@ test_that("knn.forecast throws errors for bad Sim.Mat.in arguments", {
 
 
 
-test_that("knn.forecast throws errors or warinings for bad k.in arguments", {
+test_that("knn.forecast throws errors or warnings for bad k.in arguments", {
 
 
   Sim.Mat.test <- matrix(c(1, .2, .3, .4, .5,
@@ -137,5 +137,49 @@ test_that("knn.forecast throws errors or warinings for bad k.in arguments", {
                             , k.in = k.not.int, y.in = y.test))
 
 })
+
+test_that("knn.forecast throws warnings and forecasts correctly
+  when Sim.Mat.in row count is greater than max forecast index", {
+
+
+  Sim.Mat.test <- matrix(c(1, .2, .3, .4, .5,
+                           .2, 1, .4, .3, .2,
+                           .3, .4, 1, .2, .5,
+                           .4, .3, .2, 1, .4,
+                           .5, .2, .5, .4, 1), nrow = 5, ncol = 5, byrow = TRUE)
+  k.test <- 2
+  y.test <- c(1, 5, -4, 30, 40, 50)
+  f.index.test <- c(4)
+  expected.forecast <- 3
+
+  #test warning and correct forecast
+  expect_warning(knn.forecast(Sim.Mat.in = Sim.Mat.test, f.index.in = f.index.test
+                              , k.in = k.test, y.in = y.test))
+
+  expect_equal(suppressWarnings(knn.forecast(Sim.Mat.in = Sim.Mat.test,f.index.in = f.index.test
+                            , k.in = k.test, y.in = y.test)), expected.forecast)
+
+})
+
+
+test_that("knn.forecast throws errors when there are less eligible neighbors than k.in", {
+
+
+    Sim.Mat.test <- matrix(c(1, .2, .3, .4, .5,
+                             .2, 1, .4, .3, .2,
+                             .3, .4, 1, .2, .5,
+                             .4, .3, .2, 1, .4,
+                             .5, .2, .5, .4, 1), nrow = 5, ncol = 5, byrow = TRUE)
+    k.test <- 4
+    y.test <- c(1, 5, -4, 30, 40, 50)
+    f.index.test <- c(4, 5)
+
+
+    #test warning and correct forecast
+    expect_error(knn.forecast(Sim.Mat.in = Sim.Mat.test, f.index.in = f.index.test
+                                , k.in = k.test, y.in = y.test))
+
+  })
+
 
 
