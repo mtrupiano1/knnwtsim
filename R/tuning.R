@@ -71,14 +71,41 @@ knn.forecast.randomsearch.tuning <- function(grid.len = 100
                                              ,val.holdout.len=0
                                              ,min.k = 1) {
 
+
+
+  if((!(is.vector(grid.len, mode = 'numeric'))) | (!(identical(length(grid.len), 1L)))){
+    stop('grid.len should be an integer with length 1L')
+  } else if(!(identical((grid.len %% 1),  0))){
+    warning('grid.len should be an integer, argument will be floored to nearest whole number')
+    grid.len <- floor(grid.len)
+  }
+
+  if((!(is.vector(test.h, mode = 'numeric'))) | (!(identical(length(test.h), 1L)))){
+    stop('test.h should be an integer with length 1L')
+  } else if(!(identical((test.h %% 1), 0))){
+    warning('test.h should be an integer, argument will be floored to nearest whole number')
+    test.h <- floor(test.h)
+  }
+
+  if((!(is.vector(val.holdout.len, mode = 'numeric'))) | (!(identical(length(val.holdout.len), 1L)))){
+    stop('val.holdout.len should be an integer with length 1L')
+  } else if(!(identical((val.holdout.len %% 1), 0))){
+    warning('val.holdout.len should be an integer, argument will be floored to nearest whole number')
+    val.holdout.len <- floor(val.holdout.len)
+  }
+
+  if((!(is.vector(min.k, mode = 'numeric'))) | (!(identical(length(min.k), 1L)))){
+    stop('min.k should be an integer with length 1L')
+  } else if(!(identical((min.k %% 1), 0))){
+    warning('min.k should be an integer, argument will be floored to nearest whole number')
+    min.k <- floor(min.k)
+  }
+
+
   n<- length(y.in)
 
   #Ensure integer inputs are in fact integers
-  grid.len <- floor(grid.len)
   max.k <- floor(max.k)
-  test.h <- floor(test.h)
-  val.holdout.len <- floor(val.holdout.len)
-
 
   #Set a maximum for k
   if (is.na(max.k)){
