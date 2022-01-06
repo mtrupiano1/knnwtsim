@@ -101,18 +101,34 @@ knn.forecast.randomsearch.tuning <- function(grid.len = 100
     min.k <- floor(min.k)
   }
 
+  if (!identical(max.k,NA)){
+    if(((!(is.vector(max.k, mode = 'numeric'))) | (!(identical(length(max.k), 1L))))){
+      stop('max.k should be an integer with length 1L, or NA')
+    } else if(!(identical((max.k %% 1), 0))){
+      warning('max.k should be an integer, argument will be floored to nearest whole number')
+      max.k <- floor(max.k)
+    }
+  }
 
-  n<- length(y.in)
+  n <- length(y.in)
 
-  #Ensure integer inputs are in fact integers
-  max.k <- floor(max.k)
+  viable.neighbors.count <- n - val.holdout.len - test.h
 
   #Set a maximum for k
   if (is.na(max.k)){
-    k.cap <- min(floor((length(y.in))*.4),50)
+    k.cap <- min(floor((length(y.in))*.4), viable.neighbors.count)
   } else {
-    k.cap <- max.k
+    if (max.k > viable.neighbors.count){
+      warning(paste0("max.k is larger than the number of viable neigbhors given
+              the test.h and val.holdout.len supplied, the maximum number of viable neighbors
+              will be used instead: ", viable.neighbors.count))
+    }
+    k.cap <- min(max.k,viable.neighbors.count)
   }
+
+ if(min.k > k.cap){
+   stop("min.k is greater than max.k")
+ }
 
   #Randomly propose sets of hyperparameters
   ks <- base::sample(min.k:k.cap,size=grid.len,replace=TRUE)
