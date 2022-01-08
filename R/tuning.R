@@ -72,7 +72,7 @@ knn.forecast.randomsearch.tuning <- function(grid.len = 100
                                              ,min.k = 1) {
 
 
-
+  #Integer argument type checks
   if((!(is.vector(grid.len, mode = 'numeric'))) | (!(identical(length(grid.len), 1L)))){
     stop('grid.len should be an integer with length 1L')
   } else if(!(identical((grid.len %% 1),  0))){
@@ -110,7 +110,28 @@ knn.forecast.randomsearch.tuning <- function(grid.len = 100
     }
   }
 
+  #Matrix argument checks
+  if(!((is.matrix(St.in) & is.numeric(St.in))) | !((is.matrix(Sp.in) & is.numeric(Sp.in))) | !((is.matrix(Sx.in) & is.numeric(Sx.in)))){
+    stop('St.in, Sp.in, and Sx.in should be numeric matrices')
+  } else if (!(isSymmetric.matrix(St.in)) | !(isSymmetric.matrix(Sp.in)) | !(isSymmetric.matrix(Sx.in))){
+    stop('St.in, Sp.in, and Sx.in should be a symmetric matrices')
+  }
+
+  if(!(identical(dim(St.in)[1], dim(Sp.in)[1])) | !(identical(dim(St.in)[1], dim(Sx.in)[1]))){
+    stop('Dimensions of St.in, Sp.in, and Sx.in are not all equal')
+  }
+
+
+  #Response series checks
+  if(!(is.vector(y.in, mode = 'numeric'))){
+    stop('y.in should be a numeric vector')
+  }
+
   n <- length(y.in)
+
+  if(!(identical(dim(St.in)[1], n))){
+    stop('For tuning the length of y.in should match the number of rows of the similarity matrix inputs: St.in, Sp.in, Sx.in')
+  }
 
   viable.neighbors.count <- n - val.holdout.len - test.h
 

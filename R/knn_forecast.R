@@ -28,7 +28,7 @@
 knn.forecast <- function(Sim.Mat.in,f.index.in,k.in,y.in) {
 
   if(!(is.vector(y.in, mode = 'numeric')) | !(is.vector(f.index.in, mode = 'numeric')) ){
-    stop('y.in and f.index.in should be a numeric vectors')
+    stop('y.in and f.index.in should be numeric vectors')
   }
 
   if(!((is.matrix(Sim.Mat.in) & is.numeric(Sim.Mat.in)))){
