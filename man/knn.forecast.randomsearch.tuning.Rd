@@ -29,7 +29,7 @@ knn.forecast.randomsearch.tuning(
 
 \item{test.h}{integer value representing the number of points in the test forecast horizon.}
 
-\item{max.k}{integer value representing the maximum value of k, \code{knn.forecast()} should use, will be set to \code{min(floor((length(y.in))*.4),50)} if \code{NA} is passed.}
+\item{max.k}{integer value representing the maximum value of k, \code{knn.forecast()} should use, will be set to \code{min(floor((length(y.in)) * .4), length(y.in) - val.holdout.len - test.h)} if \code{NA} is passed. Note this \code{NA} behavior differs from \code{knnwtsim} version 0.1.0.}
 
 \item{val.holdout.len}{integer value representing the number of observations at the end of the series to be removed in testing forecast if desired to leave a validation set after tuning.}
 
