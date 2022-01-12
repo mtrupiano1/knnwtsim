@@ -221,5 +221,144 @@ test_that("Bad integer arguments throw errors or warnings", {
 })
 
 
+test_that("Bad matrix argument types throw errors", {
+
+  data("simulation_master_list")
+  series.index <- 15
+  ex.series <- simulation_master_list[[series.index]]$series.lin.coef.chng.x
+
+  df <- data.frame(ex.series)
+  #Generate vector of time orders
+  df$t <- c(1:nrow(df))
+
+  #Generate vector of periods
+  nperiods <- simulation_master_list[[series.index]]$seasonal.periods
+  df$p <- rep(1:nperiods,length.out=nrow(df))
+
+  #Pull corresponding exogenous predictor(s)
+  X <- as.matrix(simulation_master_list[[series.index]]$x.chng)
+
+  St.ex <- StMatrixCalc(df$t)
+  Sp.ex <- SpMatrixCalc(df$p,nPeriods=nperiods)
+  Sx.ex <- SxMatrixCalc(X)
+
+  #Character mats
+  ch.St.ex <- matrix(as.character(St.ex), nrow = dim(St.ex)[1], ncol = dim(St.ex)[2])
+  ch.Sp.ex <- matrix(as.character(St.ex), nrow = dim(Sp.ex)[1], ncol = dim(Sp.ex)[2])
+  ch.Sx.ex <- matrix(as.character(St.ex), nrow = dim(Sx.ex)[1], ncol = dim(Sx.ex)[2])
+
+  #non - matrrx similarities
+  vec.St.ex <- as.vector(St.ex)
+  vec.Sp.ex <- as.vector(Sp.ex)
+  vec.Sx.ex <- as.vector(Sx.ex)
 
 
+  #Test non-numeric St
+  expect_error(knn.forecast.randomsearch.tuning(grid.len = 10
+                                                , St.in = ch.St.ex
+                                                , Sp.in = Sp.ex
+                                                , Sx.in = Sx.ex
+                                                , y.in = ex.series
+                                                , test.h = 2))
+
+  #Test non-numeric Sp
+  expect_error(knn.forecast.randomsearch.tuning(grid.len = 10
+                                                , St.in = St.ex
+                                                , Sp.in = ch.Sp.ex
+                                                , Sx.in = Sx.ex
+                                                , y.in = ex.series
+                                                , test.h = 2))
+
+  #Test non-numeric Sx
+  expect_error(knn.forecast.randomsearch.tuning(grid.len = 10
+                                                , St.in = St.ex
+                                                , Sp.in = Sp.ex
+                                                , Sx.in = ch.Sx.ex
+                                                , y.in = ex.series
+                                                , test.h = 2))
+
+  #Test non matrix St
+  expect_error(knn.forecast.randomsearch.tuning(grid.len = 10
+                                                , St.in = vec.St.ex
+                                                , Sp.in = Sp.ex
+                                                , Sx.in = Sx.ex
+                                                , y.in = ex.series
+                                                , test.h = 2))
+
+  #Test non matrix Sp
+  expect_error(knn.forecast.randomsearch.tuning(grid.len = 10
+                                                , St.in = St.ex
+                                                , Sp.in = vec.Sp.ex
+                                                , Sx.in = Sx.ex
+                                                , y.in = ex.series
+                                                , test.h = 2))
+
+  #Test non matrix Sx
+  expect_error(knn.forecast.randomsearch.tuning(grid.len = 10
+                                                , St.in = St.ex
+                                                , Sp.in = Sp.ex
+                                                , Sx.in = vec.Sx.ex
+                                                , y.in = ex.series
+                                                , test.h = 2))
+
+})
+
+
+test_that("Bad matrix argument dimensions throw errors", {
+
+  data("simulation_master_list")
+  series.index <- 15
+  ex.series <- simulation_master_list[[series.index]]$series.lin.coef.chng.x
+
+  df <- data.frame(ex.series)
+  #Generate vector of time orders
+  df$t <- c(1:nrow(df))
+
+  #Generate vector of periods
+  nperiods <- simulation_master_list[[series.index]]$seasonal.periods
+  df$p <- rep(1:nperiods,length.out=nrow(df))
+
+  #Pull corresponding exogenous predictor(s)
+  X <- as.matrix(simulation_master_list[[series.index]]$x.chng)
+
+  St.ex <- StMatrixCalc(df$t)
+  Sp.ex <- SpMatrixCalc(df$p,nPeriods=nperiods)
+  Sx.ex <- SxMatrixCalc(X)
+
+
+
+  #Test non-symmetric St by removing 1 row
+  expect_error(knn.forecast.randomsearch.tuning(grid.len = 10
+                                                , St.in = St.ex[-(dim(St.ex)[1]),]
+                                                , Sp.in = Sp.ex
+                                                , Sx.in = Sx.ex
+                                                , y.in = ex.series
+                                                , test.h = 2))
+
+  #Test non-symmetric Sp by removing 1 row
+  expect_error(knn.forecast.randomsearch.tuning(grid.len = 10
+                                                , St.in = Sp.ex
+                                                , Sp.in = Sp.ex[-(dim(Sp.ex)[1]),]
+                                                , Sx.in = Sx.ex
+                                                , y.in = ex.series
+                                                , test.h = 2))
+
+  #Test non-symmetric Sx by removing 1 row
+  expect_error(knn.forecast.randomsearch.tuning(grid.len = 10
+                                                , St.in = Sx.ex
+                                                , Sp.in = Sp.ex
+                                                , Sx.in = Sx.ex[-(dim(Sx.ex)[1]),]
+                                                , y.in = ex.series
+                                                , test.h = 2))
+
+  #Test differing matrix argument dimensions
+  expect_error(knn.forecast.randomsearch.tuning(grid.len = 10
+                                                , St.in = Sx.ex
+                                                , Sp.in = Sp.ex
+                                                , Sx.in = Sx.ex[-(dim(Sx.ex)[1]),-(dim(Sx.ex)[2])]
+                                                , y.in = ex.series
+                                                , test.h = 2))
+
+
+
+})
