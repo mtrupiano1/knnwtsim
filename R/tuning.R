@@ -140,7 +140,7 @@ knn.forecast.randomsearch.tuning <- function(grid.len = 100
     k.cap <- min(floor((length(y.in))*.4), viable.neighbors.count)
   } else {
     if (max.k > viable.neighbors.count){
-      warning(paste0("max.k is larger than the number of viable neigbhors given
+      warning(paste0("max.k is larger than the number of viable neighbors given
               the test.h and val.holdout.len supplied, the maximum number of viable neighbors
               will be used instead: ", viable.neighbors.count))
     }

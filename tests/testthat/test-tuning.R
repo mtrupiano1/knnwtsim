@@ -355,10 +355,140 @@ test_that("Bad matrix argument dimensions throw errors", {
   expect_error(knn.forecast.randomsearch.tuning(grid.len = 10
                                                 , St.in = Sx.ex
                                                 , Sp.in = Sp.ex
-                                                , Sx.in = Sx.ex[-(dim(Sx.ex)[1]),-(dim(Sx.ex)[2])]
+                                                , Sx.in = Sx.ex[-(dim(Sx.ex)[1]), -(dim(Sx.ex)[2])]
                                                 , y.in = ex.series
                                                 , test.h = 2))
 
 
 
 })
+
+test_that("Bad y.in argument types throw errors", {
+
+  data("simulation_master_list")
+  series.index <- 15
+  ex.series <- simulation_master_list[[series.index]]$series.lin.coef.chng.x
+
+  df <- data.frame(ex.series)
+  #Generate vector of time orders
+  df$t <- c(1:nrow(df))
+
+  #Generate vector of periods
+  nperiods <- simulation_master_list[[series.index]]$seasonal.periods
+  df$p <- rep(1:nperiods,length.out=nrow(df))
+
+  #Pull corresponding exogenous predictor(s)
+  X <- as.matrix(simulation_master_list[[series.index]]$x.chng)
+
+  St.ex <- StMatrixCalc(df$t)
+  Sp.ex <- SpMatrixCalc(df$p,nPeriods=nperiods)
+  Sx.ex <- SxMatrixCalc(X)
+
+  #bad y.in
+  ch.ex.series <- as.character(ex.series)
+
+  mat.ex.series <- matrix(ex.series)
+
+
+  #Test non-numeric y.in
+  expect_error(knn.forecast.randomsearch.tuning(grid.len = 10
+                                                , St.in = St.ex
+                                                , Sp.in = Sp.ex
+                                                , Sx.in = Sx.ex
+                                                , y.in = ch.ex.series
+                                                , test.h = 2))
+
+  #Test non-vector y.in
+  expect_error(knn.forecast.randomsearch.tuning(grid.len = 10
+                                                , St.in = St.ex
+                                                , Sp.in = Sp.ex
+                                                , Sx.in = Sx.ex
+                                                , y.in = mat.ex.series
+                                                , test.h = 2))
+
+
+
+})
+
+
+test_that("Dimension mismatch between length of y.in
+          and rows of matrix arguments throw errors", {
+
+  data("simulation_master_list")
+  series.index <- 15
+  ex.series <- simulation_master_list[[series.index]]$series.lin.coef.chng.x
+
+  df <- data.frame(ex.series)
+  #Generate vector of time orders
+  df$t <- c(1:nrow(df))
+
+  #Generate vector of periods
+  nperiods <- simulation_master_list[[series.index]]$seasonal.periods
+  df$p <- rep(1:nperiods,length.out=nrow(df))
+
+  #Pull corresponding exogenous predictor(s)
+  X <- as.matrix(simulation_master_list[[series.index]]$x.chng)
+
+  St.ex <- StMatrixCalc(df$t)
+  Sp.ex <- SpMatrixCalc(df$p,nPeriods=nperiods)
+  Sx.ex <- SxMatrixCalc(X)
+
+  expect_error(knn.forecast.randomsearch.tuning(grid.len = 10
+                                                , St.in = St.ex
+                                                , Sp.in = Sp.ex
+                                                , Sx.in = Sx.ex
+                                                , y.in = ex.series[-length(ex.series)]
+                                                , test.h = 2))
+
+
+})
+
+
+
+
+test_that("k argument restrictions throw warnings and errors correctly", {
+
+  data("simulation_master_list")
+  series.index <- 15
+  ex.series <- simulation_master_list[[series.index]]$series.lin.coef.chng.x
+
+  df <- data.frame(ex.series)
+  #Generate vector of time orders
+  df$t <- c(1:nrow(df))
+
+  #Generate vector of periods
+  nperiods <- simulation_master_list[[series.index]]$seasonal.periods
+  df$p <- rep(1:nperiods,length.out=nrow(df))
+
+  #Pull corresponding exogenous predictor(s)
+  X <- as.matrix(simulation_master_list[[series.index]]$x.chng)
+
+  St.ex <- StMatrixCalc(df$t)
+  Sp.ex <- SpMatrixCalc(df$p,nPeriods=nperiods)
+  Sx.ex <- SxMatrixCalc(X)
+
+  expect_warning(knn.forecast.randomsearch.tuning(grid.len = 10
+                                                , St.in = St.ex
+                                                , Sp.in = Sp.ex
+                                                , Sx.in = Sx.ex
+                                                , y.in = ex.series
+                                                , test.h = 5
+                                                , val.holdout.len = 5
+                                                , max.k = 91))
+
+
+  expect_error(knn.forecast.randomsearch.tuning(grid.len = 10
+                                                  , St.in = St.ex
+                                                  , Sp.in = Sp.ex
+                                                  , Sx.in = Sx.ex
+                                                  , y.in = ex.series
+                                                  , test.h = 5
+                                                  , val.holdout.len = 5
+                                                  , max.k = 2
+                                                  , min.k = 3))
+
+})
+
+
+
+
