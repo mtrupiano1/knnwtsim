@@ -167,24 +167,24 @@ df$t <- c(1:nrow(df))
 
 #Generate vector of periods
 nperiods <- simulation_master_list[[series.index]]$seasonal.periods
-df$p <- rep(1:nperiods,length.out=nrow(df))
+df$p <- rep(1:nperiods, length.out = nrow(df))
 
 #Pull corresponding exogenous predictor(s)
 X <- as.matrix(simulation_master_list[[series.index]]$x.chng)
 XdistMetric <- 'euclidean'
 
 #Number of points to set aside for validation
-val.len <- ifelse(nperiods==12,nperiods,nperiods*2)
+val.len <- ifelse(nperiods == 12, nperiods, nperiods * 2)
 
-#Calculate the weighted similarity matrix Sw 
+#Calculate the weighted similarity matrix using Sw 
 Sw.ex <- SwMatrixCalc(#For the recency similarity St
                       t.in = df$t
                       #For the periodic similarity Sp
-                      ,p.in=df$p, nPeriods.in = nperiods
+                      ,p.in = df$p, nPeriods.in = nperiods
                       #For the exogenous similarity Sx
-                      ,X.in=X, XdistMetric.in = XdistMetric
+                      ,X.in = X, XdistMetric.in = XdistMetric
                       #Weights to be applied to each similarity
-                      ,weights=pre.tuned.wts)
+                      ,weights = pre.tuned.wts)
 
 #View the top corner of the weighted similarity matrix Sw 
 cat('\n Dimensions and Slice of S_w \n')
@@ -192,7 +192,7 @@ cat('\n Dimensions and Slice of S_w \n')
 #>  Dimensions and Slice of S_w
 print(dim(Sw.ex))
 #> [1] 100 100
-print(Sw.ex[1:5,1:5])
+print(Sw.ex[1:5, 1:5])
 #>           1         2         3         4         5
 #> 1 0.9999999 0.5825337 0.4249690 0.4115130 0.5589633
 #> 2 0.5825337 0.9999999 0.5989170 0.5690332 0.4841708
@@ -208,12 +208,13 @@ val.index <- c((length(ex.series) - val.len + 1):length(ex.series))
 #Generate the forecast 
 knn.frcst <- knn.forecast(Sim.Mat.in = Sw.ex
                           ,f.index.in = val.index
-                          ,k.in=pre.tuned.k
-                          ,y.in=ex.series)
+                          ,k.in = pre.tuned.k
+                          ,y.in = ex.series)
 
-ts.plot(ex.series,ylab="Simulated Time Series Value")
-lines(x=val.index,y=knn.frcst,col='red',lty=2)
-legend('bottomleft',legend=c('actuals','KNN Forecast'),col=c('black','red'),lty=c(1,2))
+ts.plot(ex.series, ylab = "Simulated Time Series Value")
+lines(x = val.index, y = knn.frcst, col = 'red', lty = 2)
+legend('bottomleft', legend = c('actuals', 'KNN Forecast')
+       , col = c('black', 'red'), lty = c(1, 2))
 ```
 
 <img src="man/figures/README-knn-forecast-example-1.png" width="100%" />
@@ -252,20 +253,20 @@ using the included tuning function.
 ``` r
 #Calculate component similarity matrices
 St.ex <- StMatrixCalc(df$t)
-Sp.ex <- SpMatrixCalc(df$p,nPeriods=nperiods)
+Sp.ex <- SpMatrixCalc(df$p,nPeriods = nperiods)
 Sx.ex <- SxMatrixCalc(X)
 
 #Set seed for reproducibility 
 set.seed(10)
 #Run tuning function 
-tuning.ex <- knn.forecast.randomsearch.tuning(grid.len=10**4
+tuning.ex <- knn.forecast.randomsearch.tuning(grid.len = 10**4
                                                ,y.in = ex.series
                                                ,St.in = St.ex 
                                                ,Sp.in = Sp.ex
                                                ,Sx.in = Sx.ex
                                                ,test.h = val.len
                                                ,max.k = NA
-                                               ,val.holdout.len=val.len)
+                                               ,val.holdout.len = val.len)
 
 
 cat('\n Tuned Hyperparameters \n')
@@ -290,13 +291,14 @@ Sw.opt.ex <- tuning.ex$Sw.opt
 ``` r
 #Generate the forecast 
 knn.frcst.tuned <- knn.forecast(Sim.Mat.in = Sw.opt.ex
-                              ,f.index.in = val.index
-                              ,k.in=k.opt.ex 
-                              ,y.in=ex.series)
+                                , f.index.in = val.index
+                                , k.in = k.opt.ex 
+                                , y.in = ex.series)
 
-ts.plot(ex.series,ylab="Simulated Time Series Value")
-lines(x=val.index,y=knn.frcst.tuned,col='purple',lty=3)
-legend('bottomleft',legend=c('actuals','KNN Forecast Tuned'),col=c('black','purple'),lty=c(1,3))
+ts.plot(ex.series, ylab = "Simulated Time Series Value")
+lines(x = val.index, y = knn.frcst.tuned, col='purple', lty = 3)
+legend('bottomleft', legend = c('actuals', 'KNN Forecast Tuned')
+       , col = c('black', 'purple'), lty = c(1, 3))
 ```
 
 <img src="man/figures/README-tuned-knn-forecast-example-1.png" width="100%" />
