@@ -81,6 +81,82 @@ knn.forecast.boot.intervals <- function(Sim.Mat.in
                                         , return.simulations = FALSE
                                         , level = .95){
 
+
+
+  #Bad argument type checks
+  if(!(is.vector(y.in, mode = 'numeric')) |
+     !(is.vector(f.index.in, mode = 'numeric'))){
+    stop('y.in and f.index.in should be numeric vectors')
+  }
+
+  if(!((is.matrix(Sim.Mat.in) & is.numeric(Sim.Mat.in)))){
+    stop('Sim.Mat.in should be a numeric matrix')
+  } else if (!(isSymmetric.matrix(Sim.Mat.in))){
+    stop('Sim.Mat.in should be a symmetric matrix')
+  }
+
+  if((!(is.vector(k.in, mode = 'numeric'))) | (!(identical(length(k.in), 1L)))){
+    stop('k.in should be an integer with length 1L')
+  } else if(!(identical((k.in %% 1),0))){
+    warning('k.in should be an integer, argument will be
+            floored to nearest whole number')
+    k.in <- floor(k.in)
+  }
+
+
+  if (!identical(burn.in, NULL)){
+    if(((!(is.vector(burn.in, mode = 'numeric'))) |
+        (!(identical(length(burn.in), 1L))))){
+      stop('burn.in should be an integer with length 1L, or NULL')
+    } else if(!(identical((burn.in %% 1), 0))){
+      warning('burn.in should be an integer, argument will be floored to
+              nearest whole number')
+      burn.in <- floor(burn.in)
+    }
+  }
+
+  if((!(is.vector(B, mode = 'numeric'))) | (!(identical(length(B), 1L)))){
+    stop('B should be an integer with length 1L')
+  } else if(!(identical((B %% 1),0))){
+    warning('B should be an integer, argument will be
+            floored to nearest whole number')
+    B <- floor(B)
+  }
+
+  if((!(is.logical(return.simulations))) |
+     (!(identical(length(return.simulations), 1L)))){
+    stop('return.simulations should be a logical with length 1L')
+  }
+
+  if((!(is.vector(level, mode = 'numeric'))) |
+     (!(identical(length(level), 1L)))){
+    stop('level should be a numeric value with length 1L')
+  } else if(!((level > 0) & (level < 1))){
+    stop('level should be between 0 and 1')
+  }
+
+  #Conflicting sizes checks
+  if(max(f.index.in) < nrow(Sim.Mat.in)){
+    warning('Sim.Mat.in row count is greater than the maximum value of
+            f.index.in, rows and columns at indices greater than maximum value
+            of f.index.in will be removed')
+    remove.indices <- c((max(f.index.in) + 1) : nrow(Sim.Mat.in))
+    Sim.Mat.in <- Sim.Mat.in[-(remove.indices),-(remove.indices)]
+  }
+
+  if(max(f.index.in) > nrow(Sim.Mat.in)){
+    stop('f.index.in contains higher values than row count of Sim.Mat.in')
+  }
+
+  if(min(f.index.in) > (length(y.in) + 1)){
+    stop('f.index.in should start at an index <= (length(y.in) + 1)')
+  }
+
+  if(k.in > nrow(Sim.Mat.in[-(f.index.in),])){
+    stop('k.in is larger than the number of eligible neighbors')
+  }
+
+
   #burn.in defaults to k.in
   if(is.null(burn.in)){
     burn.in <- k.in
