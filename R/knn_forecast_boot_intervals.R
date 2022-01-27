@@ -156,6 +156,12 @@ knn.forecast.boot.intervals <- function(Sim.Mat.in
     stop('k.in is larger than the number of eligible neighbors')
   }
 
+  if(!is.null(burn.in)){
+    if(burn.in < k.in){
+      stop('burn.in is less than k.in, at least k.in points are needed
+           for forecasting')
+    }
+  }
 
   #burn.in defaults to k.in
   if(is.null(burn.in)){

@@ -1,4 +1,4 @@
-context("Test on the automated tuning function in tuning.R")
+context("Tests on the automated tuning function in tuning.R")
 
 test_that("Item lengths are as anticipated", {
 
