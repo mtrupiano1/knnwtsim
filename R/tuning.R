@@ -12,9 +12,9 @@
 #'
 #'
 #' @param grid.len integer value representing the number of hyperparameter sets to generate and test.
-#' @param St.in numeric matrix of similarities, can be generated with \code{StMatrixCalc()}.
-#' @param Sp.in numeric matrix of similarities, can be generated with \code{SpMatrixCalc()}.
-#' @param Sx.in numeric matrix of similarities, can be generated with \code{SxMatrixCalc()}.
+#' @param St.in numeric and symmetric matrix of similarities, can be generated with \code{StMatrixCalc()}.
+#' @param Sp.in numeric and symmetric matrix of similarities, can be generated with \code{SpMatrixCalc()}.
+#' @param Sx.in numeric and symmetric matrix of similarities, can be generated with \code{SxMatrixCalc()}.
 #' @param y.in numeric vector of the response series to be forecast.
 #' @param test.h integer value representing the number of points in the test forecast horizon.
 #' @param max.k integer value representing the maximum value of k, \code{knn.forecast()} should use, will be set to \code{min(floor((length(y.in)) * .4), length(y.in) - val.holdout.len - test.h)} if \code{NA} is passed. Note this \code{NA} behavior differs from \code{knnwtsim} version 0.1.0.

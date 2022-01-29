@@ -17,7 +17,7 @@
 #'
 #'
 #'
-#' @param Sim.Mat.in numeric matrix of similarities (recommend use of \code{S_w}, see \code{SwMatrixCalc()}).
+#' @param Sim.Mat.in numeric and symmetric matrix of similarities (recommend use of \code{S_w}, see \code{SwMatrixCalc()}).
 #' @param f.index.in numeric vector indicating the indices of \code{Sim.Mat.in} and \code{y.in} which correspond to the time order of the points to be forecast.
 #' @param k.in integer value indicating the the number of nearest neighbors to be considered in forecasting.
 #' @param y.in numeric vector of the response series to be forecast.

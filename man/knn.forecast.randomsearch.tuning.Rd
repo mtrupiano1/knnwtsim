@@ -19,11 +19,11 @@ knn.forecast.randomsearch.tuning(
 \arguments{
 \item{grid.len}{integer value representing the number of hyperparameter sets to generate and test.}
 
-\item{St.in}{numeric matrix of similarities, can be generated with \code{StMatrixCalc()}.}
+\item{St.in}{numeric and symmetric matrix of similarities, can be generated with \code{StMatrixCalc()}.}
 
-\item{Sp.in}{numeric matrix of similarities, can be generated with \code{SpMatrixCalc()}.}
+\item{Sp.in}{numeric and symmetric matrix of similarities, can be generated with \code{SpMatrixCalc()}.}
 
-\item{Sx.in}{numeric matrix of similarities, can be generated with \code{SxMatrixCalc()}.}
+\item{Sx.in}{numeric and symmetric matrix of similarities, can be generated with \code{SxMatrixCalc()}.}
 
 \item{y.in}{numeric vector of the response series to be forecast.}
 

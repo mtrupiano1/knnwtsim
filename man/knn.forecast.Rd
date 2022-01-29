@@ -7,7 +7,7 @@
 knn.forecast(Sim.Mat.in, f.index.in, k.in, y.in)
 }
 \arguments{
-\item{Sim.Mat.in}{numeric matrix of similarities (recommend use of \code{S_w}, see \code{SwMatrixCalc()}).}
+\item{Sim.Mat.in}{numeric and symmetric matrix of similarities (recommend use of \code{S_w}, see \code{SwMatrixCalc()}).}
 
 \item{f.index.in}{numeric vector indicating the indices of \code{Sim.Mat.in} and \code{y.in} which correspond to the time order of the points to be forecast.}
 
