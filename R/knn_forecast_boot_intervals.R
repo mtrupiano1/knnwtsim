@@ -140,8 +140,8 @@ knn.forecast.boot.intervals <- function(Sim.Mat.in
     warning('Sim.Mat.in row count is greater than the maximum value of
             f.index.in, rows and columns at indices greater than maximum value
             of f.index.in will be removed')
-    remove.indices <- c((max(f.index.in) + 1) : nrow(Sim.Mat.in))
-    Sim.Mat.in <- Sim.Mat.in[-(remove.indices),-(remove.indices)]
+    remove.indices <- c((max(f.index.in) + 1):nrow(Sim.Mat.in))
+    Sim.Mat.in <- Sim.Mat.in[-(remove.indices), -(remove.indices)]
   }
 
   if(max(f.index.in) > nrow(Sim.Mat.in)){
@@ -170,7 +170,7 @@ knn.forecast.boot.intervals <- function(Sim.Mat.in
 
   #Set up sim mat and response series to gather residuals
   Sim.Mat.noval <- Sim.Mat.in[-(f.index.in), -(f.index.in)]
-  y.noval <- y.in[-(f.index.in)]
+  y.noval <- y.in[-(c(min(f.index.in):length(y.in)))]
 
   #Gather pool of residuals to sample from
   gather.res.index <- c((burn.in + 1):length(y.noval))

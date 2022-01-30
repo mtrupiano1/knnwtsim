@@ -47,8 +47,8 @@ knn.forecast <- function(Sim.Mat.in,f.index.in,k.in,y.in) {
   if(max(f.index.in) < nrow(Sim.Mat.in)){
     warning('Sim.Mat.in row count is greater than the maximum value of f.index.in, rows and columns
             at indices greater than maximum value of f.index.in will be removed')
-    remove.indices <- c((max(f.index.in) + 1) : nrow(Sim.Mat.in))
-    Sim.Mat.in <- Sim.Mat.in[-(remove.indices),-(remove.indices)]
+    remove.indices <- c((max(f.index.in) + 1):nrow(Sim.Mat.in))
+    Sim.Mat.in <- Sim.Mat.in[-(remove.indices), -(remove.indices)]
   }
 
   if(k.in > nrow(Sim.Mat.in[-(f.index.in),])){

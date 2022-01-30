@@ -175,7 +175,6 @@ test_that("knn.forecast throws errors when there are less eligible neighbors tha
     f.index.test <- c(4, 5)
 
 
-    #test warning and correct forecast
     expect_error(knn.forecast(Sim.Mat.in = Sim.Mat.test, f.index.in = f.index.test
                                 , k.in = k.test, y.in = y.test))
 

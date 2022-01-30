@@ -368,3 +368,75 @@ test_that("knn.forecast.boot.intervals throws errors for
 
             })
 
+
+test_that("knn.forecast.boot.intervals throws errors and warnings
+          for conflicting size checks", {
+
+            data("simulation_master_list")
+            series.index <- 15
+            ex.series <- simulation_master_list[[series.index]]$series.lin.coef.chng.x
+
+            #Weights pre tuned by random search. In alpha, beta, gamma order
+            pre.tuned.wts <- c(0.2148058, 0.2899638, 0.4952303)
+            pre.tuned.k <- 5
+
+            df <- data.frame(ex.series)
+            #Generate vector of time orders
+            df$t <- c(1:nrow(df))
+
+            #Generate vector of periods
+            nperiods <- simulation_master_list[[series.index]]$seasonal.periods
+            df$p <- rep(1:nperiods,length.out = nrow(df))
+
+            #Pull corresponding exogenous predictor(s)
+            X <- as.matrix(simulation_master_list[[series.index]]$x.chng)
+
+
+            #Calculate the weighted similarity matrix using Sw
+            Sw.ex <- SwMatrixCalc(t.in = df$t
+                                  , p.in = df$p, nPeriods.in = nperiods
+                                  , X.in = X
+                                  , weights = pre.tuned.wts )
+
+            n <- length(ex.series)
+            #Index we want to forecast
+            f.index <- c((n - 5 + 1):length(ex.series))
+            f.index.s <- c((n - 5 + 1):(length(ex.series) - 1))
+            f.index.l <- c((n - 5 + 1):(length(ex.series) + 1))
+
+            ex.rmv <- c((n - 6 + 1):length(ex.series))
+
+
+
+            #Test extra Sim.Mat.in rows
+            expect_warning(knn.forecast.boot.intervals(Sim.Mat.in = Sw.ex
+                                                       , f.index.in = f.index.s
+                                                       , y.in = ex.series
+                                                       , k.in = pre.tuned.k
+                                                       , B = 10))
+
+            #Test max f.index.in above Sim.Mat.in row count
+            expect_error(knn.forecast.boot.intervals(Sim.Mat.in = Sw.ex
+                                                     , f.index.in = f.index.l
+                                                     , y.in = ex.series
+                                                     , k.in = pre.tuned.k
+                                                     , B = 10))
+
+
+            #Test min f.index.in more than 1 above y.in length
+            expect_error(knn.forecast.boot.intervals(Sim.Mat.in = Sw.ex
+                                                     , f.index.in = f.index
+                                                     , y.in = ex.series[ex.rmv]
+                                                     , k.in = pre.tuned.k
+                                                     , B = 10))
+
+            #Test burn.in less than k.in
+            expect_error(knn.forecast.boot.intervals(Sim.Mat.in = Sw.ex
+                                                     , f.index.in = f.index
+                                                     , y.in = ex.series
+                                                     , k.in = pre.tuned.k
+                                                     , burn.in = 4
+                                                     , B = 10))
+
+          })
+
