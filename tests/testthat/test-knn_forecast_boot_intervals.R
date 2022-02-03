@@ -2,6 +2,72 @@ context("Tests on the bootstrapped prediction intervals function
         in knn_forecast_boot_intervals.R")
 
 
+test_that("knn.forecast.boot.intervals output lengths are as anticipated", {
+
+  data("simulation_master_list")
+  series.index <- 15
+  ex.series <- simulation_master_list[[series.index]]$series.lin.coef.chng.x
+
+  #Weights pre tuned by random search. In alpha, beta, gamma order
+  pre.tuned.wts <- c(0.2148058, 0.2899638, 0.4952303)
+  pre.tuned.k <- 5
+
+  df <- data.frame(ex.series)
+  #Generate vector of time orders
+  df$t <- c(1:nrow(df))
+
+  #Generate vector of periods
+  nperiods <- simulation_master_list[[series.index]]$seasonal.periods
+  df$p <- rep(1:nperiods,length.out = nrow(df))
+
+  #Pull corresponding exogenous predictor(s)
+  X <- as.matrix(simulation_master_list[[series.index]]$x.chng)
+
+
+  #Calculate the weighted similarity matrix using Sw
+  Sw.ex <- SwMatrixCalc(t.in = df$t
+                        , p.in = df$p, nPeriods.in = nperiods
+                        , X.in = X
+                        , weights = pre.tuned.wts )
+
+  n <- length(ex.series)
+  #Index we want to forecast
+  f.index <- c((n - 5 + 1):length(ex.series))
+
+
+  B.arg <- 10
+
+  boot.test.sim.false <- knn.forecast.boot.intervals(Sim.Mat.in = Sw.ex
+                                                     , f.index.in = f.index
+                                                     , y.in = ex.series
+                                                     , k.in = pre.tuned.k
+                                                     , B = B.arg)
+
+  boot.test.sim.true <- knn.forecast.boot.intervals(Sim.Mat.in = Sw.ex
+                                                    , f.index.in = f.index
+                                                    , y.in = ex.series
+                                                    , k.in = pre.tuned.k
+                                                    , B = B.arg
+                                                    , return.simulations = TRUE)
+
+  #Should be 4 total items returned if return.simulations is FALSE
+  expect_equal(length(boot.test.sim.false), 4)
+
+  #Should be 5 total items returned if return.simulations is TRUE
+  expect_equal(length(boot.test.sim.true), 5)
+
+
+  #lb, ub, mean, and median should all be the same length as f.index.in
+  #simulated.paths should have length f.index.in * B
+  f.length <- length(f.index)
+
+  expect_equal(unname(lengths(boot.test.sim.true))
+               , c(rep(f.length, 4), f.length * B.arg))
+})
+
+
+
+
 test_that("knn.forecast.boot.intervals throws errors or warnings for
           bad integer arguments", {
 
