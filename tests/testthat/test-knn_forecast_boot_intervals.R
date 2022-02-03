@@ -285,7 +285,7 @@ test_that("knn.forecast.boot.intervals throws errors for
             #Index we want to forecast
             f.index <- c((n - 5 + 1):length(ex.series))
 
-            ch.Sw.ex <- matrix(as.character(Sw.ex), nrow = 5, ncol = 5)
+            ch.Sw.ex <- matrix(as.character(Sw.ex), nrow = 100, ncol = 100)
             vec.Sw.ex <- as.vector(Sw.ex)
 
             Sw.nosymmetric <- Sw.ex
