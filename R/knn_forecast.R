@@ -51,7 +51,8 @@ knn.forecast <- function(Sim.Mat.in,f.index.in,k.in,y.in) {
     Sim.Mat.in <- Sim.Mat.in[-(remove.indices), -(remove.indices)]
   }
 
-  if(k.in > nrow(Sim.Mat.in[-(f.index.in),])){
+  #Error workaround when k.in = 1 in knn.forecast.boot.intervals
+  if(isTRUE(k.in > nrow(Sim.Mat.in[-(f.index.in),]))){
     stop('k.in is larger than the number of eligible neighbors')
   }
 
