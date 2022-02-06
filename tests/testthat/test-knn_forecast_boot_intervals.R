@@ -66,6 +66,51 @@ test_that("knn.forecast.boot.intervals output lengths are as anticipated", {
 })
 
 
+test_that("knn.forecast.boot.intervals with known output,
+          produces expected results", {
+
+  Sim.Mat <- matrix(c(1, .5, .2, .5, 1, .7, .2, .7, 1)
+                    , nrow = 3
+                    , ncol = 3
+                    , byrow = TRUE)
+
+  y <- c(3, 1, 5)
+  f.index <- c(3)
+  k <- 1
+
+  #Everything should be a -1 here, there is 1 residual in the pool which should
+  #be 1 - 3 = -2, and the nearest neighbor for y[3] is y[2] =  1, the sampled
+  #residual is always the same, so each simulation will be -1.
+  interval.test <- knn.forecast.boot.intervals(Sim.Mat.in = Sim.Mat
+                                               , f.index.in = f.index
+                                               , y.in = y
+                                               , k.in = k
+                                               , B = 10)
+
+  lb.est <- interval.test$lb
+  ub.est <- interval.test$ub
+  mean.est <- interval.test$mean
+  median.est <- interval.test$median
+
+  expect_equal(lb.est, -1)
+  expect_equal(ub.est, -1)
+  expect_equal(mean.est, -1)
+  expect_equal(median.est, -1)
+
+})
+
+
+
+
+#Everything should be a -1 here, there is 1 residual in the pool which should
+#be 1 - 3 = -2, and the nearest neighbor for y[3] is y[2] =  1, the sampled
+#residual is always the same, so each simulation will be -1.
+interval.test <- knn.forecast.boot.intervals(Sim.Mat.in = Sim.Mat
+                                             , f.index.in = f.index
+                                             , y.in = y
+                                             , k.in = k
+                                             , B = 10)
+
 
 
 test_that("knn.forecast.boot.intervals throws errors or warnings for
