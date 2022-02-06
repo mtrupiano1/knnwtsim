@@ -74,17 +74,13 @@ test_that("knn.forecast.boot.intervals with known output,
                     , ncol = 3
                     , byrow = TRUE)
 
-  y <- c(3, 1, 5)
-  f.index <- c(3)
-  k <- 1
-
   #Everything should be a -1 here, there is 1 residual in the pool which should
   #be 1 - 3 = -2, and the nearest neighbor for y[3] is y[2] =  1, the sampled
   #residual is always the same, so each simulation will be -1.
   interval.test <- knn.forecast.boot.intervals(Sim.Mat.in = Sim.Mat
-                                               , f.index.in = f.index
-                                               , y.in = y
-                                               , k.in = k
+                                               , f.index.in = c(3)
+                                               , y.in = c(3, 1, 5)
+                                               , k.in = 1
                                                , B = 10)
 
   lb.est <- interval.test$lb
@@ -98,18 +94,6 @@ test_that("knn.forecast.boot.intervals with known output,
   expect_equal(median.est, -1)
 
 })
-
-
-
-
-#Everything should be a -1 here, there is 1 residual in the pool which should
-#be 1 - 3 = -2, and the nearest neighbor for y[3] is y[2] =  1, the sampled
-#residual is always the same, so each simulation will be -1.
-interval.test <- knn.forecast.boot.intervals(Sim.Mat.in = Sim.Mat
-                                             , f.index.in = f.index
-                                             , y.in = y
-                                             , k.in = k
-                                             , B = 10)
 
 
 
