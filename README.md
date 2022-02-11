@@ -361,7 +361,7 @@ legend('bottomleft'
                  , 'Bootstrap Simulations Mean'
                  , 'Prediction Interval Bounds')
       , col = c('black', 'green', 'blue')
-      , lty = c(1, 2, 3, 4))
+      , lty = c(1, 4, 4))
 ```
 
 <img src="man/figures/README-bootstrap-interval-example-1.png" width="100%" />
