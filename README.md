@@ -301,7 +301,7 @@ legend('bottomleft', legend = c('Actuals', 'KNN Forecast Tuned')
 
 <img src="man/figures/README-tuned-knn-forecast-example-1.png" width="100%" />
 
-## Prediction Intervals in 
+## Forecasting with Prediction Intervals
 
 The methodology used to produce forecasts with prediction intervals in
 this package is based on the description of “Prediction intervals from
@@ -350,19 +350,18 @@ ub <- interval.forecast$ub
 mean.boot <- interval.forecast$mean
   
 
-ts.plot(ex.series, ylab="Simulated Time Series Value"
-        , lwd = 1.8
+ts.plot(ex.series, ylab = "Simulated Time Series Value"
         , ylim = c(min(lb), max(ub)))
-lines(x = val.index, y = mean.boot , col='green', lty=4, lwd = 2.5)
-lines(x = val.index, y = lb, col='blue',lty=4, lwd = 2.5)
-lines(x = val.index, y = ub, col='blue',lty=4 , lwd = 2.5)
+lines(x = val.index, y = mean.boot , col = 'green', lty = 4)
+lines(x = val.index, y = lb, col = 'blue', lty = 4)
+lines(x = val.index, y = ub, col = 'blue', lty = 4)
   
 legend('bottomleft'
-      , legend=c('Actuals'
-                 , 'KNN Forecast Bootstrap Intervals Mean'
-                 , 'Prediction Intervals')
-      , col=c('black', 'green', 'blue')
-      , lty=c(1, 2, 3, 4))
+      , legend = c('Actuals'
+                 , 'Bootstrap Simulations Mean'
+                 , 'Prediction Interval Bounds')
+      , col = c('black', 'green', 'blue')
+      , lty = c(1, 2, 3, 4))
 ```
 
 <img src="man/figures/README-bootstrap-interval-example-1.png" width="100%" />
