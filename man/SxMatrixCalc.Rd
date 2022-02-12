@@ -17,8 +17,8 @@ numeric matrix of distances for \code{A}.
 }
 \description{
 Largely a wrapper function for the \code{stats::dist()} function. First calculates
-nxn distance matrix using specified method for an input matrix or vector using
- \code{stats::dist()}. Then converts the distance matrix to similarity matrix using 1/(D_x + 1).
+n x n distance matrix using specified method for an input matrix or vector using
+ \code{stats::dist()}. Then converts the distance matrix to similarity matrix using 1 / (D_x + 1).
 }
 \examples{
 X <- matrix(c(1, 1, 1, 2, 2, 2, 3, 3, 3), nrow = 3, ncol = 3, byrow = TRUE)

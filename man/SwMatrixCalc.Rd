@@ -31,8 +31,9 @@ SwMatrixCalc(
 numeric matrix of similarities which is calculated using \code{S_w}.
 }
 \description{
-A wrapper function which calls each of \code{StMatrixCalc(v=t.in)}, \code{SpMatrixCalc(v=p.in,nPeriods=nPeriods.in)},
-and \code{SxMatrixCalc(A=X.in,XdistMetric=XdistMetric.in)} to generate the three matrices of using the component measures of \code{S_w}. Then
+A wrapper function which calls each of \code{StMatrixCalc(v = t.in)},
+\code{SpMatrixCalc(v = p.in, nPeriods = nPeriods.in)},
+and \code{SxMatrixCalc(A = X.in, XdistMetric = XdistMetric.in)} to generate the three matrices of using the component measures of \code{S_w}. Then
 generates the final weighted similarity matrix as the sum of each component matrix multiplied by its corresponding \code{weights}.
 The first value in \code{weights} will be multiplied by \code{S_t}, the second \code{S_p}, and the third \code{S_x}.
 }
@@ -40,6 +41,17 @@ The first value in \code{weights} will be multiplied by \code{S_t}, the second \
 t <- c(1, 2, 3)
 p <- c(1, 2, 1)
 X <- matrix(c(1, 1, 1, 2, 2, 2, 3, 3, 3), nrow = 3, ncol = 3, byrow = TRUE)
-SwMatrixCalc(t.in = t, p.in = p, nPeriods.in = 2, X.in = X,
-  weights = c(1/4,1/4,1/2))
+SwMatrixCalc(t.in = t
+             , p.in = p, nPeriods.in = 2
+             , X.in = X
+             , weights = c(1 / 4, 1 / 4, 1 / 2))
+
+}
+\seealso{
+\itemize{
+\item Trupiano (2021) \url{arXiv:2112.06266v1} for information on the formulation of \code{S_w}.
+\item \code{\link[=StMatrixCalc]{StMatrixCalc()}} for information on the calculation of \code{S_t}.
+\item \code{\link[=SpMatrixCalc]{SpMatrixCalc()}} for information on the calculation of \code{S_p}.
+\item \code{\link[=SxMatrixCalc]{SxMatrixCalc()}} for information on the calculation of \code{S_x}.
+}
 }
