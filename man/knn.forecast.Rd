@@ -19,7 +19,7 @@ knn.forecast(Sim.Mat.in, f.index.in, k.in, y.in)
 numeric vector of the same length as \code{f.index.in}, of forecasted observations.
 }
 \description{
-Provide an nxn similarity matrix as input, all points both observed and those to be
+Provide an n x n similarity matrix as input, all points both observed and those to be
 forecasted should be included. The \code{f.index.in} argument indicates which observations
 to identify neighbors for, and removes them from consideration as eligible neighbors.
 Once the matrix is subset down to only the columns in \code{f.index.in} and the rows excluding \code{f.index.in}, the
@@ -29,9 +29,16 @@ and \code{y.in} accurately reflect the time order of the observations.
 }
 \examples{
 Sim.Mat <- matrix(c(1, .5, .2, .5, 1, .7, .2, .7, 1),
-  nrow = 3, ncol = 3, byrow = TRUE)
+                  nrow = 3, ncol = 3, byrow = TRUE)
 y <- c(2, 1, 5)
 f.index <- c(3)
 k <- 2
 knn.forecast(Sim.Mat.in = Sim.Mat, f.index.in = f.index, y.in = y, k.in = k)
+}
+\seealso{
+\itemize{
+\item \code{\link[=NNreg]{NNreg()}} for the function used to perform knn regression on a single
+point
+\item \code{\link[=SwMatrixCalc]{SwMatrixCalc()}} for the function to calculate a matrix with the recommended similarity measure
+}
 }

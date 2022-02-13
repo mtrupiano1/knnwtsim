@@ -50,11 +50,11 @@ sample from. If there are \code{n} points prior to the first observation indicat
 starting with the point of the response series at the index \code{k.in + 1}. The first \code{k.in} points cannot be estimated because
 a minimum of \code{k.in} eligible neighbors would be needed. The optional \code{burn.in} argument can be used to increase the number
 of points from the start of the series that need to be available as neighbors before calculating errors for the pool. Next, \code{B}
-possible paths the series could take are simulated using the pool of errors. Each path is simulated by calling \code{knn.forecast}, estimating the first point in \code{f.index.in}, adding a sampled forecast error, then adding
+possible paths the series could take are simulated using the pool of errors. Each path is simulated by calling \code{knn.forecast()}, estimating the first point in \code{f.index.in}, adding a sampled forecast error, then adding
 this value to the end of the series. This process is then repeated for the next point in \code{f.index.in} until all have been estimated. The final output
 interval estimates are calculated for each point in \code{f.index.in} by taking the appropriate percentiles of the corresponding simulations of that point.
 The mean and medians are also calculated from these simulations. One important implication of this behavior is that the mean forecast output from this function can
-differ from the point forecast produced by \code{knn.forecast} alone.
+differ from the point forecast produced by \code{knn.forecast()} alone.
 }
 \examples{
 data("simulation_master_list")
