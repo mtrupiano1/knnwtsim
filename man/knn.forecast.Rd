@@ -38,7 +38,7 @@ knn.forecast(Sim.Mat.in = Sim.Mat, f.index.in = f.index, y.in = y, k.in = k)
 \seealso{
 \itemize{
 \item \code{\link[=NNreg]{NNreg()}} for the function used to perform knn regression on a single
-point
-\item \code{\link[=SwMatrixCalc]{SwMatrixCalc()}} for the function to calculate a matrix with the recommended similarity measure
+point.
+\item \code{\link[=SwMatrixCalc]{SwMatrixCalc()}} for the function to calculate a matrix with the recommended similarity measure.
 }
 }

@@ -36,201 +36,205 @@
 #' }
 #' @export
 #'
+#' @seealso
+#' * [knn.forecast()] for the function called to perform knn regression.
+#' * [SwMatrixCalc()] for the function to calculate a matrix with the recommended similarity measure.
+#' * Hyndman R, Athanasopoulos G (2021),"Forecasting: Principles and Practice, 3rd ed", Chapter 5.5, \url{https://otexts.com/fpp3/prediction-intervals.html#prediction-intervals-from-bootstrapped-residuals}.
+#'   For background on the algorithm this function is based on.
+#' @md
+#'
 #' @examples
 #' data("simulation_master_list")
 #' series.index <- 15
 #' ex.series <- simulation_master_list[[series.index]]$series.lin.coef.chng.x
 #'
-#' #Weights pre tuned by random search. In alpha, beta, gamma order
+#' # Weights pre tuned by random search. In alpha, beta, gamma order
 #' pre.tuned.wts <- c(0.2148058, 0.2899638, 0.4952303)
 #' pre.tuned.k <- 5
 #'
 #' df <- data.frame(ex.series)
-#' #Generate vector of time orders
+#' # Generate vector of time orders
 #' df$t <- c(1:nrow(df))
 #'
-#' #Generate vector of periods
+#' # Generate vector of periods
 #' nperiods <- simulation_master_list[[series.index]]$seasonal.periods
-#' df$p <- rep(1:nperiods,length.out = nrow(df))
+#' df$p <- rep(1:nperiods, length.out = nrow(df))
 #'
-#' #Pull corresponding exogenous predictor(s)
+#' # Pull corresponding exogenous predictor(s)
 #' X <- as.matrix(simulation_master_list[[series.index]]$x.chng)
 #'
 #'
-#' #Calculate the weighted similarity matrix using Sw
-#' Sw.ex <- SwMatrixCalc(t.in = df$t
-#'                       , p.in = df$p, nPeriods.in = nperiods
-#'                       , X.in = X
-#'                       , weights = pre.tuned.wts )
+#' # Calculate the weighted similarity matrix using Sw
+#' Sw.ex <- SwMatrixCalc(t.in = df$t,
+#'                       p.in = df$p, nPeriods.in = nperiods,
+#'                       X.in = X,
+#'                       weights = pre.tuned.wts)
 #'
 #' n <- length(ex.series)
-#' #Index we want to forecast
+#' # Index we want to forecast
 #' f.index <- c((n - 5 + 1):length(ex.series))
 #'
-#' interval.forecast <- knn.forecast.boot.intervals(Sim.Mat.in = Sw.ex
-#'                                                  , f.index.in = f.index
-#'                                                  , y.in = ex.series
-#'                                                  , k.in = pre.tuned.k)
-#'
-knn.forecast.boot.intervals <- function(Sim.Mat.in
-                                        , f.index.in
-                                        , k.in
-                                        , y.in
-                                        , burn.in = NULL
-                                        , B = 200
-                                        , return.simulations = FALSE
-                                        , level = .95){
+#' interval.forecast <- knn.forecast.boot.intervals(Sim.Mat.in = Sw.ex,
+#'                                                  f.index.in = f.index,
+#'                                                  y.in = ex.series,
+#'                                                  k.in = pre.tuned.k)
+knn.forecast.boot.intervals <- function(Sim.Mat.in,
+                                        f.index.in,
+                                        k.in,
+                                        y.in,
+                                        burn.in = NULL,
+                                        B = 200,
+                                        return.simulations = FALSE,
+                                        level = .95) {
 
 
 
-  #Bad argument type checks
-  if(!(is.vector(y.in, mode = 'numeric')) |
-     !(is.vector(f.index.in, mode = 'numeric'))){
-    stop('y.in and f.index.in should be numeric vectors')
+  #bad argument type checks
+  if (!(is.vector(y.in, mode = "numeric")) |
+    !(is.vector(f.index.in, mode = "numeric"))) {
+    stop("y.in and f.index.in should be numeric vectors")
   }
 
-  if(!((is.matrix(Sim.Mat.in) & is.numeric(Sim.Mat.in)))){
-    stop('Sim.Mat.in should be a numeric matrix')
-  } else if (!(isSymmetric.matrix(Sim.Mat.in))){
-    stop('Sim.Mat.in should be a symmetric matrix')
+  if (!((is.matrix(Sim.Mat.in) & is.numeric(Sim.Mat.in)))) {
+    stop("Sim.Mat.in should be a numeric matrix")
+  } else if (!(isSymmetric.matrix(Sim.Mat.in))) {
+    stop("Sim.Mat.in should be a symmetric matrix")
   }
 
-  if((!(is.vector(k.in, mode = 'numeric'))) | (!(identical(length(k.in), 1L)))){
-    stop('k.in should be an integer with length 1L')
-  } else if(!(identical((k.in %% 1),0))){
-    warning('k.in should be an integer, argument will be
-            floored to nearest whole number')
+  if ((!(is.vector(k.in, mode = "numeric")))
+      | (!(identical(length(k.in), 1L)))) {
+    stop("k.in should be an integer with length 1L")
+  } else if (!(identical((k.in %% 1), 0))) {
+    warning("k.in should be an integer, argument will be
+            floored to nearest whole number")
     k.in <- floor(k.in)
   }
 
 
-  if (!identical(burn.in, NULL)){
-    if(((!(is.vector(burn.in, mode = 'numeric'))) |
-        (!(identical(length(burn.in), 1L))))){
-      stop('burn.in should be an integer with length 1L, or NULL')
-    } else if(!(identical((burn.in %% 1), 0))){
-      warning('burn.in should be an integer, argument will be floored to
-              nearest whole number')
+  if (!identical(burn.in, NULL)) {
+    if (((!(is.vector(burn.in, mode = "numeric"))) |
+      (!(identical(length(burn.in), 1L))))) {
+      stop("burn.in should be an integer with length 1L, or NULL")
+    } else if (!(identical((burn.in %% 1), 0))) {
+      warning("burn.in should be an integer, argument will be floored to
+              nearest whole number")
       burn.in <- floor(burn.in)
     }
   }
 
-  if((!(is.vector(B, mode = 'numeric'))) | (!(identical(length(B), 1L)))){
-    stop('B should be an integer with length 1L')
-  } else if(!(identical((B %% 1),0))){
-    warning('B should be an integer, argument will be
-            floored to nearest whole number')
+  if ((!(is.vector(B, mode = "numeric"))) | (!(identical(length(B), 1L)))) {
+    stop("B should be an integer with length 1L")
+  } else if (!(identical((B %% 1), 0))) {
+    warning("B should be an integer, argument will be
+            floored to nearest whole number")
     B <- floor(B)
   }
 
-  if((!(is.logical(return.simulations))) |
-     (!(identical(length(return.simulations), 1L)))){
-    stop('return.simulations should be a logical with length 1L')
+  if ((!(is.logical(return.simulations))) |
+    (!(identical(length(return.simulations), 1L)))) {
+    stop("return.simulations should be a logical with length 1L")
   }
 
-  if((!(is.vector(level, mode = 'numeric'))) |
-     (!(identical(length(level), 1L)))){
-    stop('level should be a numeric value with length 1L')
-  } else if(!((level > 0) & (level < 1))){
-    stop('level should be between 0 and 1')
+  if ((!(is.vector(level, mode = "numeric"))) |
+    (!(identical(length(level), 1L)))) {
+    stop("level should be a numeric value with length 1L")
+  } else if (!((level > 0) & (level < 1))) {
+    stop("level should be between 0 and 1")
   }
 
-  #Conflicting sizes checks
-  if(max(f.index.in) < nrow(Sim.Mat.in)){
-    warning('Sim.Mat.in row count is greater than the maximum value of
+  #conflicting sizes checks
+  if (max(f.index.in) < nrow(Sim.Mat.in)) {
+    warning("Sim.Mat.in row count is greater than the maximum value of
             f.index.in, rows and columns at indices greater than maximum value
-            of f.index.in will be removed')
+            of f.index.in will be removed")
     remove.indices <- c((max(f.index.in) + 1):nrow(Sim.Mat.in))
     Sim.Mat.in <- Sim.Mat.in[-(remove.indices), -(remove.indices)]
   }
 
-  if(max(f.index.in) > nrow(Sim.Mat.in)){
-    stop('f.index.in contains higher values than row count of Sim.Mat.in')
+  if (max(f.index.in) > nrow(Sim.Mat.in)) {
+    stop("f.index.in contains higher values than row count of Sim.Mat.in")
   }
 
-  if(min(f.index.in) > (length(y.in) + 1)){
-    stop('f.index.in should start at an index <= (length(y.in) + 1)')
+  if (min(f.index.in) > (length(y.in) + 1)) {
+    stop("f.index.in should start at an index <= (length(y.in) + 1)")
   }
 
-  if(k.in > nrow(Sim.Mat.in[-(f.index.in),])){
-    stop('k.in is larger than the number of eligible neighbors')
+  if (k.in > nrow(Sim.Mat.in[-(f.index.in), ])) {
+    stop("k.in is larger than the number of eligible neighbors")
   }
 
-  if(!is.null(burn.in)){
-    if(burn.in < k.in){
-      stop('burn.in is less than k.in, at least k.in points are needed
-           for forecasting')
+  if (!is.null(burn.in)) {
+    if (burn.in < k.in) {
+      stop("burn.in is less than k.in, at least k.in points are needed
+           for forecasting")
     }
   }
 
   #burn.in defaults to k.in
-  if(is.null(burn.in)){
+  if (is.null(burn.in)) {
     burn.in <- k.in
   }
 
-  #Set up sim mat and response series to gather residuals
+  #set up sim mat and response series to gather residuals
   Sim.Mat.noval <- Sim.Mat.in[-(f.index.in), -(f.index.in)]
   y.noval <- y.in[-(c(min(f.index.in):length(y.in)))]
 
-  #Gather pool of residuals to sample from
+  #gather pool of residuals to sample from
   gather.res.index <- c((burn.in + 1):length(y.noval))
   res.len <- length(gather.res.index)
   et <- numeric(length = res.len)
   test.frcst <- numeric(length = res.len)
 
 
-  for (t in gather.res.index){
+  for (t in gather.res.index) {
     Sim.Mat.noval.t <- Sim.Mat.noval[1:t, 1:t]
     y.t <- y.noval[1:t]
     y.t.act <- y.noval[t]
 
-    res.est.frcst.t <- knn.forecast(Sim.Mat.in = Sim.Mat.noval.t
-                                    , f.index.in = t
-                                    , k.in = k.in
-                                    , y.in = y.t)
+    res.est.frcst.t <- knn.forecast(Sim.Mat.in = Sim.Mat.noval.t,
+                                    f.index.in = t,
+                                    k.in = k.in,
+                                    y.in = y.t)
 
     et.t <- y.t.act - res.est.frcst.t
 
     et[t - burn.in] <- et.t
     test.frcst[t - burn.in] <- res.est.frcst.t
-
   }
 
   h <- length(f.index.in)
   boot.paths <- matrix(NA, nrow = B, ncol = h)
 
-  #Create B simulated forecasts
-  for (b in c(1:B)){
+  #create B simulated forecasts
+  for (b in c(1:B)) {
 
-    #This loop produces the bth simulated path
-    for (i in c(1:h)){
+    #this loop produces the bth simulated path
+    for (i in c(1:h)) {
       one.hop.point <- f.index.in[i]
       one.hop.res <- base::sample(et, size = 1, replace = TRUE)
 
-      #Assign a 0 vector for the new forecast if first iteration, then append
+      #assign a 0 vector for the new forecast if first iteration, then append
       #previously estimated points in later iterations
-      if(i == 1){
+      if (i == 1) {
         path <- numeric(length = h)
         y.sim <- y.noval
       } else {
         y.sim <- c(y.sim, path[i - 1])
       }
 
-      #Removing uneeded columns in the sim matrix to avoid warnings
-      if (i != h){
+      #removing uneeded columns in the sim matrix to avoid warnings
+      if (i != h) {
         remove.index <- f.index.in[(i + 1):h]
-        #Will need to make sure Sw has dims as high as max f.index.in
-        #(may need that in knn.forecast too)
         Sim.Mat.one.hop <- Sim.Mat.in[-(remove.index), -(remove.index)]
       } else {
         Sim.Mat.one.hop <- Sim.Mat.in
       }
 
-      #Produce one step ahead forecast and store result for next iteration
-      one.hop.frcst <- knn.forecast(Sim.Mat.in = Sim.Mat.one.hop
-                                    , f.index.in = one.hop.point
-                                    , k.in = k.in
-                                    , y.in = y.sim)
+      #produce one step ahead forecast and store result for next iteration
+      one.hop.frcst <- knn.forecast(Sim.Mat.in = Sim.Mat.one.hop,
+                                    f.index.in = one.hop.point,
+                                    k.in = k.in,
+                                    y.in = y.sim)
 
       one.hop.frsct.w.res <- one.hop.frcst + one.hop.res
 
@@ -239,26 +243,27 @@ knn.forecast.boot.intervals <- function(Sim.Mat.in
     boot.paths[b, ] <- path
   }
 
-  #Use simulated paths for estimates
-  ub.boot <- apply(boot.paths, MARGIN = 2, FUN = stats::quantile
-                   , probs = (level + 1) / 2)
+  #use simulated paths for estimates
+  ub.boot <- apply(boot.paths,
+                   MARGIN = 2, FUN = stats::quantile,
+                   probs = (level + 1) / 2)
 
-  lb.boot <- apply(boot.paths, MARGIN = 2, FUN = stats::quantile
-                   , probs = (1 - level) / 2)
+  lb.boot <- apply(boot.paths,
+                   MARGIN = 2, FUN = stats::quantile,
+                   probs = (1 - level) / 2)
 
   mean.boot <- apply(boot.paths, MARGIN = 2, FUN = mean)
   median.boot <- apply(boot.paths, MARGIN = 2, FUN = stats::median)
 
-  return.list <- list(lb = lb.boot
-                      , ub = ub.boot
-                      , mean = mean.boot
-                      , median = median.boot)
+  return.list <- list(lb = lb.boot,
+                      ub = ub.boot,
+                      mean = mean.boot,
+                      median = median.boot)
 
-  if (return.simulations == TRUE){
+  if (return.simulations == TRUE) {
     simulations <- list(simulated.paths = boot.paths)
     return.list <- append(return.list, simulations)
   }
 
   return(return.list)
-
 }

@@ -20,8 +20,8 @@
 #'
 #' @seealso
 #' * [NNreg()] for the function used to perform knn regression on a single
-#' point
-#' * [SwMatrixCalc()] for the function to calculate a matrix with the recommended similarity measure
+#' point.
+#' * [SwMatrixCalc()] for the function to calculate a matrix with the recommended similarity measure.
 #' @md
 #'
 #' @examples
@@ -97,7 +97,7 @@ knn.forecast <- function(Sim.Mat.in, f.index.in, k.in, y.in) {
 #' @export
 #'
 #' @seealso [knn.forecast()] the recommended user facing function to perform knn
-#' regression for forecasting with \code{NNreg()}
+#' regression for forecasting with \code{NNreg()}.
 #' @md
 #'
 #'

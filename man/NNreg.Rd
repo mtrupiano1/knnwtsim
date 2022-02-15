@@ -34,5 +34,5 @@ NNreg(v = Sim.Mat.col, k.in2 = 2, y.in2 = y)
 }
 \seealso{
 \code{\link[=knn.forecast]{knn.forecast()}} the recommended user facing function to perform knn
-regression for forecasting with \code{NNreg()}
+regression for forecasting with \code{NNreg()}.
 }

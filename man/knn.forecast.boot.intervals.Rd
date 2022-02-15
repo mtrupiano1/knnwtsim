@@ -35,11 +35,11 @@ knn.forecast.boot.intervals(
 \value{
 list of the following components:
 \describe{
-          \item{lb}{numeric vector of the same length as \code{f.index.in}, with the estimated lower bound of the prediction interval.}
-          \item{ub}{numeric vector of the same length as \code{f.index.in}, with the estimated upper bound of the prediction interval.}
-          \item{mean}{numeric vector of the same length as \code{f.index.in}, with the mean of the \code{B} simulated paths for each forecasted point.}
-          \item{median}{numeric vector of the same length as \code{f.index.in}, with the median of the \code{B} simulated paths for each forecasted point.}
-          \item{simulated.paths}{numeric matrix where each of the \code{B} rows contains a simulated path for the points in \code{f.index.in}, only returned if \code{return.simulations = TRUE}.}
+\item{lb}{numeric vector of the same length as \code{f.index.in}, with the estimated lower bound of the prediction interval.}
+\item{ub}{numeric vector of the same length as \code{f.index.in}, with the estimated upper bound of the prediction interval.}
+\item{mean}{numeric vector of the same length as \code{f.index.in}, with the mean of the \code{B} simulated paths for each forecasted point.}
+\item{median}{numeric vector of the same length as \code{f.index.in}, with the median of the \code{B} simulated paths for each forecasted point.}
+\item{simulated.paths}{numeric matrix where each of the \code{B} rows contains a simulated path for the points in \code{f.index.in}, only returned if \code{return.simulations = TRUE}.}
 }
 }
 \description{
@@ -61,35 +61,42 @@ data("simulation_master_list")
 series.index <- 15
 ex.series <- simulation_master_list[[series.index]]$series.lin.coef.chng.x
 
-#Weights pre tuned by random search. In alpha, beta, gamma order
+# Weights pre tuned by random search. In alpha, beta, gamma order
 pre.tuned.wts <- c(0.2148058, 0.2899638, 0.4952303)
 pre.tuned.k <- 5
 
 df <- data.frame(ex.series)
-#Generate vector of time orders
+# Generate vector of time orders
 df$t <- c(1:nrow(df))
 
-#Generate vector of periods
+# Generate vector of periods
 nperiods <- simulation_master_list[[series.index]]$seasonal.periods
-df$p <- rep(1:nperiods,length.out = nrow(df))
+df$p <- rep(1:nperiods, length.out = nrow(df))
 
-#Pull corresponding exogenous predictor(s)
+# Pull corresponding exogenous predictor(s)
 X <- as.matrix(simulation_master_list[[series.index]]$x.chng)
 
 
-#Calculate the weighted similarity matrix using Sw
-Sw.ex <- SwMatrixCalc(t.in = df$t
-                      , p.in = df$p, nPeriods.in = nperiods
-                      , X.in = X
-                      , weights = pre.tuned.wts )
+# Calculate the weighted similarity matrix using Sw
+Sw.ex <- SwMatrixCalc(t.in = df$t,
+                      p.in = df$p, nPeriods.in = nperiods,
+                      X.in = X,
+                      weights = pre.tuned.wts)
 
 n <- length(ex.series)
-#Index we want to forecast
+# Index we want to forecast
 f.index <- c((n - 5 + 1):length(ex.series))
 
-interval.forecast <- knn.forecast.boot.intervals(Sim.Mat.in = Sw.ex
-                                                 , f.index.in = f.index
-                                                 , y.in = ex.series
-                                                 , k.in = pre.tuned.k)
-
+interval.forecast <- knn.forecast.boot.intervals(Sim.Mat.in = Sw.ex,
+                                                 f.index.in = f.index,
+                                                 y.in = ex.series,
+                                                 k.in = pre.tuned.k)
+}
+\seealso{
+\itemize{
+\item \code{\link[=knn.forecast]{knn.forecast()}} for the function called to perform knn regression.
+\item \code{\link[=SwMatrixCalc]{SwMatrixCalc()}} for the function to calculate a matrix with the recommended similarity measure.
+\item Hyndman R, Athanasopoulos G (2021),"Forecasting: Principles and Practice, 3rd ed", Chapter 5.5, \url{https://otexts.com/fpp3/prediction-intervals.html#prediction-intervals-from-bootstrapped-residuals}.
+For background on the algorithm this function is based on.
+}
 }
