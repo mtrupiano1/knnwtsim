@@ -60,9 +60,9 @@ should also be between 0-1, with the diagonal elements being equal to 1.
 #### Component Similarity Details
 
 Initially `S_t`, `S_p`, and `S_x` are calculated as dissimilarities,
-`D_t`,`D_p`, and `D_x`. They are then transformed to similarities by the
-formula `1 / (D+1)`, where `D` is any dissimilarity measure. This also
-ensures each element of the similarity matrices fall in the range
+`D_t`, `D_p`, and `D_x`. They are then transformed to similarities by
+the formula `1 / (D+1)`, where `D` is any dissimilarity measure. This
+also ensures each element of the similarity matrices fall in the range
 `(0,1]`, with 1 representing the greatest similarity, and the values
 approaching 0 the least.
 
@@ -104,7 +104,7 @@ vector using the method indicated by the `XdistMetric` argument of
 
 ### KNN Forecasting
 
-K Nearest Neighbors forecasting is implemented in this package through
+K nearest neighbors forecasting is implemented in this package through
 the function `knn.forecast`. Using a provided similarity matrix, which
 is not required to be calculated using `S_w` specifically, the function
 will perform K Nearest Neighbors regression on each point in a specified
@@ -155,37 +155,37 @@ data("simulation_master_list")
 series.index <- 15
 ex.series <- simulation_master_list[[series.index]]$series.lin.coef.chng.x
 
-#Weights pre tuned by random search. In alpha, beta, gamma order   
+# Weights pre tuned by random search. In alpha, beta, gamma order
 pre.tuned.wts <- c(0.2148058, 0.2899638, 0.4952303)
 pre.tuned.k <- 5
 
 df <- data.frame(ex.series)
-#Generate vector of time orders
+# Generate vector of time orders
 df$t <- c(1:nrow(df))
 
-#Generate vector of periods
+# Generate vector of periods
 nperiods <- simulation_master_list[[series.index]]$seasonal.periods
 df$p <- rep(1:nperiods, length.out = nrow(df))
 
-#Pull corresponding exogenous predictor(s)
+# Pull corresponding exogenous predictor(s)
 X <- as.matrix(simulation_master_list[[series.index]]$x.chng)
-XdistMetric <- 'euclidean'
+XdistMetric <- "euclidean"
 
-#Number of points to set aside for validation
+# Number of points to set aside for validation
 val.len <- ifelse(nperiods == 12, nperiods, nperiods * 2)
 
-#Calculate the weighted similarity matrix using Sw 
-Sw.ex <- SwMatrixCalc(#For the recency similarity St
+# Calculate the weighted similarity matrix using Sw
+Sw.ex <- SwMatrixCalc(# For the recency similarity St
                       t.in = df$t
-                      #For the periodic similarity Sp
-                      ,p.in = df$p, nPeriods.in = nperiods
-                      #For the exogenous similarity Sx
-                      ,X.in = X, XdistMetric.in = XdistMetric
-                      #Weights to be applied to each similarity
-                      ,weights = pre.tuned.wts)
+                      # For the periodic similarity Sp
+                      , p.in = df$p, nPeriods.in = nperiods
+                      # For the exogenous similarity Sx
+                      , X.in = X, XdistMetric.in = XdistMetric
+                      # Weights to be applied to each similarity
+                      , weights = pre.tuned.wts)
 
-#View the top corner of the weighted similarity matrix Sw 
-cat('\n Dimensions and Slice of S_w \n')
+# View the top corner of the weighted similarity matrix Sw
+cat("\n Dimensions and Slice of S_w \n")
 #> 
 #>  Dimensions and Slice of S_w
 print(dim(Sw.ex))
@@ -200,22 +200,17 @@ print(Sw.ex[1:5, 1:5])
 ```
 
 ``` r
-#Index we want to forecast 
+# Index we want to forecast
 val.index <- c((length(ex.series) - val.len + 1):length(ex.series))
 
-#Generate the forecast 
+# Generate the forecast
 knn.frcst <- knn.forecast(Sim.Mat.in = Sw.ex
-                          ,f.index.in = val.index
-                          ,k.in = pre.tuned.k
-                          ,y.in = ex.series)
-
-ts.plot(ex.series, ylab = "Simulated Time Series Value")
-lines(x = val.index, y = knn.frcst, col = 'red', lty = 2)
-legend('bottomleft', legend = c('Actuals', 'KNN Forecast')
-       , col = c('black', 'red'), lty = c(1, 2))
+                          , f.index.in = val.index
+                          , k.in = pre.tuned.k
+                          , y.in = ex.series)
 ```
 
-<img src="man/figures/README-knn-forecast-example-1.png" width="100%" />
+<img src="man/figures/README-knn-forecast-plot-1.png" width="100%" style="display: block; margin: auto;" />
 
 ## Example with Tuning of Similarity Matrix Weights
 
@@ -249,57 +244,52 @@ Using the example series from the previous section, we can reproduce the
 using the included tuning function.
 
 ``` r
-#Calculate component similarity matrices
+# Calculate component similarity matrices
 St.ex <- StMatrixCalc(df$t)
-Sp.ex <- SpMatrixCalc(df$p,nPeriods = nperiods)
+Sp.ex <- SpMatrixCalc(df$p, nPeriods = nperiods)
 Sx.ex <- SxMatrixCalc(X)
 
-#Set seed for reproducibility 
+# Set seed for reproducibility
 set.seed(10)
-#Run tuning function 
+# Run tuning function
 tuning.ex <- knn.forecast.randomsearch.tuning(grid.len = 10**4
-                                               ,y.in = ex.series
-                                               ,St.in = St.ex 
-                                               ,Sp.in = Sp.ex
-                                               ,Sx.in = Sx.ex
-                                               ,test.h = val.len
-                                               ,max.k = NA
-                                               ,val.holdout.len = val.len)
+                                              , y.in = ex.series
+                                              , St.in = St.ex
+                                              , Sp.in = Sp.ex
+                                              , Sx.in = Sx.ex
+                                              , test.h = val.len
+                                              , max.k = NA
+                                              , val.holdout.len = val.len)
 
 
-cat('\n Tuned Hyperparameters \n')
+cat("\n Tuned Hyperparameters \n")
 #> 
 #>  Tuned Hyperparameters
-cat('\n S_w Weights \n')
+cat("\n S_w Weights \n")
 #> 
 #>  S_w Weights
 print(tuning.ex$weight.opt)
 #> [1] 0.2148058 0.2899638 0.4952303
-cat('\n k \n')
+cat("\n k \n")
 #> 
 #>  k
 print(tuning.ex$k.opt)
 #> [1] 5
 
-#Pull out tuned S_w and k
+# Pull out tuned S_w and k
 k.opt.ex <- tuning.ex$k.opt
 Sw.opt.ex <- tuning.ex$Sw.opt
 ```
 
 ``` r
-#Generate the forecast 
+# Generate the forecast
 knn.frcst.tuned <- knn.forecast(Sim.Mat.in = Sw.opt.ex
                                 , f.index.in = val.index
-                                , k.in = k.opt.ex 
+                                , k.in = k.opt.ex
                                 , y.in = ex.series)
-
-ts.plot(ex.series, ylab = "Simulated Time Series Value")
-lines(x = val.index, y = knn.frcst.tuned, col='purple', lty = 3)
-legend('bottomleft', legend = c('Actuals', 'KNN Forecast Tuned')
-       , col = c('black', 'purple'), lty = c(1, 3))
 ```
 
-<img src="man/figures/README-tuned-knn-forecast-example-1.png" width="100%" />
+<img src="man/figures/README-tuned-plot-1.png" width="100%" style="display: block; margin: auto;" />
 
 ## Forecasting with Prediction Intervals
 
@@ -340,30 +330,16 @@ simulated points in a given path to the list of eligible neighbors when
 repeatably calling `knn.forecast`.
 
 ``` r
-#Produce interval forecast list 
+# Produce interval forecast list
 interval.forecast <- knn.forecast.boot.intervals(Sim.Mat.in = Sw.opt.ex
                                                  , f.index.in = val.index
                                                  , y.in = ex.series
-                                                 , k.in =  k.opt.ex)
+                                                 , k.in = k.opt.ex)
 
-#Pull out desired components
+# Pull out desired components
 lb <- interval.forecast$lb
 ub <- interval.forecast$ub
 mean.boot <- interval.forecast$mean
-  
-
-ts.plot(ex.series, ylab = "Simulated Time Series Value"
-        , ylim = c(min(lb), max(ub)))
-lines(x = val.index, y = mean.boot , col = 'green', lty = 4)
-lines(x = val.index, y = lb, col = 'blue', lty = 4)
-lines(x = val.index, y = ub, col = 'blue', lty = 4)
-  
-legend('bottomleft'
-      , legend = c('Actuals'
-                 , 'Bootstrap Simulations Mean'
-                 , 'Prediction Interval Bounds')
-      , col = c('black', 'green', 'blue')
-      , lty = c(1, 4, 4))
 ```
 
-<img src="man/figures/README-bootstrap-interval-example-1.png" width="100%" />
+<img src="man/figures/README-bootstrap-interval-plot-1.png" width="100%" style="display: block; margin: auto;" />
