@@ -23,19 +23,33 @@ test_that("Item lengths are as anticipated", {
 
 
   tuning.test <- knn.forecast.randomsearch.tuning(grid.len = 10
-                                                  ,St.in = St.ex
-                                                  ,Sp.in = Sp.ex
-                                                  ,Sx.in = Sx.ex
-                                                  ,y.in = ex.series
-                                                  ,test.h = 2
-                                                  ,max.k = 2
-                                                  ,val.holdout.len = 2)
+                                                  , St.in = St.ex
+                                                  , Sp.in = Sp.ex
+                                                  , Sx.in = Sx.ex
+                                                  , y.in = ex.series
+                                                  , test.h = 2
+                                                  , val.holdout.len = 2)
 
   #Should be 6 total items returned the list for any valid input
   expect_equal(length(tuning.test), 6)
   #Should be 3 weights in weight.opt, 1 value for k.opt, a matrix of length nxn,
   #1 Test.MAPE.opt value, grid.len number of MAPE.all values, and 4 variables in the Grid dataframe
   expect_equal(unname(lengths(tuning.test)), c(3,1,prod(dim(St.ex)),1,10,4))
+
+
+  #Ensure NA max.k argument still works
+  tuning.test.na <- knn.forecast.randomsearch.tuning(grid.len = 10
+                                                  , St.in = St.ex
+                                                  , Sp.in = Sp.ex
+                                                  , Sx.in = Sx.ex
+                                                  , y.in = ex.series
+                                                  , max.k = NA
+                                                  , test.h = 2
+                                                  , val.holdout.len = 2)
+
+  #Should be 6 total items returned the list for any valid input
+  expect_equal(length(tuning.test.na), 6)
+
 })
 
 

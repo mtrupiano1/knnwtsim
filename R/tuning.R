@@ -17,7 +17,7 @@
 #' @param Sx.in numeric and symmetric matrix of similarities, can be generated with \code{SxMatrixCalc()}.
 #' @param y.in numeric vector of the response series to be forecast.
 #' @param test.h integer value representing the number of points in the test forecast horizon.
-#' @param max.k integer value representing the maximum value of k, \code{knn.forecast()} should use, will be set to \code{min(floor((length(y.in)) * .4), length(y.in) - val.holdout.len - test.h)} if \code{NA} is passed. Note this \code{NA} behavior differs from \code{knnwtsim} version 0.1.0.
+#' @param max.k integer value representing the maximum value of k, \code{knn.forecast()} should use, will be set to \code{min(floor((length(y.in)) * .4), length(y.in) - val.holdout.len - test.h)} if \code{NULL} or \code{NA} is passed. Note this \code{NA} behavior differs from \code{knnwtsim} version 0.1.0.
 #' @param val.holdout.len integer value representing the number of observations at the end of the series to be removed in testing forecast if desired to leave a validation set after tuning.
 #' @param min.k integer value representing the minimum value of k, \code{knn.forecast()} should use.
 #'
@@ -60,14 +60,14 @@
 #'   Sx.in = Sx.ex,
 #'   test.h = 3,
 #'   max.k = 10,
-#'   val.holdout.len=3)
+#'   val.holdout.len = 3)
 knn.forecast.randomsearch.tuning <- function(grid.len = 100
                                              ,St.in
                                              ,Sp.in
                                              ,Sx.in
                                              ,y.in
                                              ,test.h=1
-                                             ,max.k =NA
+                                             ,max.k = NULL
                                              ,val.holdout.len=0
                                              ,min.k = 1) {
 
@@ -101,16 +101,20 @@ knn.forecast.randomsearch.tuning <- function(grid.len = 100
     min.k <- floor(min.k)
   }
 
-  if (!identical(max.k,NA)){
-    if(((!(is.vector(max.k, mode = 'numeric'))) | (!(identical(length(max.k), 1L))))){
-      stop('max.k should be an integer with length 1L, or NA')
-    } else if(!(identical((max.k %% 1), 0))){
-      warning('max.k should be an integer, argument will be floored to nearest whole number')
-      max.k <- floor(max.k)
+  #multi layered if statement is here because of the move to the recommended
+  #default argument value without breaking calls on previous versions
+  if(!identical(max.k, NULL)){
+    if (!identical(max.k, NA)){
+      if(((!(is.vector(max.k, mode = 'numeric'))) | (!(identical(length(max.k), 1L))))){
+        stop('max.k should be an integer with length 1L, NULL, or NA')
+      } else if(!(identical((max.k %% 1), 0))){
+        warning('max.k should be an integer, argument will be floored to nearest whole number')
+        max.k <- floor(max.k)
+      }
     }
   }
 
-  #Matrix argument checks
+  #matrix argument checks
   if(!((is.matrix(St.in) & is.numeric(St.in))) | !((is.matrix(Sp.in) & is.numeric(Sp.in))) | !((is.matrix(Sx.in) & is.numeric(Sx.in)))){
     stop('St.in, Sp.in, and Sx.in should be numeric matrices')
   } else if (!(isSymmetric.matrix(St.in)) | !(isSymmetric.matrix(Sp.in)) | !(isSymmetric.matrix(Sx.in))){
@@ -135,17 +139,24 @@ knn.forecast.randomsearch.tuning <- function(grid.len = 100
 
   viable.neighbors.count <- n - val.holdout.len - test.h
 
-  #Set a maximum for k
-  if (is.na(max.k)){
+  #Set a maximum for k, multi layered if statement is here because of
+  #the move to the recommended default argument value without breaking
+  #calls on previous versions
+  if(is.null(max.k)){
+    k.cap <- min(floor((length(y.in))*.4), viable.neighbors.count)
+  } else if ((is.na(max.k))){
     k.cap <- min(floor((length(y.in))*.4), viable.neighbors.count)
   } else {
     if (max.k > viable.neighbors.count){
-      warning(paste0("max.k is larger than the number of viable neighbors given
-              the test.h and val.holdout.len supplied, the maximum number of viable neighbors
-              will be used instead: ", viable.neighbors.count))
-    }
-    k.cap <- min(max.k,viable.neighbors.count)
+         warning(paste0("max.k is larger than the number of viable neighbors
+                         given the test.h and val.holdout.len supplied, the
+                         maximum number of viable neighbors will be used
+                         instead: ", viable.neighbors.count))
+     }
+     k.cap <- min(max.k, viable.neighbors.count)
   }
+
+
 
  if(min.k > k.cap){
    stop("min.k is greater than max.k")
