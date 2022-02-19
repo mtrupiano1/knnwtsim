@@ -65,19 +65,23 @@
 #'
 #'
 #' # Calculate the weighted similarity matrix using Sw
-#' Sw.ex <- SwMatrixCalc(t.in = df$t,
-#'                       p.in = df$p, nPeriods.in = nperiods,
-#'                       X.in = X,
-#'                       weights = pre.tuned.wts)
+#' Sw.ex <- SwMatrixCalc(
+#'   t.in = df$t,
+#'   p.in = df$p, nPeriods.in = nperiods,
+#'   X.in = X,
+#'   weights = pre.tuned.wts
+#' )
 #'
 #' n <- length(ex.series)
 #' # Index we want to forecast
 #' f.index <- c((n - 5 + 1):length(ex.series))
 #'
-#' interval.forecast <- knn.forecast.boot.intervals(Sim.Mat.in = Sw.ex,
-#'                                                  f.index.in = f.index,
-#'                                                  y.in = ex.series,
-#'                                                  k.in = pre.tuned.k)
+#' interval.forecast <- knn.forecast.boot.intervals(
+#'   Sim.Mat.in = Sw.ex,
+#'   f.index.in = f.index,
+#'   y.in = ex.series,
+#'   k.in = pre.tuned.k
+#' )
 knn.forecast.boot.intervals <- function(Sim.Mat.in,
                                         f.index.in,
                                         k.in,
@@ -89,7 +93,7 @@ knn.forecast.boot.intervals <- function(Sim.Mat.in,
 
 
 
-  #bad argument type checks
+  # bad argument type checks
   if (!(is.vector(y.in, mode = "numeric")) |
     !(is.vector(f.index.in, mode = "numeric"))) {
     stop("y.in and f.index.in should be numeric vectors")
@@ -101,8 +105,8 @@ knn.forecast.boot.intervals <- function(Sim.Mat.in,
     stop("Sim.Mat.in should be a symmetric matrix")
   }
 
-  if ((!(is.vector(k.in, mode = "numeric")))
-      | (!(identical(length(k.in), 1L)))) {
+  if ((!(is.vector(k.in, mode = "numeric"))) |
+    (!(identical(length(k.in), 1L)))) {
     stop("k.in should be an integer with length 1L")
   } else if (!(identical((k.in %% 1), 0))) {
     warning("k.in should be an integer, argument will be
@@ -142,7 +146,7 @@ knn.forecast.boot.intervals <- function(Sim.Mat.in,
     stop("level should be between 0 and 1")
   }
 
-  #conflicting sizes checks
+  # conflicting sizes checks
   if (max(f.index.in) < nrow(Sim.Mat.in)) {
     warning("Sim.Mat.in row count is greater than the maximum value of
             f.index.in, rows and columns at indices greater than maximum value
@@ -170,16 +174,16 @@ knn.forecast.boot.intervals <- function(Sim.Mat.in,
     }
   }
 
-  #burn.in defaults to k.in
+  # burn.in defaults to k.in
   if (is.null(burn.in)) {
     burn.in <- k.in
   }
 
-  #set up sim mat and response series to gather residuals
+  # set up sim mat and response series to gather residuals
   Sim.Mat.noval <- Sim.Mat.in[-(f.index.in), -(f.index.in)]
   y.noval <- y.in[-(c(min(f.index.in):length(y.in)))]
 
-  #gather pool of residuals to sample from
+  # gather pool of residuals to sample from
   gather.res.index <- c((burn.in + 1):length(y.noval))
   res.len <- length(gather.res.index)
   et <- numeric(length = res.len)
@@ -191,10 +195,12 @@ knn.forecast.boot.intervals <- function(Sim.Mat.in,
     y.t <- y.noval[1:t]
     y.t.act <- y.noval[t]
 
-    res.est.frcst.t <- knn.forecast(Sim.Mat.in = Sim.Mat.noval.t,
-                                    f.index.in = t,
-                                    k.in = k.in,
-                                    y.in = y.t)
+    res.est.frcst.t <- knn.forecast(
+      Sim.Mat.in = Sim.Mat.noval.t,
+      f.index.in = t,
+      k.in = k.in,
+      y.in = y.t
+    )
 
     et.t <- y.t.act - res.est.frcst.t
 
@@ -205,16 +211,16 @@ knn.forecast.boot.intervals <- function(Sim.Mat.in,
   h <- length(f.index.in)
   boot.paths <- matrix(NA, nrow = B, ncol = h)
 
-  #create B simulated forecasts
+  # create B simulated forecasts
   for (b in c(1:B)) {
 
-    #this loop produces the bth simulated path
+    # this loop produces the bth simulated path
     for (i in c(1:h)) {
       one.hop.point <- f.index.in[i]
       one.hop.res <- base::sample(et, size = 1, replace = TRUE)
 
-      #assign a 0 vector for the new forecast if first iteration, then append
-      #previously estimated points in later iterations
+      # assign a 0 vector for the new forecast if first iteration, then append
+      # previously estimated points in later iterations
       if (i == 1) {
         path <- numeric(length = h)
         y.sim <- y.noval
@@ -222,7 +228,7 @@ knn.forecast.boot.intervals <- function(Sim.Mat.in,
         y.sim <- c(y.sim, path[i - 1])
       }
 
-      #removing uneeded columns in the sim matrix to avoid warnings
+      # removing uneeded columns in the sim matrix to avoid warnings
       if (i != h) {
         remove.index <- f.index.in[(i + 1):h]
         Sim.Mat.one.hop <- Sim.Mat.in[-(remove.index), -(remove.index)]
@@ -230,11 +236,13 @@ knn.forecast.boot.intervals <- function(Sim.Mat.in,
         Sim.Mat.one.hop <- Sim.Mat.in
       }
 
-      #produce one step ahead forecast and store result for next iteration
-      one.hop.frcst <- knn.forecast(Sim.Mat.in = Sim.Mat.one.hop,
-                                    f.index.in = one.hop.point,
-                                    k.in = k.in,
-                                    y.in = y.sim)
+      # produce one step ahead forecast and store result for next iteration
+      one.hop.frcst <- knn.forecast(
+        Sim.Mat.in = Sim.Mat.one.hop,
+        f.index.in = one.hop.point,
+        k.in = k.in,
+        y.in = y.sim
+      )
 
       one.hop.frsct.w.res <- one.hop.frcst + one.hop.res
 
@@ -243,22 +251,26 @@ knn.forecast.boot.intervals <- function(Sim.Mat.in,
     boot.paths[b, ] <- path
   }
 
-  #use simulated paths for estimates
+  # use simulated paths for estimates
   ub.boot <- apply(boot.paths,
-                   MARGIN = 2, FUN = stats::quantile,
-                   probs = (level + 1) / 2)
+    MARGIN = 2, FUN = stats::quantile,
+    probs = (level + 1) / 2
+  )
 
   lb.boot <- apply(boot.paths,
-                   MARGIN = 2, FUN = stats::quantile,
-                   probs = (1 - level) / 2)
+    MARGIN = 2, FUN = stats::quantile,
+    probs = (1 - level) / 2
+  )
 
   mean.boot <- apply(boot.paths, MARGIN = 2, FUN = mean)
   median.boot <- apply(boot.paths, MARGIN = 2, FUN = stats::median)
 
-  return.list <- list(lb = lb.boot,
-                      ub = ub.boot,
-                      mean = mean.boot,
-                      median = median.boot)
+  return.list <- list(
+    lb = lb.boot,
+    ub = ub.boot,
+    mean = mean.boot,
+    median = median.boot
+  )
 
   if (return.simulations == TRUE) {
     simulations <- list(simulated.paths = boot.paths)

@@ -41,11 +41,12 @@ The first value in \code{weights} will be multiplied by \code{S_t}, the second \
 t <- c(1, 2, 3)
 p <- c(1, 2, 1)
 X <- matrix(c(1, 1, 1, 2, 2, 2, 3, 3, 3), nrow = 3, ncol = 3, byrow = TRUE)
-SwMatrixCalc(t.in = t
-             , p.in = p, nPeriods.in = 2
-             , X.in = X
-             , weights = c(1 / 4, 1 / 4, 1 / 2))
-
+SwMatrixCalc(
+  t.in = t,
+  p.in = p, nPeriods.in = 2,
+  X.in = X,
+  weights = c(1 / 4, 1 / 4, 1 / 2)
+)
 }
 \seealso{
 \itemize{

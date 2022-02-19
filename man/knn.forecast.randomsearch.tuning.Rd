@@ -38,12 +38,12 @@ knn.forecast.randomsearch.tuning(
 \value{
 list of the following components:
 \describe{
-          \item{weight.opt}{numeric vector of the 3 weights to generate \code{Sw.opt} in alpha, beta, gamma order which achieved the best performance in terms of MAPE.}
-          \item{k.opt}{integer value of neighbors used in \code{knn.forecast()} which achieved the best performance in terms of MAPE.}
-          \item{Sw.opt}{numeric matrix of similarities calculated using \code{S_w}, with the best performing set of hyperparameters.}
-          \item{Test.MAPE}{numeric value of the MAPE result for the optimum hyperparamter set achieved on the test points.}
-          \item{MAPE.all}{numeric vector of MAPE results, each observation corresponds to the row in \code{Grid} of the same index.}
-          \item{Grid}{dataframe of all hyperparameter sets tested in the tuning.}
+\item{weight.opt}{numeric vector of the 3 weights to generate \code{Sw.opt} in alpha, beta, gamma order which achieved the best performance in terms of MAPE.}
+\item{k.opt}{integer value of neighbors used in \code{knn.forecast()} which achieved the best performance in terms of MAPE.}
+\item{Sw.opt}{numeric matrix of similarities calculated using \code{S_w}, with the best performing set of hyperparameters.}
+\item{Test.MAPE}{numeric value of the MAPE result for the optimum hyperparamter set achieved on the test points.}
+\item{MAPE.all}{numeric vector of MAPE results, each observation corresponds to the row in \code{Grid} of the same index.}
+\item{Grid}{dataframe of all hyperparameter sets tested in the tuning.}
 }
 }
 \description{
@@ -62,24 +62,35 @@ series.index <- 15
 ex.series <- simulation_master_list[[series.index]]$series.lin.coef.chng.x
 
 df <- data.frame(ex.series)
-#Generate vector of time orders
+# Generate vector of time orders
 df$t <- c(1:nrow(df))
-#Generate vector of periods
+# Generate vector of periods
 nperiods <- simulation_master_list[[series.index]]$seasonal.periods
 df$p <- rep(1:nperiods, length.out = nrow(df))
-#Pull corresponding exogenous predictor(s)
+# Pull corresponding exogenous predictor(s)
 X <- as.matrix(simulation_master_list[[series.index]]$x.chng)
 
 St.ex <- StMatrixCalc(df$t)
 Sp.ex <- SpMatrixCalc(df$p, nPeriods = nperiods)
 Sx.ex <- SxMatrixCalc(X)
 
-tuning.test <- knn.forecast.randomsearch.tuning(grid.len = 10,
+tuning.test <- knn.forecast.randomsearch.tuning(
+  grid.len = 10,
   y.in = ex.series,
   St.in = St.ex,
   Sp.in = Sp.ex,
   Sx.in = Sx.ex,
   test.h = 3,
   max.k = 10,
-  val.holdout.len = 3)
+  val.holdout.len = 3
+)
+}
+\seealso{
+\itemize{
+\item Trupiano (2021) \url{arXiv:2112.06266v1} for information on the formulation of \code{S_w}.
+\item \code{\link[=StMatrixCalc]{StMatrixCalc()}} for information on the calculation of \code{S_t}.
+\item \code{\link[=SpMatrixCalc]{SpMatrixCalc()}} for information on the calculation of \code{S_p}.
+\item \code{\link[=SxMatrixCalc]{SxMatrixCalc()}} for information on the calculation of \code{S_x}.
+\item \code{\link[=knn.forecast]{knn.forecast()}} for the function called to perform knn regression.
+}
 }

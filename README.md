@@ -175,14 +175,15 @@ XdistMetric <- "euclidean"
 val.len <- ifelse(nperiods == 12, nperiods, nperiods * 2)
 
 # Calculate the weighted similarity matrix using Sw
-Sw.ex <- SwMatrixCalc(# For the recency similarity St
-                      t.in = df$t
-                      # For the periodic similarity Sp
-                      , p.in = df$p, nPeriods.in = nperiods
-                      # For the exogenous similarity Sx
-                      , X.in = X, XdistMetric.in = XdistMetric
-                      # Weights to be applied to each similarity
-                      , weights = pre.tuned.wts)
+Sw.ex <- SwMatrixCalc( # For the recency similarity St
+  t.in = df$t
+  # For the periodic similarity Sp
+  , p.in = df$p, nPeriods.in = nperiods
+  # For the exogenous similarity Sx
+  , X.in = X, XdistMetric.in = XdistMetric
+  # Weights to be applied to each similarity
+  , weights = pre.tuned.wts
+)
 
 # View the top corner of the weighted similarity matrix Sw
 cat("\n Dimensions and Slice of S_w \n")
@@ -204,10 +205,12 @@ print(Sw.ex[1:5, 1:5])
 val.index <- c((length(ex.series) - val.len + 1):length(ex.series))
 
 # Generate the forecast
-knn.frcst <- knn.forecast(Sim.Mat.in = Sw.ex
-                          , f.index.in = val.index
-                          , k.in = pre.tuned.k
-                          , y.in = ex.series)
+knn.frcst <- knn.forecast(
+  Sim.Mat.in = Sw.ex,
+  f.index.in = val.index,
+  k.in = pre.tuned.k,
+  y.in = ex.series
+)
 ```
 
 <img src="man/figures/README-knn-forecast-plot-1.png" width="100%" style="display: block; margin: auto;" />
@@ -252,14 +255,16 @@ Sx.ex <- SxMatrixCalc(X)
 # Set seed for reproducibility
 set.seed(10)
 # Run tuning function
-tuning.ex <- knn.forecast.randomsearch.tuning(grid.len = 10**4
-                                              , y.in = ex.series
-                                              , St.in = St.ex
-                                              , Sp.in = Sp.ex
-                                              , Sx.in = Sx.ex
-                                              , test.h = val.len
-                                              , max.k = NA
-                                              , val.holdout.len = val.len)
+tuning.ex <- knn.forecast.randomsearch.tuning(
+  grid.len = 10**4,
+  y.in = ex.series,
+  St.in = St.ex,
+  Sp.in = Sp.ex,
+  Sx.in = Sx.ex,
+  test.h = val.len,
+  max.k = NA,
+  val.holdout.len = val.len
+)
 
 
 cat("\n Tuned Hyperparameters \n")
@@ -283,10 +288,12 @@ Sw.opt.ex <- tuning.ex$Sw.opt
 
 ``` r
 # Generate the forecast
-knn.frcst.tuned <- knn.forecast(Sim.Mat.in = Sw.opt.ex
-                                , f.index.in = val.index
-                                , k.in = k.opt.ex
-                                , y.in = ex.series)
+knn.frcst.tuned <- knn.forecast(
+  Sim.Mat.in = Sw.opt.ex,
+  f.index.in = val.index,
+  k.in = k.opt.ex,
+  y.in = ex.series
+)
 ```
 
 <img src="man/figures/README-tuned-plot-1.png" width="100%" style="display: block; margin: auto;" />
@@ -331,10 +338,12 @@ repeatably calling `knn.forecast`.
 
 ``` r
 # Produce interval forecast list
-interval.forecast <- knn.forecast.boot.intervals(Sim.Mat.in = Sw.opt.ex
-                                                 , f.index.in = val.index
-                                                 , y.in = ex.series
-                                                 , k.in = k.opt.ex)
+interval.forecast <- knn.forecast.boot.intervals(
+  Sim.Mat.in = Sw.opt.ex,
+  f.index.in = val.index,
+  y.in = ex.series,
+  k.in = k.opt.ex
+)
 
 # Pull out desired components
 lb <- interval.forecast$lb

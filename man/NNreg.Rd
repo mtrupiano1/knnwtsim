@@ -26,7 +26,8 @@ for all points to be forecasted simultaneously.
 }
 \examples{
 Sim.Mat <- matrix(c(1, .5, .2, .5, 1, .7, .2, .7, 1),
-                  nrow = 3, ncol = 3, byrow = TRUE)
+  nrow = 3, ncol = 3, byrow = TRUE
+)
 Sim.Mat.col <- Sim.Mat[-(3), 3]
 y <- c(2, 1, 5)
 k <- 2

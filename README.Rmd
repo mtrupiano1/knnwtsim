@@ -117,14 +117,15 @@ XdistMetric <- "euclidean"
 val.len <- ifelse(nperiods == 12, nperiods, nperiods * 2)
 
 # Calculate the weighted similarity matrix using Sw
-Sw.ex <- SwMatrixCalc(# For the recency similarity St
-                      t.in = df$t
-                      # For the periodic similarity Sp
-                      , p.in = df$p, nPeriods.in = nperiods
-                      # For the exogenous similarity Sx
-                      , X.in = X, XdistMetric.in = XdistMetric
-                      # Weights to be applied to each similarity
-                      , weights = pre.tuned.wts)
+Sw.ex <- SwMatrixCalc( # For the recency similarity St
+  t.in = df$t
+  # For the periodic similarity Sp
+  , p.in = df$p, nPeriods.in = nperiods
+  # For the exogenous similarity Sx
+  , X.in = X, XdistMetric.in = XdistMetric
+  # Weights to be applied to each similarity
+  , weights = pre.tuned.wts
+)
 
 # View the top corner of the weighted similarity matrix Sw
 cat("\n Dimensions and Slice of S_w \n")
@@ -138,18 +139,21 @@ print(Sw.ex[1:5, 1:5])
 val.index <- c((length(ex.series) - val.len + 1):length(ex.series))
 
 # Generate the forecast
-knn.frcst <- knn.forecast(Sim.Mat.in = Sw.ex
-                          , f.index.in = val.index
-                          , k.in = pre.tuned.k
-                          , y.in = ex.series)
+knn.frcst <- knn.forecast(
+  Sim.Mat.in = Sw.ex,
+  f.index.in = val.index,
+  k.in = pre.tuned.k,
+  y.in = ex.series
+)
 ```
 
 ```{r knn-forecast-plot, fig.align = 'center',  echo = FALSE, strip.white = TRUE}
 ts.plot(ex.series, ylab = "Simulated Time Series Value")
 lines(x = val.index, y = knn.frcst, col = "red", lty = 2)
-legend("bottomleft"
-       , legend = c("Actuals", "KNN Forecast")
-       , col = c("black", "red"), lty = c(1, 2))
+legend("bottomleft",
+  legend = c("Actuals", "KNN Forecast"),
+  col = c("black", "red"), lty = c(1, 2)
+)
 ```
 
 
@@ -180,14 +184,16 @@ Sx.ex <- SxMatrixCalc(X)
 # Set seed for reproducibility
 set.seed(10)
 # Run tuning function
-tuning.ex <- knn.forecast.randomsearch.tuning(grid.len = 10**4
-                                              , y.in = ex.series
-                                              , St.in = St.ex
-                                              , Sp.in = Sp.ex
-                                              , Sx.in = Sx.ex
-                                              , test.h = val.len
-                                              , max.k = NA
-                                              , val.holdout.len = val.len)
+tuning.ex <- knn.forecast.randomsearch.tuning(
+  grid.len = 10**4,
+  y.in = ex.series,
+  St.in = St.ex,
+  Sp.in = Sp.ex,
+  Sx.in = Sx.ex,
+  test.h = val.len,
+  max.k = NA,
+  val.holdout.len = val.len
+)
 
 
 cat("\n Tuned Hyperparameters \n")
@@ -205,19 +211,21 @@ Sw.opt.ex <- tuning.ex$Sw.opt
 ```{r tuned-knn-forecast-example}
 
 # Generate the forecast
-knn.frcst.tuned <- knn.forecast(Sim.Mat.in = Sw.opt.ex
-                                , f.index.in = val.index
-                                , k.in = k.opt.ex
-                                , y.in = ex.series)
-
+knn.frcst.tuned <- knn.forecast(
+  Sim.Mat.in = Sw.opt.ex,
+  f.index.in = val.index,
+  k.in = k.opt.ex,
+  y.in = ex.series
+)
 ```
 
 ```{r tuned-plot, fig.align = 'center',  echo = FALSE, strip.white = TRUE}
 ts.plot(ex.series, ylab = "Simulated Time Series Value")
 lines(x = val.index, y = knn.frcst.tuned, col = "purple", lty = 3)
-legend("bottomleft"
-       , legend = c("Actuals", "KNN Forecast Tuned")
-       , col = c("black", "purple"), lty = c(1, 3))
+legend("bottomleft",
+  legend = c("Actuals", "KNN Forecast Tuned"),
+  col = c("black", "purple"), lty = c(1, 3)
+)
 ```
 
 ## Forecasting with Prediction Intervals 
@@ -232,10 +240,12 @@ eligible neighbors when repeatably calling `knn.forecast`.
 ```{r bootstrap-interval-example}
 
 # Produce interval forecast list
-interval.forecast <- knn.forecast.boot.intervals(Sim.Mat.in = Sw.opt.ex
-                                                 , f.index.in = val.index
-                                                 , y.in = ex.series
-                                                 , k.in = k.opt.ex)
+interval.forecast <- knn.forecast.boot.intervals(
+  Sim.Mat.in = Sw.opt.ex,
+  f.index.in = val.index,
+  y.in = ex.series,
+  k.in = k.opt.ex
+)
 
 # Pull out desired components
 lb <- interval.forecast$lb
@@ -245,17 +255,21 @@ mean.boot <- interval.forecast$mean
 
 ```{r bootstrap-interval-plot, fig.align = 'center',  echo = FALSE, strip.white = TRUE}
 
-ts.plot(ex.series
-        , ylab = "Simulated Time Series Value"
-        , ylim = c(min(lb), max(ub)))
+ts.plot(ex.series,
+  ylab = "Simulated Time Series Value",
+  ylim = c(min(lb), max(ub))
+)
 lines(x = val.index, y = mean.boot, col = "green", lty = 4)
 lines(x = val.index, y = lb, col = "blue", lty = 4)
 lines(x = val.index, y = ub, col = "blue", lty = 4)
 
-legend("bottomleft"
-       , legend = c("Actuals"
-                    , "Bootstrap Simulations Mean"
-                    , "Prediction Interval Bounds")
-       , col = c("black", "green", "blue")
-       , lty = c(1, 4, 4))
+legend("bottomleft",
+  legend = c(
+    "Actuals",
+    "Bootstrap Simulations Mean",
+    "Prediction Interval Bounds"
+  ),
+  col = c("black", "green", "blue"),
+  lty = c(1, 4, 4)
+)
 ```

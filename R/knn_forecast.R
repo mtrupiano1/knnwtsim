@@ -26,16 +26,17 @@
 #'
 #' @examples
 #' Sim.Mat <- matrix(c(1, .5, .2, .5, 1, .7, .2, .7, 1),
-#'                   nrow = 3, ncol = 3, byrow = TRUE)
+#'   nrow = 3, ncol = 3, byrow = TRUE
+#' )
 #' y <- c(2, 1, 5)
 #' f.index <- c(3)
 #' k <- 2
 #' knn.forecast(Sim.Mat.in = Sim.Mat, f.index.in = f.index, y.in = y, k.in = k)
 knn.forecast <- function(Sim.Mat.in, f.index.in, k.in, y.in) {
 
-  #argument type error checks
-  if (!(is.vector(y.in, mode = "numeric"))
-      | !(is.vector(f.index.in, mode = "numeric"))) {
+  # argument type error checks
+  if (!(is.vector(y.in, mode = "numeric")) |
+    !(is.vector(f.index.in, mode = "numeric"))) {
     stop("y.in and f.index.in should be numeric vectors")
   }
 
@@ -45,8 +46,8 @@ knn.forecast <- function(Sim.Mat.in, f.index.in, k.in, y.in) {
     stop("Sim.Mat.in should be a symmetric matrix")
   }
 
-  if ((!(is.vector(k.in, mode = "numeric")))
-      | (!(identical(length(k.in), 1L)))) {
+  if ((!(is.vector(k.in, mode = "numeric"))) |
+    (!(identical(length(k.in), 1L)))) {
     stop("k.in should be an integer with length 1L")
   } else if (!(identical((k.in %% 1), 0))) {
     warning("k.in should be an integer,
@@ -54,7 +55,7 @@ knn.forecast <- function(Sim.Mat.in, f.index.in, k.in, y.in) {
     k.in <- floor(k.in)
   }
 
-  #dimension conflict error checks
+  # dimension conflict error checks
   if (max(f.index.in) < nrow(Sim.Mat.in)) {
     warning("Sim.Mat.in row count is greater than the maximum value of
             f.index.in, rows and columns at indices greater than maximum value
@@ -68,13 +69,15 @@ knn.forecast <- function(Sim.Mat.in, f.index.in, k.in, y.in) {
     stop("k.in is larger than the number of eligible neighbors")
   }
 
-  #subset similarity matrix to only rows with eligible neighbors, and columns
-  #which need an estimate
+  # subset similarity matrix to only rows with eligible neighbors, and columns
+  # which need an estimate
   Sim.Mat.Eligible <- as.matrix(Sim.Mat.in[-(f.index.in), f.index.in])
 
-  #apply NNreg over columns
-  Y.hat <- apply(Sim.Mat.Eligible, MARGIN = 2
-                 , FUN = NNreg, k.in2 = k.in, y.in2 = y.in)
+  # apply NNreg over columns
+  Y.hat <- apply(Sim.Mat.Eligible,
+    MARGIN = 2,
+    FUN = NNreg, k.in2 = k.in, y.in2 = y.in
+  )
   return(Y.hat)
 }
 
@@ -103,19 +106,20 @@ knn.forecast <- function(Sim.Mat.in, f.index.in, k.in, y.in) {
 #'
 #' @examples
 #' Sim.Mat <- matrix(c(1, .5, .2, .5, 1, .7, .2, .7, 1),
-#'                   nrow = 3, ncol = 3, byrow = TRUE)
+#'   nrow = 3, ncol = 3, byrow = TRUE
+#' )
 #' Sim.Mat.col <- Sim.Mat[-(3), 3]
 #' y <- c(2, 1, 5)
 #' k <- 2
 #' NNreg(v = Sim.Mat.col, k.in2 = 2, y.in2 = y)
 NNreg <- function(v, k.in2, y.in2) {
-  #sort the provided vector of similarity from most to least similar
+  # sort the provided vector of similarity from most to least similar
   point.sort <- sort(v, decreasing = T, index = T)[[2]]
-  #identify the indices of the k.in2 most similar points
+  # identify the indices of the k.in2 most similar points
   point.neighbors <- point.sort[1:k.in2]
-  #subset y.in2 down to only the identified neighbors
+  # subset y.in2 down to only the identified neighbors
   Y.neighbors <- y.in2[point.neighbors]
-  #estimate the point of interest by taking the mean of the nearest neighbors
+  # estimate the point of interest by taking the mean of the nearest neighbors
   Y.hat <- mean(Y.neighbors)
   return(Y.hat)
 }

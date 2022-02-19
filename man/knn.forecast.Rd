@@ -29,7 +29,8 @@ and \code{y.in} accurately reflect the time order of the observations.
 }
 \examples{
 Sim.Mat <- matrix(c(1, .5, .2, .5, 1, .7, .2, .7, 1),
-                  nrow = 3, ncol = 3, byrow = TRUE)
+  nrow = 3, ncol = 3, byrow = TRUE
+)
 y <- c(2, 1, 5)
 f.index <- c(3)
 k <- 2

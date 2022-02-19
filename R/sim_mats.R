@@ -18,8 +18,8 @@
 SeasonalAbsDissimilarity <- function(p1, p2, nPeriods) {
   minPeriod <- 1
 
-  #picture putting the seasonal periods on a clock, and calculate the distance
-  #between any two points both clockwise and counterclockwise, then take min
+  # picture putting the seasonal periods on a clock, and calculate the distance
+  # between any two points both clockwise and counterclockwise, then take min
   DirectDis <- abs(p1 - p2)
   AroundDis <- abs(min(p1, p2) - minPeriod) + abs(nPeriods - max(p1, p2)) + 1
 
@@ -49,7 +49,7 @@ SeasonalAbsDissimilarity <- function(p1, p2, nPeriods) {
 #' SpMatrixCalc(c(1, 2, 4), 4)
 SpMatrixCalc <- function(v, nPeriods) {
 
-  #argument type error handling
+  # argument type error handling
   if (!(is.vector(v, mode = "numeric"))) {
     stop("v should be a numeric vector")
   }
@@ -59,11 +59,11 @@ SpMatrixCalc <- function(v, nPeriods) {
     stop("nPeriods should be numeric with length 1L")
   }
 
-  #set up a matrix to hold calculations
+  # set up a matrix to hold calculations
   n <- length(v)
   dpmat <- matrix(NA, nrow = n, ncol = n)
 
-  #fill in the matrix using seasonal dissimilarity function
+  # fill in the matrix using seasonal dissimilarity function
   for (i in c(1:n)) {
     p1 <- v[i]
     for (j in c(1:n)) {
@@ -71,7 +71,7 @@ SpMatrixCalc <- function(v, nPeriods) {
       dpmat[i, j] <- SeasonalAbsDissimilarity(p1, p2, nPeriods)
     }
   }
-  #convert dissimilarities to similarities
+  # convert dissimilarities to similarities
   spmat <- 1 / (1 + dpmat)
   return(spmat)
 }
@@ -116,15 +116,15 @@ TempAbsDissimilarity <- function(p1, p2) {
 #' StMatrixCalc(c(1, 2, 3))
 StMatrixCalc <- function(v) {
 
-  #argument type error handling
+  # argument type error handling
   if (!(is.vector(v, mode = "numeric"))) {
     stop("v should be a numeric vector")
   }
 
-  #set up a matrix to hold calculations
+  # set up a matrix to hold calculations
   n <- length(v)
   dtmat <- matrix(NA, nrow = n, ncol = n)
-  #fill in the matrix using temporal dissimilarity function
+  # fill in the matrix using temporal dissimilarity function
   for (i in c(1:n)) {
     p1 <- v[i]
     for (j in c(1:n)) {
@@ -132,7 +132,7 @@ StMatrixCalc <- function(v) {
       dtmat[i, j] <- TempAbsDissimilarity(p1, p2)
     }
   }
-  #convert dissimilarities to similarities
+  # convert dissimilarities to similarities
   stmat <- 1 / (1 + dtmat)
   return(stmat)
 }
@@ -157,15 +157,17 @@ StMatrixCalc <- function(v) {
 #' SxMatrixCalc(X)
 SxMatrixCalc <- function(A, XdistMetric = "euclidean") {
 
-  #argument type error handling
+  # argument type error handling
   if (!((is.vector(A, mode = "numeric")) | (is.matrix(A) & is.numeric(A)))) {
     stop("A should be a numeric vector or a numeric matrix")
   }
 
-  #get full symmetric distance matrix from stats::dist
-  dxmat <- as.matrix(stats::dist(A, method = XdistMetric
-                                 , upper = TRUE, diag = TRUE))
-  #convert distances to similarities
+  # get full symmetric distance matrix from stats::dist
+  dxmat <- as.matrix(stats::dist(A,
+    method = XdistMetric,
+    upper = TRUE, diag = TRUE
+  ))
+  # convert distances to similarities
   sxmat <- 1 / (1 + dxmat)
   return(sxmat)
 }
@@ -203,17 +205,18 @@ SxMatrixCalc <- function(A, XdistMetric = "euclidean") {
 #' t <- c(1, 2, 3)
 #' p <- c(1, 2, 1)
 #' X <- matrix(c(1, 1, 1, 2, 2, 2, 3, 3, 3), nrow = 3, ncol = 3, byrow = TRUE)
-#' SwMatrixCalc(t.in = t
-#'              , p.in = p, nPeriods.in = 2
-#'              , X.in = X
-#'              , weights = c(1 / 4, 1 / 4, 1 / 2))
-#'
+#' SwMatrixCalc(
+#'   t.in = t,
+#'   p.in = p, nPeriods.in = 2,
+#'   X.in = X,
+#'   weights = c(1 / 4, 1 / 4, 1 / 2)
+#' )
 SwMatrixCalc <- function(t.in,
                          p.in, nPeriods.in,
                          X.in, XdistMetric.in = "euclidean",
                          weights = c(1 / 3, 1 / 3, 1 / 3)) {
 
-  #arugment type error checks
+  # arugment type error checks
   if (!(is.vector(weights, mode = "numeric"))) {
     stop("weights should be a numeric vector")
   } else if (length(weights) > 3) {
@@ -238,19 +241,19 @@ SwMatrixCalc <- function(t.in,
     }
   }
 
-  #assigning the respective weights
+  # assigning the respective weights
   alpha <- weights[1]
   beta <- weights[2]
   gamma <- weights[3]
 
-  #call component functions
+  # call component functions
   St <- StMatrixCalc(v = t.in)
 
   Sp <- SpMatrixCalc(v = p.in, nPeriods = nPeriods.in)
 
   Sx <- SxMatrixCalc(A = X.in, XdistMetric = XdistMetric.in)
 
-  #combine component similarity matrices into final similarity matrix
+  # combine component similarity matrices into final similarity matrix
   Sw <- alpha * St + beta * Sp + gamma * Sx
 
   return(Sw)

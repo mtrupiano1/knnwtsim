@@ -78,19 +78,23 @@ X <- as.matrix(simulation_master_list[[series.index]]$x.chng)
 
 
 # Calculate the weighted similarity matrix using Sw
-Sw.ex <- SwMatrixCalc(t.in = df$t,
-                      p.in = df$p, nPeriods.in = nperiods,
-                      X.in = X,
-                      weights = pre.tuned.wts)
+Sw.ex <- SwMatrixCalc(
+  t.in = df$t,
+  p.in = df$p, nPeriods.in = nperiods,
+  X.in = X,
+  weights = pre.tuned.wts
+)
 
 n <- length(ex.series)
 # Index we want to forecast
 f.index <- c((n - 5 + 1):length(ex.series))
 
-interval.forecast <- knn.forecast.boot.intervals(Sim.Mat.in = Sw.ex,
-                                                 f.index.in = f.index,
-                                                 y.in = ex.series,
-                                                 k.in = pre.tuned.k)
+interval.forecast <- knn.forecast.boot.intervals(
+  Sim.Mat.in = Sw.ex,
+  f.index.in = f.index,
+  y.in = ex.series,
+  k.in = pre.tuned.k
+)
 }
 \seealso{
 \itemize{
