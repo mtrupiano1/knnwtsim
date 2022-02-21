@@ -7,9 +7,9 @@
 SpMatrixCalc(v, nPeriods)
 }
 \arguments{
-\item{v}{numeric vector with the seasonal periods corresponding to each point in the response series.}
+\item{v}{positive numeric vector with the seasonal periods corresponding to each point in the response series.}
 
-\item{nPeriods}{numeric value representing the maximum value \code{v} can take on.}
+\item{nPeriods}{positive numeric value representing the maximum value \code{v} can take on.}
 }
 \value{
 numeric matrix of seasonal similarities for the vector \code{v}.

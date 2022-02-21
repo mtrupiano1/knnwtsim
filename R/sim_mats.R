@@ -35,8 +35,8 @@ SeasonalAbsDissimilarity <- function(p1, p2, nPeriods) {
 #' for each possible pair of points in a vector
 #' of seasonal periods, then converts dissimilarity matrix to a similarity matrix using 1 / (D_p + 1).
 #'
-#' @param v numeric vector with the seasonal periods corresponding to each point in the response series.
-#' @param nPeriods numeric value representing the maximum value \code{v} can take on.
+#' @param v positive numeric vector with the seasonal periods corresponding to each point in the response series.
+#' @param nPeriods positive numeric value representing the maximum value \code{v} can take on.
 #'
 #' @return numeric matrix of seasonal similarities for the vector \code{v}.
 #' @export
@@ -57,6 +57,10 @@ SpMatrixCalc <- function(v, nPeriods) {
   if ((!(is.vector(nPeriods, mode = "numeric"))) |
     (!(identical(length(nPeriods), 1L)))) {
     stop("nPeriods should be numeric with length 1L")
+  }
+
+  if (any(c(v, nPeriods) < 0)) {
+    stop("Niether v or nPeriods should contain a value < 0")
   }
 
   # set up a matrix to hold calculations
