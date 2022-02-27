@@ -137,6 +137,7 @@ test_that("knn.forecast throws errors or warnings for bad k.in arguments", {
   k.ch <- "a"
   k.too.long <- c(2, 2)
   k.not.int <- 2.3
+  k.less.1 <- 0
 
   # test for non-numeric k.in
   expect_error(knn.forecast(
@@ -155,6 +156,12 @@ test_that("knn.forecast throws errors or warnings for bad k.in arguments", {
   expect_warning(knn.forecast(
     Sim.Mat.in = Sim.Mat.test, f.index.in = f.index.test,
     k.in = k.not.int, y.in = y.test
+  ))
+
+  # test for k.in < 1
+  expect_error(knn.forecast(
+    Sim.Mat.in = Sim.Mat.test, f.index.in = f.index.test,
+    k.in = k.less.1, y.in = y.test
   ))
 })
 

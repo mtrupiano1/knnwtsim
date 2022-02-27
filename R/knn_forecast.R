@@ -12,7 +12,7 @@
 #'
 #' @param Sim.Mat.in numeric and symmetric matrix of similarities (recommend use of \code{S_w}, see \code{SwMatrixCalc()}).
 #' @param f.index.in numeric vector indicating the indices of \code{Sim.Mat.in} and \code{y.in} which correspond to the time order of the points to be forecast.
-#' @param k.in integer value indicating the the number of nearest neighbors to be considered in forecasting.
+#' @param k.in integer value indicating the the number of nearest neighbors to be considered in forecasting, must be \code{>= 1}.
 #' @param y.in numeric vector of the response series to be forecast.
 #'
 #' @return numeric vector of the same length as \code{f.index.in}, of forecasted observations.
@@ -64,9 +64,14 @@ knn.forecast <- function(Sim.Mat.in, f.index.in, k.in, y.in) {
     Sim.Mat.in <- Sim.Mat.in[-(remove.indices), -(remove.indices)]
   }
 
-  # Error workaround when k.in = 1 in knn.forecast.boot.intervals
+  # error workaround when k.in = 1 in knn.forecast.boot.intervals
   if (isTRUE(k.in > nrow(Sim.Mat.in[-(f.index.in), ]))) {
     stop("k.in is larger than the number of eligible neighbors")
+  }
+
+  # check that value of k.in is reasonable
+  if (k.in < 1) {
+    stop("k.in cannot be < 1")
   }
 
   # subset similarity matrix to only rows with eligible neighbors, and columns

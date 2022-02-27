@@ -11,7 +11,7 @@ knn.forecast(Sim.Mat.in, f.index.in, k.in, y.in)
 
 \item{f.index.in}{numeric vector indicating the indices of \code{Sim.Mat.in} and \code{y.in} which correspond to the time order of the points to be forecast.}
 
-\item{k.in}{integer value indicating the the number of nearest neighbors to be considered in forecasting.}
+\item{k.in}{integer value indicating the the number of nearest neighbors to be considered in forecasting, must be \code{>= 1}.}
 
 \item{y.in}{numeric vector of the response series to be forecast.}
 }

@@ -59,8 +59,13 @@ SpMatrixCalc <- function(v, nPeriods) {
     stop("nPeriods should be numeric with length 1L")
   }
 
+  # argument value error handling
   if (any(c(v, nPeriods) < 0)) {
     stop("Niether v or nPeriods should contain a value < 0")
+  }
+
+  if (any(v > nPeriods)) {
+    stop("Some observations of v are greater than nPeriods")
   }
 
   # set up a matrix to hold calculations

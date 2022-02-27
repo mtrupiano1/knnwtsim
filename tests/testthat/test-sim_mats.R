@@ -37,6 +37,7 @@ test_that("SpMatrixCalc throws errors for bad arguments", {
   ch.v <- c("a", "b")
   X.v <- matrix(c(1, 1, 1, 2, 2, 2, 3, 3, 3), nrow = 3, ncol = 3, byrow = TRUE)
   neg.v <- c(1, 2, -5)
+  too.high.v <- c(1, 2, 6)
   good.v <- c(1, 2, 5)
 
   long.np <- c(5, 5)
@@ -61,6 +62,9 @@ test_that("SpMatrixCalc throws errors for bad arguments", {
 
   # test for negative nPeriods error
   expect_error(SpMatrixCalc(good.v, neg.np))
+
+  # test for values of v greater than nPeriods
+  expect_error(SpMatrixCalc(too.high.v, good.np))
 })
 
 
