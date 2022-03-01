@@ -20,13 +20,13 @@ knn.forecast.boot.intervals(
 
 \item{f.index.in}{numeric vector indicating the indices of \code{Sim.Mat.in} and \code{y.in} which correspond to the time order of the points to be forecast.}
 
-\item{k.in}{integer value indicating the the number of nearest neighbors to be considered in forecasting.}
+\item{k.in}{integer value indicating the the number of nearest neighbors to be considered in forecasting, must be \code{>= 1}.}
 
 \item{y.in}{numeric vector of the response series to be forecast.}
 
 \item{burn.in}{integer value which indicates how many points at the start of the series to set aside as eligible neighbors before calculating forecast errors to be re-sampled.}
 
-\item{B}{integer value representing the number of bootstrap replications, this will be the number of forecasts simulated and used to calculate outputs.}
+\item{B}{integer value representing the number of bootstrap replications, this will be the number of forecasts simulated and used to calculate outputs, must be \code{>= 1}.}
 
 \item{return.simulations}{logical value indicating whether to return all simulated forecasts.}
 

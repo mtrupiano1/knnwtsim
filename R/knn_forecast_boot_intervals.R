@@ -19,10 +19,10 @@
 #'
 #' @param Sim.Mat.in numeric and symmetric matrix of similarities (recommend use of \code{S_w}, see \code{SwMatrixCalc()}).
 #' @param f.index.in numeric vector indicating the indices of \code{Sim.Mat.in} and \code{y.in} which correspond to the time order of the points to be forecast.
-#' @param k.in integer value indicating the the number of nearest neighbors to be considered in forecasting.
+#' @param k.in integer value indicating the the number of nearest neighbors to be considered in forecasting, must be \code{>= 1}.
 #' @param y.in numeric vector of the response series to be forecast.
 #' @param burn.in integer value which indicates how many points at the start of the series to set aside as eligible neighbors before calculating forecast errors to be re-sampled.
-#' @param B integer value representing the number of bootstrap replications, this will be the number of forecasts simulated and used to calculate outputs.
+#' @param B integer value representing the number of bootstrap replications, this will be the number of forecasts simulated and used to calculate outputs, must be \code{>= 1}.
 #' @param return.simulations logical value indicating whether to return all simulated forecasts.
 #' @param level numeric value over the range (0,1) indicating the confidence level for the prediction intervals.
 #'
@@ -167,12 +167,17 @@ knn.forecast.boot.intervals <- function(Sim.Mat.in,
     stop("k.in is larger than the number of eligible neighbors")
   }
 
+  if ((k.in < 1) | (B < 1)) {
+    stop("integer arguments k.in and B cannot be < 1")
+  }
+
   if (!is.null(burn.in)) {
     if (burn.in < k.in) {
       stop("burn.in is less than k.in, at least k.in points are needed
            for forecasting")
     }
   }
+
 
   # burn.in defaults to k.in
   if (is.null(burn.in)) {

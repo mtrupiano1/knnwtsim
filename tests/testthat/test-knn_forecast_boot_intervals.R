@@ -167,7 +167,14 @@ test_that("knn.forecast.boot.intervals throws errors or warnings for
     B = 10
   ))
 
-
+  # Test k.in < 1
+  expect_error(knn.forecast.boot.intervals(
+    Sim.Mat.in = Sw.ex,
+    f.index.in = f.index,
+    y.in = ex.series,
+    k.in = 0,
+    B = 10
+  ))
 
   # Test too long B
   expect_error(knn.forecast.boot.intervals(
@@ -195,6 +202,15 @@ test_that("knn.forecast.boot.intervals throws errors or warnings for
     y.in = ex.series,
     k.in = pre.tuned.k,
     B = 10.3
+  ))
+
+  # Test B < 1
+  expect_error(knn.forecast.boot.intervals(
+    Sim.Mat.in = Sw.ex,
+    f.index.in = f.index,
+    y.in = ex.series,
+    k.in = pre.tuned.k,
+    B = 0
   ))
 
   # Test too long burn.in
