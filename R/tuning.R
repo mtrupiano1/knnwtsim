@@ -11,15 +11,16 @@
 #' and \code{test.actuals} are both numeric vectors.
 #'
 #'
-#' @param grid.len integer value representing the number of hyperparameter sets to generate and test.
+#' @param grid.len integer value representing the number of hyperparameter sets to generate and test, must be \code{>= 1}.
 #' @param St.in numeric and symmetric matrix of similarities, can be generated with \code{StMatrixCalc()}.
 #' @param Sp.in numeric and symmetric matrix of similarities, can be generated with \code{SpMatrixCalc()}.
 #' @param Sx.in numeric and symmetric matrix of similarities, can be generated with \code{SxMatrixCalc()}.
 #' @param y.in numeric vector of the response series to be forecast.
-#' @param test.h integer value representing the number of points in the test forecast horizon.
+#' @param test.h integer value representing the number of points in the test forecast horizon, must be \code{>= 1}.
 #' @param max.k integer value representing the maximum value of k, \code{knn.forecast()} should use, will be set to \code{min(floor((length(y.in)) * .4), length(y.in) - val.holdout.len - test.h)} if \code{NULL} or \code{NA} is passed. Note this \code{NA} behavior differs from \code{knnwtsim} version 0.1.0.
-#' @param val.holdout.len integer value representing the number of observations at the end of the series to be removed in testing forecast if desired to leave a validation set after tuning.
-#' @param min.k integer value representing the minimum value of k, \code{knn.forecast()} should use.
+#'  If a numeric value is passed it must be \code{>= 1}.
+#' @param val.holdout.len integer value representing the number of observations at the end of the series to be removed in testing forecast if desired to leave a validation set after tuning, must be \code{>= 0}.
+#' @param min.k integer value representing the minimum value of k, \code{knn.forecast()} should use, must be \code{>= 1}.
 #'
 #' @return list of the following components:
 #' \describe{
@@ -188,6 +189,17 @@ knn.forecast.randomsearch.tuning <- function(grid.len = 100,
   if (min.k > k.cap) {
     stop("min.k is greater than max.k")
   }
+
+  # check if integer arguments are below minimum values
+  if (any(c(grid.len, test.h, min.k, k.cap) < 1)){
+    stop("None of the integer arguments: grid.len, test.h, min.k, and max.k
+         can be < 1")
+  }
+
+  if (val.holdout.len < 0){
+    stop("Integer argument val.holdout.len cannot be < 0")
+  }
+
 
   # randomly propose sets of hyperparameters
   ks <- base::sample(min.k:k.cap, size = grid.len, replace = TRUE)

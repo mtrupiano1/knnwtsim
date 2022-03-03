@@ -113,6 +113,17 @@ test_that("Bad integer arguments throw errors or warnings", {
     val.holdout.len = 2
   ))
 
+  # Test grid.len < 1
+  expect_error(knn.forecast.randomsearch.tuning(
+    grid.len = 0,
+    St.in = St.ex,
+    Sp.in = Sp.ex,
+    Sx.in = Sx.ex,
+    y.in = ex.series,
+    test.h = 2,
+    max.k = 2,
+    val.holdout.len = 2
+  ))
 
   # Test too long test.h
   expect_error(knn.forecast.randomsearch.tuning(
@@ -150,6 +161,17 @@ test_that("Bad integer arguments throw errors or warnings", {
     val.holdout.len = 2
   ))
 
+  # Test test.h < 1
+  expect_error(knn.forecast.randomsearch.tuning(
+    grid.len = 10,
+    St.in = St.ex,
+    Sp.in = Sp.ex,
+    Sx.in = Sx.ex,
+    y.in = ex.series,
+    test.h = 0,
+    max.k = 2,
+    val.holdout.len = 2
+  ))
 
   # Test too long val.holdout.len
   expect_error(knn.forecast.randomsearch.tuning(
@@ -185,6 +207,18 @@ test_that("Bad integer arguments throw errors or warnings", {
     test.h = 2,
     max.k = 2,
     val.holdout.len = 2.2
+  ))
+
+  # Test val.holdout.len < 0
+  expect_error(knn.forecast.randomsearch.tuning(
+    grid.len = 10,
+    St.in = St.ex,
+    Sp.in = Sp.ex,
+    Sx.in = Sx.ex,
+    y.in = ex.series,
+    test.h = 2,
+    max.k = 2,
+    val.holdout.len = -1
   ))
 
   # Test too long min.k
@@ -226,6 +260,18 @@ test_that("Bad integer arguments throw errors or warnings", {
     min.k = 1.2
   ))
 
+  # Test min.k < 1
+  expect_error(knn.forecast.randomsearch.tuning(
+    grid.len = 10,
+    St.in = St.ex,
+    Sp.in = Sp.ex,
+    Sx.in = Sx.ex,
+    y.in = ex.series,
+    test.h = 2,
+    max.k = 2,
+    val.holdout.len = 2,
+    min.k = 0
+  ))
 
   # Test too long max.k
   expect_error(knn.forecast.randomsearch.tuning(
@@ -261,6 +307,20 @@ test_that("Bad integer arguments throw errors or warnings", {
     test.h = 2,
     max.k = 2.2,
     val.holdout.len = 2
+  ))
+
+  # Test max.k < 1, min.k would also need to be lower to get to the
+  # right if statement
+  expect_error(knn.forecast.randomsearch.tuning(
+    grid.len = 10,
+    St.in = St.ex,
+    Sp.in = Sp.ex,
+    Sx.in = Sx.ex,
+    y.in = ex.series,
+    test.h = 2,
+    max.k = 0,
+    val.holdout.len = 2,
+    min.k = -1
   ))
 })
 

@@ -17,7 +17,7 @@ knn.forecast.randomsearch.tuning(
 )
 }
 \arguments{
-\item{grid.len}{integer value representing the number of hyperparameter sets to generate and test.}
+\item{grid.len}{integer value representing the number of hyperparameter sets to generate and test, must be \code{>= 1}.}
 
 \item{St.in}{numeric and symmetric matrix of similarities, can be generated with \code{StMatrixCalc()}.}
 
@@ -27,13 +27,14 @@ knn.forecast.randomsearch.tuning(
 
 \item{y.in}{numeric vector of the response series to be forecast.}
 
-\item{test.h}{integer value representing the number of points in the test forecast horizon.}
+\item{test.h}{integer value representing the number of points in the test forecast horizon, must be \code{>= 1}.}
 
-\item{max.k}{integer value representing the maximum value of k, \code{knn.forecast()} should use, will be set to \code{min(floor((length(y.in)) * .4), length(y.in) - val.holdout.len - test.h)} if \code{NULL} or \code{NA} is passed. Note this \code{NA} behavior differs from \code{knnwtsim} version 0.1.0.}
+\item{max.k}{integer value representing the maximum value of k, \code{knn.forecast()} should use, will be set to \code{min(floor((length(y.in)) * .4), length(y.in) - val.holdout.len - test.h)} if \code{NULL} or \code{NA} is passed. Note this \code{NA} behavior differs from \code{knnwtsim} version 0.1.0.
+If a numeric value is passed it must be \code{>= 1}.}
 
-\item{val.holdout.len}{integer value representing the number of observations at the end of the series to be removed in testing forecast if desired to leave a validation set after tuning.}
+\item{val.holdout.len}{integer value representing the number of observations at the end of the series to be removed in testing forecast if desired to leave a validation set after tuning, must be \code{>= 0}.}
 
-\item{min.k}{integer value representing the minimum value of k, \code{knn.forecast()} should use.}
+\item{min.k}{integer value representing the minimum value of k, \code{knn.forecast()} should use, must be \code{>= 1}.}
 }
 \value{
 list of the following components:
