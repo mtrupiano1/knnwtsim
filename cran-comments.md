@@ -12,5 +12,7 @@ argument restrictions and error handling.
 
 ## R CMD check results
 
-0 errors | 0 warnings | 0 note
+0 errors | 0 warnings | 0 notes
 
+## revdep checks
+reverse dependency checks show no reverse dependencies for this package
