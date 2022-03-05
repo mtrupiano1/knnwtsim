@@ -150,7 +150,7 @@ are known:
 
 ``` r
 library(knnwtsim)
-## Pull a series to forecast
+# Pull a series to forecast
 data("simulation_master_list")
 series.index <- 15
 ex.series <- simulation_master_list[[series.index]]$series.lin.coef.chng.x
