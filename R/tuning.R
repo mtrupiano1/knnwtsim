@@ -37,7 +37,7 @@
 #' @export
 #'
 #' @seealso
-#' * Trupiano (2021) <arXiv:2112.06266v1> for information on the formulation of \code{S_w}.
+#' * Trupiano (2021) arXiv:2112.06266 for information on the formulation of \code{S_w}.
 #' * [StMatrixCalc()] for information on the calculation of \code{S_t}.
 #' * [SpMatrixCalc()] for information on the calculation of \code{S_p}.
 #' * [SxMatrixCalc()] for information on the calculation of \code{S_x}.

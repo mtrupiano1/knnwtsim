@@ -24,5 +24,5 @@ two points, given the number of periods in one full seasonal cycle.
 SeasonalAbsDissimilarity(1, 4, 4)
 }
 \seealso{
-Trupiano (2021) \url{arXiv:2112.06266v1} for information on the formulation of this seasonal dissimilarity measure.
+Trupiano (2021) arXiv:2112.06266 for information on the formulation of this seasonal dissimilarity measure.
 }

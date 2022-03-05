@@ -50,7 +50,7 @@ SwMatrixCalc(
 }
 \seealso{
 \itemize{
-\item Trupiano (2021) \url{arXiv:2112.06266v1} for information on the formulation of \code{S_w}.
+\item Trupiano (2021) arXiv:2112.06266 for information on the formulation of \code{S_w}.
 \item \code{\link[=StMatrixCalc]{StMatrixCalc()}} for information on the calculation of \code{S_t}.
 \item \code{\link[=SpMatrixCalc]{SpMatrixCalc()}} for information on the calculation of \code{S_p}.
 \item \code{\link[=SxMatrixCalc]{SxMatrixCalc()}} for information on the calculation of \code{S_x}.

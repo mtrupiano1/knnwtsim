@@ -11,7 +11,7 @@
 #' @export
 #'
 #' @seealso
-#' Trupiano (2021) <arXiv:2112.06266v1> for information on the formulation of this seasonal dissimilarity measure.
+#' Trupiano (2021) arXiv:2112.06266 for information on the formulation of this seasonal dissimilarity measure.
 #' @md
 #' @examples
 #' SeasonalAbsDissimilarity(1, 4, 4)
@@ -42,7 +42,7 @@ SeasonalAbsDissimilarity <- function(p1, p2, nPeriods) {
 #' @export
 #'
 #' @seealso
-#' * Trupiano (2021) <arXiv:2112.06266v1> for information on the formulation of this seasonal similarity measure.
+#' * Trupiano (2021) arXiv:2112.06266 for information on the formulation of this seasonal similarity measure.
 #' * [SeasonalAbsDissimilarity()] for the function used to calculate seasonal dissimilarity.
 #' @md
 #' @examples
@@ -204,7 +204,7 @@ SxMatrixCalc <- function(A, XdistMetric = "euclidean") {
 #' @export
 #'
 #' @seealso
-#' * Trupiano (2021) <arXiv:2112.06266v1> for information on the formulation of \code{S_w}.
+#' * Trupiano (2021) arXiv:2112.06266 for information on the formulation of \code{S_w}.
 #' * [StMatrixCalc()] for information on the calculation of \code{S_t}.
 #' * [SpMatrixCalc()] for information on the calculation of \code{S_p}.
 #' * [SxMatrixCalc()] for information on the calculation of \code{S_x}.
