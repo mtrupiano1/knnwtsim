@@ -9,10 +9,9 @@ argument restrictions and error handling.
 * windows (on GitHub actions), R 4.1.2
 * win-builder, R-devel, R 4.1.1, R 4.0.5
 
-
 ## R CMD check results
 
 0 errors | 0 warnings | 0 notes
 
 ## revdep checks
-reverse dependency checks show no reverse dependencies for this package
+Reverse dependency checks show no reverse dependencies for this package

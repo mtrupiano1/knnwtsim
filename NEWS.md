@@ -1,4 +1,4 @@
-# knnwtsim 1.0.0.9000
+# knnwtsim 1.0.0
 
 ## Major Changes
 * The function `knn.forecast.boot.intervals()` has been added to provide the capability to generate interval forecasts and simulations with the package. 
